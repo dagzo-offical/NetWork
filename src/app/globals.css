@@ -1,26 +1,199 @@
 @import "tailwindcss";
 
+@theme {
+  --color-bg-primary: #0a0a0f;
+  --color-bg-secondary: #0d0d1a;
+  --color-neon-green: #00ff88;
+  --color-neon-blue: #0088ff;
+  --color-neon-red: #ff0066;
+  --color-neon-purple: #8800ff;
+  --color-text-primary: #e2e8f0;
+  --color-text-muted: #64748b;
+}
+
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --bg-primary: #0a0a0f;
+  --bg-secondary: #0d0d1a;
+  --neon-green: #00ff88;
+  --neon-blue: #0088ff;
+  --neon-red: #ff0066;
+  --neon-purple: #8800ff;
+  --text-primary: #e2e8f0;
+  --text-muted: #64748b;
+  --border-glow: rgba(0, 255, 136, 0.3);
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+* {
+  box-sizing: border-box;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+html,
+body {
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  font-family: var(--font-geist-sans), system-ui, sans-serif;
+  overflow-x: hidden;
+}
+
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #0a0a0f;
+}
+::-webkit-scrollbar-thumb {
+  background: #00ff88;
+  border-radius: 3px;
+}
+
+@keyframes neon-pulse {
+  0%,
+  100% {
+    box-shadow: 0 0 5px var(--neon-green), 0 0 10px var(--neon-green), 0 0 20px var(--neon-green);
+  }
+  50% {
+    box-shadow: 0 0 10px var(--neon-green), 0 0 20px var(--neon-green), 0 0 40px var(--neon-green);
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+@keyframes border-glow {
+  0%,
+  100% {
+    border-color: rgba(0, 255, 136, 0.3);
+  }
+  50% {
+    border-color: rgba(0, 255, 136, 0.8);
+  }
+}
+
+@keyframes float {
+  0%,
+  100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+@keyframes scan-line {
+  0% {
+    top: 0;
+  }
+  100% {
+    top: 100%;
+  }
+}
+
+@keyframes border-rotate {
+  0% {
+    background-position: 0% 50%;
+  }
+  100% {
+    background-position: 200% 50%;
+  }
+}
+
+@keyframes pulse-slow {
+  0%,
+  100% {
+    opacity: 0.4;
+  }
+  50% {
+    opacity: 0.9;
+  }
+}
+
+.neon-glow {
+  animation: neon-pulse 2s infinite;
+}
+.float-animation {
+  animation: float 3s ease-in-out infinite;
+}
+.pulse-slow {
+  animation: pulse-slow 3s ease-in-out infinite;
+}
+
+.glass {
+  background: rgba(13, 13, 26, 0.7);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(0, 255, 136, 0.15);
+}
+
+.glass-hover {
+  transition: all 0.3s ease;
+}
+.glass-hover:hover {
+  background: rgba(13, 13, 26, 0.9);
+  border-color: rgba(0, 255, 136, 0.4);
+  box-shadow: 0 0 20px rgba(0, 255, 136, 0.15);
+}
+
+.gradient-text {
+  background: linear-gradient(135deg, #00ff88, #0088ff);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+}
+
+.gradient-text-red {
+  background: linear-gradient(135deg, #ff0066, #8800ff);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+}
+
+.gradient-border {
+  position: relative;
+  border-radius: 12px;
+}
+.gradient-border::before {
+  content: "";
+  position: absolute;
+  inset: -1.5px;
+  border-radius: 13px;
+  background: linear-gradient(135deg, #00ff88, #0088ff, #ff0066, #00ff88);
+  background-size: 200% 200%;
+  z-index: -1;
+  opacity: 0.6;
+  animation: border-rotate 4s linear infinite;
+}
+
+.code-block {
+  background: #0d1117;
+  border: 1px solid rgba(0, 255, 136, 0.2);
+  border-radius: 8px;
+  font-family: var(--font-geist-mono), "JetBrains Mono", monospace;
+}
+
+.terminal {
+  background: #000000;
+  border: 1px solid #00ff88;
+  border-radius: 8px;
+  font-family: var(--font-geist-mono), monospace;
+  color: #00ff88;
+}
+
+.progress-neon {
+  background: linear-gradient(90deg, #00ff88, #0088ff);
+  box-shadow: 0 0 10px rgba(0, 255, 136, 0.5);
+}
+
+.grid-bg {
+  background-image: linear-gradient(rgba(0, 255, 136, 0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 255, 136, 0.04) 1px, transparent 1px);
+  background-size: 40px 40px;
+}
+
+.prose-cyber p {
+  margin-bottom: 1rem;
+  line-height: 1.8;
+  color: #cbd5e1;
+}
+.prose-cyber strong {
+  color: #00ff88;
 }
