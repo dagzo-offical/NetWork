@@ -1,12 +1,19 @@
 "use client";
 
 import { useState } from "react";
-import { motion } from "framer-motion";
-import { Award, Loader2, ShieldCheck, Lock } from "lucide-react";
+import { Award, ShieldCheck, Lock } from "lucide-react";
 import { useProgress } from "@/hooks/useProgress";
 import { COURSE_SECTIONS, TOTAL_LESSONS } from "@/lib/course-data";
-import { Button } from "@/components/ui/Button";
-import { Progress } from "@/components/ui/Progress";
+
+const UZ_TITLES: Record<string, string> = {
+  "network-fundamentals": "Tarmoq Asoslari",
+  "http-tls": "HTTP, HTTPS, TLS va SSL",
+  "web-servers": "Web Serverlar",
+  "server-infrastructure": "Server Infratuzilmasi",
+  "software-architecture": "Dasturiy Arxitektura",
+  "network-security": "Tarmoq Xavfsizligi",
+  "pentesting": "Penetratsion Testlash",
+};
 
 export default function CertificatePage() {
   const { progress, loaded, isSectionExamPassed } = useProgress();
@@ -14,121 +21,280 @@ export default function CertificatePage() {
 
   if (!loaded) {
     return (
-      <div className="flex items-center justify-center py-40 text-slate-400">
-        <Loader2 className="h-7 w-7 animate-spin text-neon-green" />
+      <div
+        style={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          minHeight: "60vh",
+          color: "#64748b",
+          gap: "12px",
+        }}
+      >
+        <div
+          style={{
+            width: "24px",
+            height: "24px",
+            border: "2px solid #00ff88",
+            borderTopColor: "transparent",
+            borderRadius: "50%",
+            animation: "spin 0.8s linear infinite",
+          }}
+        />
+        Yuklanmoqda...
+        <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
       </div>
     );
   }
 
-  const masteredSections = COURSE_SECTIONS.filter((s) =>
-    isSectionExamPassed(s.id)
-  );
+  const masteredSections = COURSE_SECTIONS.filter((s) => isSectionExamPassed(s.id));
   const allMastered = masteredSections.length === COURSE_SECTIONS.length;
-  const percent = Math.round(
-    (masteredSections.length / COURSE_SECTIONS.length) * 100
-  );
+  const percent = Math.round((masteredSections.length / COURSE_SECTIONS.length) * 100);
 
   return (
-    <div className="mx-auto max-w-3xl px-4 sm:px-6 py-12">
-      <div className="text-center mb-8">
-        <h1 className="text-3xl font-bold">
-          Your <span className="gradient-text">Certificate</span>
-        </h1>
-        <p className="mt-2 text-slate-400">
-          Pass the final exam of all {COURSE_SECTIONS.length} sections to earn
-          your certificate of completion.
-        </p>
-      </div>
+    <div style={{ minHeight: "100vh", padding: "40px 24px" }}>
+      <div style={{ maxWidth: "760px", margin: "0 auto" }}>
 
-      <div className="glass rounded-xl p-5 mb-8">
-        <div className="flex items-center justify-between mb-2 text-sm">
-          <span className="text-slate-300">Program Progress</span>
-          <span className="text-slate-500">
-            {masteredSections.length}/{COURSE_SECTIONS.length} sections mastered
-          </span>
-        </div>
-        <Progress value={percent} />
-      </div>
-
-      {allMastered ? (
-        <motion.div
-          initial={{ opacity: 0, scale: 0.96 }}
-          animate={{ opacity: 1, scale: 1 }}
-          className="gradient-border rounded-xl"
-        >
-          <div className="glass rounded-xl p-8 sm:p-12 text-center">
-            <Award className="mx-auto h-14 w-14 text-neon-green" />
-            <p className="mt-4 text-xs uppercase tracking-[0.3em] text-slate-500">
-              Certificate of Completion
-            </p>
-            <h2 className="mt-3 text-2xl sm:text-3xl font-bold gradient-text">
-              Network Security & Infrastructure
-            </h2>
-            <p className="mt-4 text-sm text-slate-400">
-              This certifies that
-            </p>
-            <input
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              placeholder="Enter your name"
-              className="mt-2 w-full max-w-sm mx-auto bg-transparent border-b border-neon-green/40 text-center text-xl font-semibold text-slate-100 focus:outline-none focus:border-neon-green py-1"
-            />
-            <p className="mt-4 text-sm text-slate-400 max-w-md mx-auto">
-              has successfully completed all {TOTAL_LESSONS} lessons and passed
-              the final exam for every one of the {COURSE_SECTIONS.length}{" "}
-              sections of the NetSec Academy program.
-            </p>
-            <div className="mt-6 flex items-center justify-center gap-2 text-neon-green">
-              <ShieldCheck className="h-5 w-5" />
-              <span className="font-mono text-sm">
-                {progress.xp.toLocaleString()} XP earned
-              </span>
-            </div>
-            <div className="mt-2 text-xs text-slate-600">
-              Issued {new Date().toLocaleDateString()} · NetSec Academy
-            </div>
-            <Button
-              variant="solid"
-              className="mt-6"
-              onClick={() => window.print()}
+        {/* Header */}
+        <div style={{ textAlign: "center", marginBottom: "32px" }}>
+          <h1
+            style={{
+              fontSize: "clamp(24px, 4vw, 40px)",
+              fontWeight: 800,
+              color: "#e2e8f0",
+              marginBottom: "8px",
+            }}
+          >
+            Sizning{" "}
+            <span
+              style={{
+                background: "linear-gradient(135deg, #00ff88, #0088ff)",
+                WebkitBackgroundClip: "text",
+                WebkitTextFillColor: "transparent",
+                backgroundClip: "text",
+              }}
             >
-              Print / Save Certificate
-            </Button>
-          </div>
-        </motion.div>
-      ) : (
-        <div className="glass rounded-xl p-10 text-center">
-          <Lock className="mx-auto h-10 w-10 text-slate-600" />
-          <h3 className="mt-3 font-semibold text-slate-100">
-            Certificate Locked
-          </h3>
-          <p className="mt-1 text-sm text-slate-400">
-            Master all sections to unlock your certificate.
+              Sertifikatiz
+            </span>
+          </h1>
+          <p style={{ color: "#94a3b8", fontSize: "15px" }}>
+            Barcha {COURSE_SECTIONS.length} ta bo&apos;limning final imtihonidan o&apos;ting — sertifikat olish uchun.
           </p>
-          <div className="mt-6 grid sm:grid-cols-2 gap-2 text-left">
-            {COURSE_SECTIONS.map((s) => {
-              const done = isSectionExamPassed(s.id);
-              return (
-                <div
-                  key={s.id}
-                  className={`flex items-center gap-2 rounded-lg border p-3 text-sm ${
-                    done
-                      ? "border-neon-green/40 text-slate-200"
-                      : "border-white/10 text-slate-500"
-                  }`}
-                >
-                  {done ? (
-                    <ShieldCheck className="h-4 w-4 text-neon-green" />
-                  ) : (
-                    <Lock className="h-4 w-4" />
-                  )}
-                  {s.title}
-                </div>
-              );
-            })}
+        </div>
+
+        {/* Progress */}
+        <div
+          style={{
+            background: "rgba(13,13,26,0.85)",
+            border: "1px solid rgba(255,255,255,0.08)",
+            borderRadius: "14px",
+            padding: "20px 24px",
+            marginBottom: "24px",
+            backdropFilter: "blur(16px)",
+          }}
+        >
+          <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "10px", fontSize: "13px" }}>
+            <span style={{ color: "#e2e8f0" }}>Dastur Progressi</span>
+            <span style={{ color: "#64748b" }}>
+              {masteredSections.length}/{COURSE_SECTIONS.length} bo&apos;lim yakunlandi
+            </span>
+          </div>
+          <div style={{ height: "8px", background: "rgba(255,255,255,0.07)", borderRadius: "4px", overflow: "hidden" }}>
+            <div
+              style={{
+                height: "100%",
+                width: `${percent}%`,
+                background: "linear-gradient(90deg, #00ff88, #0088ff)",
+                boxShadow: "0 0 10px rgba(0,255,136,0.4)",
+                borderRadius: "4px",
+                transition: "width 0.8s ease",
+              }}
+            />
           </div>
         </div>
-      )}
+
+        {/* Certificate or Locked */}
+        {allMastered ? (
+          <div
+            style={{
+              position: "relative",
+              borderRadius: "16px",
+              overflow: "hidden",
+            }}
+          >
+            {/* Gradient border */}
+            <div
+              style={{
+                position: "absolute",
+                inset: 0,
+                background: "linear-gradient(135deg, #00ff88, #0088ff, #8800ff, #00ff88)",
+                backgroundSize: "300% 300%",
+                animation: "gradientShift 4s linear infinite",
+                zIndex: 0,
+              }}
+            />
+            <style>{`
+              @keyframes gradientShift {
+                0% { background-position: 0% 50%; }
+                100% { background-position: 100% 50%; }
+              }
+            `}</style>
+
+            <div
+              style={{
+                position: "relative",
+                zIndex: 1,
+                margin: "2px",
+                borderRadius: "14px",
+                background: "rgba(10,10,20,0.97)",
+                padding: "clamp(28px, 5vw, 60px)",
+                textAlign: "center",
+              }}
+            >
+              <Award size={56} color="#00ff88" style={{ margin: "0 auto 16px", filter: "drop-shadow(0 0 12px rgba(0,255,136,0.5))" }} />
+
+              <p
+                style={{
+                  fontSize: "10px",
+                  letterSpacing: "4px",
+                  textTransform: "uppercase",
+                  color: "#64748b",
+                  marginBottom: "12px",
+                }}
+              >
+                Yakunlash Sertifikati
+              </p>
+
+              <h2
+                style={{
+                  fontSize: "clamp(20px, 4vw, 32px)",
+                  fontWeight: 800,
+                  background: "linear-gradient(135deg, #00ff88, #0088ff)",
+                  WebkitBackgroundClip: "text",
+                  WebkitTextFillColor: "transparent",
+                  backgroundClip: "text",
+                  marginBottom: "20px",
+                }}
+              >
+                Tarmoq Xavfsizligi va Infratuzilmasi
+              </h2>
+
+              <p style={{ color: "#94a3b8", fontSize: "14px", marginBottom: "8px" }}>
+                Bu sertifikat
+              </p>
+
+              <input
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                placeholder="Ismingizni kiriting"
+                style={{
+                  background: "transparent",
+                  border: "none",
+                  borderBottom: "2px solid rgba(0,255,136,0.4)",
+                  textAlign: "center",
+                  fontSize: "24px",
+                  fontWeight: 700,
+                  color: "#e2e8f0",
+                  outline: "none",
+                  padding: "4px 16px",
+                  width: "100%",
+                  maxWidth: "400px",
+                  marginBottom: "20px",
+                  display: "block",
+                  margin: "0 auto 20px",
+                }}
+              />
+
+              <p style={{ color: "#94a3b8", fontSize: "14px", maxWidth: "500px", margin: "0 auto 24px", lineHeight: 1.7 }}>
+                NetSec Academy dasturining barcha {TOTAL_LESSONS} ta darsi va{" "}
+                {COURSE_SECTIONS.length} ta bo&apos;limining final imtihonini muvaffaqiyatli yakunlaganligini tasdiqlaydi.
+              </p>
+
+              <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "8px", color: "#00ff88", marginBottom: "8px" }}>
+                <ShieldCheck size={18} />
+                <span style={{ fontFamily: "monospace", fontSize: "14px" }}>
+                  {progress.xp.toLocaleString()} XP to&apos;plandi
+                </span>
+              </div>
+
+              <p style={{ fontSize: "12px", color: "#475569", marginBottom: "24px" }}>
+                Berildi: {new Date().toLocaleDateString("uz-UZ")} · NetSec Academy
+              </p>
+
+              <button
+                onClick={() => window.print()}
+                style={{
+                  padding: "12px 28px",
+                  borderRadius: "8px",
+                  background: "linear-gradient(135deg, #00ff88, #00cc66)",
+                  color: "#000",
+                  fontWeight: 700,
+                  fontSize: "14px",
+                  border: "none",
+                  cursor: "pointer",
+                  boxShadow: "0 0 20px rgba(0,255,136,0.3)",
+                }}
+              >
+                🖨️ Chop Etish / Saqlash
+              </button>
+            </div>
+          </div>
+        ) : (
+          <div
+            style={{
+              background: "rgba(13,13,26,0.85)",
+              border: "1px solid rgba(255,255,255,0.07)",
+              borderRadius: "16px",
+              padding: "40px 24px",
+              textAlign: "center",
+              backdropFilter: "blur(16px)",
+            }}
+          >
+            <Lock size={40} color="#475569" style={{ margin: "0 auto 14px" }} />
+            <h3 style={{ color: "#e2e8f0", fontWeight: 700, fontSize: "20px", marginBottom: "8px" }}>
+              Sertifikat Qulflangan
+            </h3>
+            <p style={{ color: "#94a3b8", fontSize: "14px", marginBottom: "28px" }}>
+              Sertifikat olish uchun barcha bo&apos;limlarni yakunlang.
+            </p>
+
+            <div
+              style={{
+                display: "grid",
+                gridTemplateColumns: "repeat(auto-fill, minmax(240px, 1fr))",
+                gap: "10px",
+                textAlign: "left",
+              }}
+            >
+              {COURSE_SECTIONS.map((s) => {
+                const done = isSectionExamPassed(s.id);
+                return (
+                  <div
+                    key={s.id}
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      gap: "10px",
+                      borderRadius: "10px",
+                      border: done ? "1px solid rgba(0,255,136,0.35)" : "1px solid rgba(255,255,255,0.08)",
+                      padding: "12px 14px",
+                      fontSize: "13px",
+                      color: done ? "#e2e8f0" : "#64748b",
+                    }}
+                  >
+                    {done ? (
+                      <ShieldCheck size={16} color="#00ff88" />
+                    ) : (
+                      <Lock size={16} color="#475569" />
+                    )}
+                    {UZ_TITLES[s.id] ?? s.title}
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        )}
+      </div>
     </div>
   );
 }

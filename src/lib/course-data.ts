@@ -15,56 +15,56 @@ function buildLesson(
   content?: Partial<LessonContent>
 ): Lesson {
   const fallback: LessonContent = {
-    introduction: `${title} is a core building block of modern networking and security. In this lesson we explore what ${topic} is, why it matters, and how it behaves on real production networks.`,
-    theory: `At a conceptual level, ${topic} operates within the layered model of networking. Understanding its position in the stack — and how it interacts with the layers above and below — is essential for diagnosing failures and reasoning about security. We examine the protocol/component design goals, its data structures, and the trade-offs its designers made.`,
-    realWorldArchitecture: `In production, ${topic} is rarely deployed in isolation. It sits inside a wider architecture of routers, switches, load balancers, firewalls and observability tooling. We look at how enterprises and cloud providers actually wire it up, including redundancy, scaling and failure-domain considerations.`,
-    packetFlow: `When traffic involving ${topic} crosses the wire, a precise sequence of frames and packets is exchanged. We trace that flow hop by hop, identifying which fields change at each layer and what a packet capture would reveal.`,
-    securityImplications: `${topic} introduces a specific attack surface. Misconfiguration, missing authentication, or trust placed in untrusted inputs can all be abused. We catalogue the realistic threats and the blast radius of each.`,
+    introduction: `${title} — zamonaviy tarmoq va xavfsizlikning asosiy qurilish bloki. Ushbu darsda ${topic} nima ekanligini, nima uchun muhimligini va real ishlab chiqarish tarmoqlarida qanday ishlashini o'rganamiz.`,
+    theory: `Kontseptual jihatdan, ${topic} tarmoqning qatlamli modelida ishlaydi. Uning stekdagi o'rni — va yuqori va quyi qatlamlar bilan o'zaro ta'sirini tushunish — nosozliklarni tashxislash va xavfsizlik haqida mulohaza yuritish uchun zarurdir. Biz protokol/komponent dizayn maqsadlarini, uning ma'lumotlar tuzilmalarini va dizaynerlar qilgan murosalarni ko'rib chiqamiz.`,
+    realWorldArchitecture: `Ishlab chiqarishda ${topic} kamdan-kam hollarda alohida joylashtiriladi. U routerlar, switchlar, load balancerlar, firewalllar va kuzatuv vositalari keng arxitekturasida joylashgan. Korxonalar va bulut provayderlari uni qanday ulashtirishini, jumladan ortiqchalik, masshtablash va nosozlik domenlarini ko'rib chiqamiz.`,
+    packetFlow: `${topic} bilan bog'liq trafik tarmoqdan o'tganda, aniq ketma-ketlikda freymlar va paketlar almashiladi. Biz ushbu oqimni hop-by-hop kuzatamiz, har bir qatlamda qaysi maydonlar o'zgarishini va paket yozuvida nima ko'rinishini aniqlaymiz.`,
+    securityImplications: `${topic} muayyan hujum yuzasini kiritadi. Noto'g'ri konfiguratsiya, autentifikatsiyaning yo'qligi yoki ishonchsiz kirishlarga ishonch — barchasi suiiste'mol qilinishi mumkin. Biz real tahdidlarni va har birining oqibat darajasini ro'yxatga olamiz.`,
     attackVectors: [
       {
-        name: `${topic} spoofing / forgery`,
-        description: `An attacker forges ${topic} messages to impersonate a legitimate host or service.`,
+        name: `${topic} soxtalashtirish / qalbakilashtirish`,
+        description: `Tajovuzkor qonuniy xost yoki xizmatni taqlid qilish uchun ${topic} xabarlarini soxtalashtiradi.`,
         severity: "High",
       },
       {
-        name: `${topic} flooding`,
-        description: `Resource exhaustion by overwhelming the component with crafted ${topic} traffic.`,
+        name: `${topic} flooding hujumi`,
+        description: `Maxsus ${topic} trafigi bilan komponentni bosib, resurslarni tugaturish.`,
         severity: "Medium",
       },
     ],
     defenseMethods: [
-      `Apply strict input validation on all ${topic} fields.`,
-      `Enable authentication / cryptographic integrity where the protocol supports it.`,
-      `Rate-limit and monitor ${topic} traffic for anomalies.`,
-      `Segment networks so a compromise of ${topic} cannot move laterally.`,
+      `Barcha ${topic} maydonlarida qat'iy kiritish tekshiruvi qo'llang.`,
+      `Protokol qo'llab-quvvatlasa, autentifikatsiya va kriptografik yaxlitlikni yoqing.`,
+      `${topic} trafigini anomaliyalar uchun limitlang va monitoring qiling.`,
+      `${topic} kompromissi lateral harakatga olib kelmasligini ta'minlash uchun tarmoqlarni segmentlang.`,
     ],
     configExamples: [
       {
         language: "bash",
-        description: `Reference configuration touching ${topic}.`,
-        code: `# Inspect ${topic}-related state\nip addr show\nip route show`,
+        description: `${topic} bilan bog'liq holat tekshiruvi.`,
+        code: `# ${topic} holati tekshiruvi\nip addr show\nip route show`,
       },
     ],
     cliExamples: [
       {
         language: "bash",
-        description: `Diagnostic commands for ${topic}.`,
+        description: `${topic} uchun diagnostika buyruqlari.`,
         code: `ping -c 4 8.8.8.8\ntraceroute 8.8.8.8`,
       },
     ],
-    wiresharkAnalysis: `Open a capture and apply a display filter relevant to ${topic}. Inspect the protocol tree, confirm expected field values, and watch for retransmissions, malformed packets or unexpected sources.`,
+    wiresharkAnalysis: `Yozuvni oching va ${topic} ga oid ko'rsatma filtri qo'llang. Protokol daraxtini tekshiring, kutilgan maydon qiymatlarini tasdiqlang va retransmissiyalar, noto'g'ri shakllantirilgan paketlar yoki kutilmagan manbalarni kuzating.`,
     commonMistakes: [
-      `Assuming ${topic} is trustworthy by default.`,
-      `Ignoring edge cases that only appear under load.`,
-      `Failing to log and monitor ${topic} behaviour.`,
+      `${topic} ni sukut bo'yicha ishonchli deb hisoblash.`,
+      `Faqat yuklanish ostida paydo bo'ladigan chekka holatllarni e'tiborsiz qoldirish.`,
+      `${topic} xatti-harakatini jurnalga yozish va monitoring qilishni unutish.`,
     ],
-    advancedConcepts: `Advanced practitioners tune ${topic} for performance, integrate it with automation pipelines, and reason about its behaviour during partial failures and partitions.`,
-    summary: `${title}: you should now be able to explain what ${topic} is, how it works on the wire, the threats it faces, and how to defend it.`,
+    advancedConcepts: `Ilg'or mutaxassislar ${topic} ni ishlash uchun sozlaydi, uni avtomatlashtirish pipelinelari bilan birlashtiradi va qisman nosozliklar va bo'linmalar paytida uning xatti-harakati haqida mulohaza yuritadi.`,
+    summary: `${title}: endi ${topic} nima ekanligini, u tarmoqda qanday ishlashini, u duch keladigan tahdidlarni va uni qanday himoya qilishni tushuntira olishingiz kerak.`,
     diagrams: [
       {
         type: "mermaid",
-        title: `${title} — overview`,
-        content: `graph LR\n  A[Client] -->|${topic}| B[Service]\n  B --> C[(Backend)]`,
+        title: `${title} — umumiy ko'rinish`,
+        content: `graph LR\n  A[Mijoz] -->|${topic}| B[Xizmat]\n  B --> C[(Backend)]`,
       },
     ],
   };
@@ -85,9 +85,9 @@ function buildLesson(
 
 const section1: CourseSection = {
   id: "network-fundamentals",
-  title: "Network Fundamentals",
+  title: "Tarmoq Asoslari",
   description:
-    "Build an unshakeable mental model of how data moves across networks — from physical frames to logical addressing, routing and the transport layer.",
+    "Ma'lumotlar tarmoqlar bo'ylab qanday harakatlanishini — fizik freymlardan mantiqiy manzillash, routing va transport qatlamigacha — chuqur o'rganing.",
   icon: "Network",
   color: "#00ff88",
   totalDuration: "8h 30m",
@@ -95,135 +95,135 @@ const section1: CourseSection = {
     buildLesson(
       "network-fundamentals",
       "what-is-a-network",
-      "What Is a Network?",
+      "Tarmoq nima?",
       "Beginner",
       "20m",
-      "computer networks",
+      "kompyuter tarmoqlari",
       {
         introduction:
-          "A network is two or more devices connected so they can exchange data. That simple idea scales from two laptops sharing a cable to billions of devices on the global Internet. This lesson establishes the vocabulary — node, link, host, protocol, topology — that every later lesson depends on.",
+          "Tarmoq — ma'lumot almashish uchun ulangan ikki yoki undan ortiq qurilma. Bu oddiy g'oya kabel orqali ulangan ikkita noutbukdan tortib, global Internetdagi milliardlab qurilmalargacha kengayadi. Ushbu dars har bir keyingi dars tayanadigan lug'atni — node, link, host, protokol, topologiya — o'rnatadi.",
         theory:
-          "A network is defined by three things: the nodes (endpoints and intermediary devices), the links (the medium carrying signals — copper, fibre, radio), and the protocols (the agreed rules for formatting and exchanging data). Communication is layered: each layer solves one problem and hands a clean abstraction to the layer above. The OSI model defines seven layers (Physical, Data Link, Network, Transport, Session, Presentation, Application); the TCP/IP model collapses these into four (Link, Internet, Transport, Application). Layering is what lets a web browser ignore whether it is running over Wi-Fi or Ethernet.",
+          "Tarmoq uchta narsa bilan belgilanadi: tugunlar (endpoint va oraliq qurilmalar), havolalar (signallarni tashuvchi muhit — mis, tolali optik, radio) va protokollar (ma'lumotlarni formatlash va almashinish uchun kelishilgan qoidalar). Muloqot qatlamli: har bir qatlam bitta muammoni hal qiladi va yuqori qatlamga toza abstraksiya beradi. OSI modeli yetti qatlamni belgilaydi (Fizik, Ma'lumotlar havolasi, Tarmoq, Transport, Sessiya, Taqdimot, Ilova); TCP/IP modeli bularni to'rttaga qisqartiradi (Havola, Internet, Transport, Ilova). Qatlamlash veb-brauzerga Wi-Fi yoki Ethernet ustida ishlayotganligini e'tiborsiz qoldirishga imkon beradi.",
         realWorldArchitecture:
-          "A typical office network has end devices (laptops, phones) connected to access switches, which uplink to a distribution/core switch, which connects to a router/firewall, which reaches the ISP. Wireless access points bridge radio clients onto the wired LAN. Servers live in a separate VLAN. This access/distribution/core hierarchy keeps broadcast domains small and failure domains contained.",
+          "Odatiy ofis tarmog'ida end qurilmalar (noutbuklar, telefonlar) access switchlarga, ular distribution/core switchga, u esa router/firewallga ulangan bo'lib, ISP ga yetib boradi. Simsiz kirish nuqtalari radio mijozlarni simli LAN ga ko'prik orqali ulaydi. Serverlar alohida VLAN da joylashgan. Bu kirish/tarqatish/yadro ierarxiyasi broadcast domenlarini kichik va nosozlik domenlarini izolyatsiyalangan saqlaydi.",
         packetFlow:
-          "When laptop A sends a message to server B on the same LAN: the application produces data, the transport layer adds a TCP/UDP header, the network layer adds an IP header with source/destination IP, the data link layer wraps it in an Ethernet frame with source/destination MAC, and the physical layer encodes bits onto the wire. The switch reads the destination MAC and forwards the frame out only the correct port. B reverses the process — decapsulating each header layer by layer.",
+          "Noutbuk A bir xil LAN dagi server B ga xabar yuborayotganda: ilova ma'lumot ishlab chiqaradi, transport qatlami TCP/UDP sarlavhasi qo'shadi, tarmoq qatlami manba/manzil IP bilan IP sarlavhasi qo'shadi, ma'lumotlar havolasi qatlami manba/manzil MAC bilan Ethernet freymiga o'raydi va fizik qatlam bitlarni simga kodlaydi. Switch manzil MAC ni o'qib, freymni faqat to'g'ri portdan yuboradi. B jarayonni teskari — har bir sarlavha qatlamini ajratib — amalga oshiradi.",
         securityImplications:
-          "Every shared medium is an eavesdropping opportunity. On a hub (or compromised switch) any node can see traffic for others. Broadcast traffic reaches every node in a segment. An attacker who plugs into a network port inherits Layer 2 reach to every device in that broadcast domain — which is why physical port security and network segmentation are foundational controls.",
+          "Har bir umumiy muhit tinglab turish imkoniyatidir. Hub da (yoki buzilgan switchda) har qanday tugun boshqalarga tegishli trafikni ko'rishi mumkin. Broadcast trafigi segmentdagi har bir tugunga yetib boradi. Tarmoq portiga ulanadigan tajovuzkor o'sha broadcast domenidagi har bir qurilmaga Layer 2 kirishini oladi — shuning uchun fizik port xavfsizligi va tarmoq segmentatsiyasi asosiy boshqaruvlardir.",
         commonMistakes: [
-          "Confusing the OSI model (a teaching abstraction) with how stacks are actually implemented (TCP/IP).",
-          "Believing a switch provides security — it provides efficiency, not confidentiality.",
-          "Designing one giant flat network with no segmentation.",
+          "OSI modelini (o'qitish abstraksiyasi) stek aslida qanday amalga oshirilishi (TCP/IP) bilan chalkashtirib yuborish.",
+          "Switch xavfsizlik ta'minlaydi deb o'ylash — u samaradorlik ta'minlaydi, maxfiylik emas.",
+          "Segmentatsiyasiz bitta katta tekis tarmoq loyihalash.",
         ],
         diagrams: [
           {
             type: "mermaid",
-            title: "OSI vs TCP/IP layering",
+            title: "OSI va TCP/IP qatlamlari",
             content:
-              "graph TD\n  subgraph OSI\n    A7[Application] --> A6[Presentation] --> A5[Session] --> A4[Transport] --> A3[Network] --> A2[Data Link] --> A1[Physical]\n  end",
+              "graph TD\n  subgraph OSI\n    A7[Ilova] --> A6[Taqdimot] --> A5[Sessiya] --> A4[Transport] --> A3[Tarmoq] --> A2[Ma'lumotlar Havolasi] --> A1[Fizik]\n  end",
           },
           {
             type: "mermaid",
-            title: "Office network topology",
+            title: "Ofis tarmog'i topologiyasi",
             content:
-              "graph TD\n  PC1[Laptop] --> AS[Access Switch]\n  PC2[Phone] --> AS\n  AS --> CS[Core Switch]\n  CS --> FW[Router / Firewall]\n  FW --> ISP[(Internet)]",
+              "graph TD\n  PC1[Noutbuk] --> AS[Access Switch]\n  PC2[Telefon] --> AS\n  AS --> CS[Core Switch]\n  CS --> FW[Router / Firewall]\n  FW --> ISP[(Internet)]",
           },
         ],
         summary:
-          "A network = nodes + links + protocols, organised into layers. Layering decouples concerns; switches forward by MAC; routers forward by IP. Shared media imply eavesdropping risk, so segmentation is a primary security control.",
+          "Tarmoq = tugunlar + havolalar + protokollar, qatlamlarga tashkil etilgan. Qatlamlash muammolarni ajratadi; switchlar MAC bo'yicha, routerlar IP bo'yicha yo'naltiradi. Umumiy muhit tinglab turish xavfini anglatadi, shuning uchun segmentatsiya asosiy xavfsizlik nazoravidir.",
       }
     ),
     buildLesson(
       "network-fundamentals",
       "how-the-internet-works",
-      "How the Internet Works",
+      "Internet Qanday Ishlaydi?",
       "Beginner",
       "25m",
-      "the Internet and autonomous systems",
+      "Internet va avtonom tizimlar",
       {
         introduction:
-          "The Internet is not one network — it is a network of ~75,000 independently operated networks (Autonomous Systems) that agree to exchange traffic. This lesson explains how a packet from your laptop reaches a server on another continent.",
+          "Internet — bitta tarmoq emas — bu trafik almashishga kelishgan ~75,000 ta mustaqil boshqariladigan tarmoqlar (Avtonom Tizimlar) tarmog'i. Ushbu dars noutbukingizdan boshqa qit'adagi serverga paket qanday yetib borishini tushuntiradi.",
         theory:
-          "Each Autonomous System (AS) has a unique AS Number and announces the IP prefixes it owns. The Border Gateway Protocol (BGP) is the routing protocol that glues ASes together: every AS tells its neighbours which prefixes it can reach and via what AS-path. Inside an AS, an Interior Gateway Protocol (OSPF or IS-IS) finds shortest paths. The Internet has no central controller — reachability is an emergent property of millions of BGP announcements.",
+          "Har bir Avtonom Tizim (AS) noyob AS raqamiga ega va o'ziga tegishli IP prefikslarini e'lon qiladi. BGP (Border Gateway Protocol) — ASlarni bir-biriga ulashga biriktiradigan routing protokoli: har bir AS qo'shnilarga qaysi prefikslariga yetib borishi mumkinligini va qaysi AS-yo'l orqali aytadi. AS ichida IGP (OSPF yoki IS-IS) eng qisqa yo'llarni topadi. Internetda markaziy nazorat yo'q — ulanish millionlab BGP e'lonlaridan kelib chiqadi.",
         realWorldArchitecture:
-          "ASes connect at Internet Exchange Points (IXPs) via peering, or buy transit from larger ISPs. Content providers (Google, Netflix, Cloudflare) operate their own global backbones and push content into caches close to users. A request to a popular site usually terminates at a CDN edge node a few milliseconds away, not the origin data centre.",
+          "ASlar Internet Exchange Pointlarida (IXP) peering orqali ulanadi yoki kattaroq ISPlardan tranzit sotib oladi. Kontent provayderlari (Google, Netflix, Cloudflare) o'z global magistrallarini boshqaradi va kontentni foydalanuvchilarga yaqin keshlariga suradi. Mashhur saytga so'rov odatda origin ma'lumotlar markazida emas, bir necha millisekund uzoqlikdagi CDN chekka tugunida tugallanadi.",
         packetFlow:
-          "You type a URL. DNS resolves the hostname to an IP. Your packet goes to your default gateway, then your ISP's edge router. The ISP consults its BGP table, picks the best AS-path, and forwards toward the destination AS. Each hop decrements the IP TTL. The destination AS's interior routing delivers it to the server. The reply retraces an independent path back.",
+          "Siz URL yozasiz. DNS hostnameni IPga hal qiladi. Paketingiz standart shlyuzga, so'ng ISPingizning chekka routeriga boradi. ISP BGP jadvalini ko'rib, eng yaxshi AS-yo'lni tanlab, manzil ASga yo'naltiradi. Har bir hop IP TTLni kamaytiradi. Manzil ASning ichki routingi uni serverga yetkazadi. Javob mustaqil yo'l orqali qaytadi.",
         securityImplications:
-          "BGP trusts announcements by default. A BGP hijack (announcing prefixes you do not own) can blackhole or intercept traffic — this has caused real global outages. RPKI (Resource Public Key Infrastructure) cryptographically validates that an AS is authorised to announce a prefix, mitigating hijacks.",
+          "BGP e'lonlarga sukut bo'yicha ishonadi. BGP hijack (o'zingizga tegishli bo'lmagan prefikslarni e'lon qilish) trafikni qoratuynukka yubora yoki ushlab qolishi mumkin — bu real global ishlamay qolishlarga sabab bo'lgan. RPKI (Resurs Ochiq Kalit Infratuzilmasi) ASning prefiksni e'lon qilishga vakolatli ekanligini kriptografik ravishda tekshiradi, hijacklarni kamaytiradi.",
         diagrams: [
           {
             type: "mermaid",
-            title: "Packet across Autonomous Systems",
+            title: "Avtonom Tizimlar bo'ylab paket",
             content:
-              "graph LR\n  U[Your Laptop] --> ISP[ISP AS]\n  ISP --> IXP[Internet Exchange]\n  IXP --> T[Transit AS]\n  T --> D[Destination AS]\n  D --> S[Server]",
+              "graph LR\n  U[Sizning Noutbukingiz] --> ISP[ISP AS]\n  ISP --> IXP[Internet Exchange]\n  IXP --> T[Tranzit AS]\n  T --> D[Manzil AS]\n  D --> S[Server]",
           },
         ],
         attackVectors: [
           {
-            name: "BGP prefix hijack",
+            name: "BGP prefiks hijack",
             description:
-              "A malicious or misconfigured AS announces IP prefixes it does not own, attracting and intercepting traffic.",
+              "Zararli yoki noto'g'ri sozlangan AS o'ziga tegishli bo'lmagan IP prefikslarini e'lon qilib, trafikni o'ziga jalb qiladi va ushlab qoladi.",
             severity: "Critical",
           },
           {
-            name: "Route leak",
+            name: "Route sizish",
             description:
-              "An AS re-announces routes it should not, causing traffic to take an unintended and often congested path.",
+              "AS bo'lmasligi kerak bo'lgan marshrutlarni qayta e'lon qilib, trafik kutilmagan va ko'pincha band yo'ldan borishiga olib keladi.",
             severity: "High",
           },
         ],
         summary:
-          "The Internet is a mesh of Autonomous Systems stitched together by BGP. There is no central authority; reachability emerges from announcements. BGP's implicit trust is its biggest weakness, partly fixed by RPKI.",
+          "Internet — BGP tomonidan birlashtirilgan Avtonom Tizimlar to'ri. Markaziy hokimiyat yo'q; ulanish e'lonlardan kelib chiqadi. BGPning bilvosita ishonchi uning eng katta zaifligi bo'lib, RPKI tomonidan qisman tuzatilgan.",
       }
     ),
     buildLesson(
       "network-fundamentals",
       "lan-wan-man",
-      "LAN, WAN & MAN",
+      "LAN, WAN va MAN",
       "Beginner",
       "18m",
-      "network scope classifications",
+      "tarmoq miqyosi tasnifi",
       {
         introduction:
-          "Networks are classified by geographic scope. LAN, MAN and WAN differ not just in size but in ownership, technology, latency and cost — and those differences drive architecture decisions.",
+          "Tarmoqlar geografik miqyos bo'yicha tasniflanadi. LAN, MAN va WAN faqat hajm jihatidan emas, balki egalik, texnologiya, kechikish va narx jihatidan ham farq qiladi — va bu farqlar arxitektura qarorlarini belgilaydi.",
         theory:
-          "A LAN (Local Area Network) spans a building or campus, is privately owned, uses Ethernet/Wi-Fi, and offers high bandwidth with sub-millisecond latency. A MAN (Metropolitan Area Network) spans a city, often built on fibre rings by a carrier. A WAN (Wide Area Network) spans countries or continents, is typically leased from carriers, and exhibits higher latency and lower per-bit bandwidth. The Internet is the largest WAN.",
+          "LAN (Mahalliy Tarmoq) bino yoki kampusni qamrab oladi, shaxsiy mulk, Ethernet/Wi-Fi ishlatadi va submillisekund kechikish bilan yuqori o'tkazuvchanlik taklif etadi. MAN (Metropoliten Tarmoq) shaharni qamrab oladi, ko'pincha tashuvchi tomonidan tolali optik halqalarda qurilgan. WAN (Keng Tarmoq) mamlakatlar yoki kontinentlarni qamrab oladi, odatda tashuvchilardan ijaraga olinadi va yuqori kechikish va past bit o'tkazuvchanligiga ega. Internet eng katta WANdir.",
         realWorldArchitecture:
-          "An enterprise runs LANs at each site. Sites are stitched together over a WAN using MPLS circuits, leased lines, or increasingly SD-WAN overlays that ride the public Internet with encryption and intelligent path selection. A MAN might connect several campuses within one city using carrier dark fibre.",
+          "Korxona har bir saytda LANlar boshqaradi. Saytlar MPLS sxemalari, ijaraga olingan liniyalar yoki tobora ko'proq shifrlash va aqlli yo'l tanlash bilan ommaviy Internetni ishlatadigan SD-WAN overlaylar orqali WAN bo'ylab birlashtiriladi. MAN tashuvchi qorang'i optik tolasi yordamida bir shahardagi bir necha kampusni ulashi mumkin.",
         packetFlow:
-          "Within a LAN, frames are switched at Layer 2 with no routing. Crossing to another site, packets are routed at Layer 3, encapsulated for WAN transport (e.g. in MPLS labels or an IPsec tunnel), carried across the carrier network, then decapsulated and switched onto the remote LAN.",
+          "LAN ichida freymlar routing siz Layer 2 da kommutatsiyalanadi. Boshqa saytga o'tishda paketlar Layer 3 da marshrutlanadi, WAN transporti uchun inkapsulyatsiya qilinadi (masalan, MPLS yorliqlari yoki IPsec tunelida), tashuvchi tarmog'i bo'ylab tashiladi, so'ng dekapsulatsiya qilinib, masofaviy LANga kommutatsiyalanadi.",
         securityImplications:
-          "WAN links traverse infrastructure you do not control, so confidentiality requires encryption (IPsec, MACsec, TLS). LANs are higher-trust but still need segmentation. SD-WAN concentrates security policy but also becomes a high-value target.",
+          "WAN linklari siz nazorat qilmaydigan infratuzilmadan o'tadi, shuning uchun maxfiylik shifrlashni talab qiladi (IPsec, MACsec, TLS). LANlar yuqori ishonchli, lekin hali ham segmentatsiyaga muhtoj. SD-WAN xavfsizlik siyosatini markazlashtiradi, lekin shu bilan birga yuqori qimmatli nishonga aylanadi.",
         diagrams: [
           {
             type: "mermaid",
-            title: "Connecting LANs over a WAN",
+            title: "WAN orqali LANlarni ulash",
             content:
-              "graph LR\n  subgraph Site A LAN\n    A1[Hosts] --> AR[Router]\n  end\n  subgraph Site B LAN\n    B1[Hosts] --> BR[Router]\n  end\n  AR -->|Encrypted WAN tunnel| BR",
+              "graph LR\n  subgraph Sayt A LAN\n    A1[Xostlar] --> AR[Router]\n  end\n  subgraph Sayt B LAN\n    B1[Xostlar] --> BR[Router]\n  end\n  AR -->|Shifrlangan WAN tunel| BR",
           },
         ],
         summary:
-          "LAN = building, private, fast. MAN = city scale. WAN = global, leased, higher latency. Architecture and security controls follow scope: switch inside LANs, route and encrypt across WANs.",
+          "LAN = bino, shaxsiy, tez. MAN = shahar miqyosi. WAN = global, ijaraga olingan, yuqori kechikish. Arxitektura va xavfsizlik nazoravlari miqyosga ergashadi: LANlar ichida kommutatsiya, WANlar bo'ylab marshrutlash va shifrlash.",
       }
     ),
-    buildLesson("network-fundamentals", "switch-vs-router", "Switch vs Router", "Beginner", "22m", "switches and routers"),
-    buildLesson("network-fundamentals", "mac-addresses", "MAC Addresses", "Beginner", "18m", "MAC addressing"),
-    buildLesson("network-fundamentals", "ipv4-addressing", "IPv4 Addressing", "Beginner", "25m", "IPv4 addressing"),
-    buildLesson("network-fundamentals", "ipv6-addressing", "IPv6 Addressing", "Intermediate", "25m", "IPv6 addressing"),
+    buildLesson("network-fundamentals", "switch-vs-router", "Switch va Router", "Beginner", "22m", "switchlar va routerlar"),
+    buildLesson("network-fundamentals", "mac-addresses", "MAC Manzillar", "Beginner", "18m", "MAC manzillash"),
+    buildLesson("network-fundamentals", "ipv4-addressing", "IPv4 Manzillash", "Beginner", "25m", "IPv4 manzillash"),
+    buildLesson("network-fundamentals", "ipv6-addressing", "IPv6 Manzillash", "Intermediate", "25m", "IPv6 manzillash"),
     buildLesson("network-fundamentals", "subnetting", "Subnetting", "Intermediate", "30m", "subnetting"),
-    buildLesson("network-fundamentals", "cidr", "CIDR Notation", "Intermediate", "20m", "CIDR"),
-    buildLesson("network-fundamentals", "default-gateway", "The Default Gateway", "Beginner", "15m", "default gateways"),
-    buildLesson("network-fundamentals", "nat", "Network Address Translation (NAT)", "Intermediate", "25m", "NAT"),
-    buildLesson("network-fundamentals", "dns", "DNS — Domain Name System", "Beginner", "28m", "DNS"),
-    buildLesson("network-fundamentals", "dhcp", "DHCP — Dynamic Host Configuration", "Beginner", "20m", "DHCP"),
-    buildLesson("network-fundamentals", "arp", "ARP — Address Resolution Protocol", "Intermediate", "20m", "ARP"),
-    buildLesson("network-fundamentals", "icmp", "ICMP — The Diagnostic Protocol", "Beginner", "18m", "ICMP"),
-    buildLesson("network-fundamentals", "tcp", "TCP — Transmission Control Protocol", "Intermediate", "30m", "TCP"),
-    buildLesson("network-fundamentals", "udp", "UDP — User Datagram Protocol", "Beginner", "18m", "UDP"),
-    buildLesson("network-fundamentals", "ports", "Ports & Port Numbers", "Beginner", "15m", "TCP/UDP ports"),
-    buildLesson("network-fundamentals", "sockets", "Sockets", "Intermediate", "20m", "network sockets"),
-    buildLesson("network-fundamentals", "osi-model", "The OSI Model in Depth", "Intermediate", "25m", "the OSI model"),
+    buildLesson("network-fundamentals", "cidr", "CIDR Belgisi", "Intermediate", "20m", "CIDR"),
+    buildLesson("network-fundamentals", "default-gateway", "Standart Shlyuz", "Beginner", "15m", "standart shlyuzlar"),
+    buildLesson("network-fundamentals", "nat", "Tarmoq Manzili Tarjimasi (NAT)", "Intermediate", "25m", "NAT"),
+    buildLesson("network-fundamentals", "dns", "DNS — Domen Nomlari Tizimi", "Beginner", "28m", "DNS"),
+    buildLesson("network-fundamentals", "dhcp", "DHCP — Dinamik Xost Konfiguratsiyasi", "Beginner", "20m", "DHCP"),
+    buildLesson("network-fundamentals", "arp", "ARP — Manzil Aniqlash Protokoli", "Intermediate", "20m", "ARP"),
+    buildLesson("network-fundamentals", "icmp", "ICMP — Diagnostika Protokoli", "Beginner", "18m", "ICMP"),
+    buildLesson("network-fundamentals", "tcp", "TCP — Uzatishni Boshqarish Protokoli", "Intermediate", "30m", "TCP"),
+    buildLesson("network-fundamentals", "udp", "UDP — Foydalanuvchi Datagramma Protokoli", "Beginner", "18m", "UDP"),
+    buildLesson("network-fundamentals", "ports", "Portlar va Port Raqamlari", "Beginner", "15m", "TCP/UDP portlar"),
+    buildLesson("network-fundamentals", "sockets", "Socketlar", "Intermediate", "20m", "tarmoq socketlari"),
+    buildLesson("network-fundamentals", "osi-model", "OSI Modeli Chuqur O'rganish", "Intermediate", "25m", "OSI modeli"),
   ],
 };
 
@@ -233,9 +233,9 @@ const section1: CourseSection = {
 
 const section2: CourseSection = {
   id: "http-tls",
-  title: "HTTP, HTTPS, TLS & SSL",
+  title: "HTTP, HTTPS, TLS va SSL",
   description:
-    "Master the protocols of the modern web — from request methods and headers to the cryptographic handshake that secures every connection.",
+    "Zamonaviy veb protokollarini o'zlashtirishning asosi — so'rov metodlari va sarlavhalardan har bir ulanishni himoya qiladigan kriptografik handshakegacha.",
   icon: "Globe",
   color: "#0088ff",
   totalDuration: "10h 15m",
@@ -376,24 +376,24 @@ const section2: CourseSection = {
           "TLS 1.3 establishes an encrypted, authenticated channel in one round trip using ephemeral Diffie-Hellman for mandatory forward secrecy. Certificates authenticate the server; HKDF derives keys; 0-RTT trades a round trip for replay risk.",
       }
     ),
-    buildLesson("http-tls", "http-headers", "HTTP Headers", "Beginner", "22m", "HTTP headers"),
-    buildLesson("http-tls", "cookies", "Cookies", "Beginner", "20m", "HTTP cookies"),
-    buildLesson("http-tls", "sessions", "Sessions", "Intermediate", "22m", "web sessions"),
-    buildLesson("http-tls", "authentication", "Authentication", "Intermediate", "28m", "web authentication"),
-    buildLesson("http-tls", "authorization", "Authorization", "Intermediate", "25m", "authorization"),
+    buildLesson("http-tls", "http-headers", "HTTP Sarlavhalari", "Beginner", "22m", "HTTP sarlavhalari"),
+    buildLesson("http-tls", "cookies", "Cookie-lar", "Beginner", "20m", "HTTP cookie-lari"),
+    buildLesson("http-tls", "sessions", "Sessiyalar", "Intermediate", "22m", "veb sessiyalar"),
+    buildLesson("http-tls", "authentication", "Autentifikatsiya", "Intermediate", "28m", "veb autentifikatsiyasi"),
+    buildLesson("http-tls", "authorization", "Avtorizatsiya", "Intermediate", "25m", "avtorizatsiya"),
     buildLesson("http-tls", "https", "HTTPS", "Beginner", "20m", "HTTPS"),
-    buildLesson("http-tls", "ssl", "SSL — History & Legacy", "Intermediate", "18m", "SSL"),
-    buildLesson("http-tls", "tls", "TLS — Transport Layer Security", "Intermediate", "25m", "TLS"),
-    buildLesson("http-tls", "ssl-handshake", "The SSL/TLS 1.2 Handshake", "Advanced", "30m", "the TLS 1.2 handshake"),
-    buildLesson("http-tls", "certificates", "X.509 Certificates", "Intermediate", "25m", "X.509 certificates"),
-    buildLesson("http-tls", "certificate-authorities", "Certificate Authorities", "Intermediate", "20m", "certificate authorities"),
-    buildLesson("http-tls", "pki", "Public Key Infrastructure (PKI)", "Advanced", "28m", "PKI"),
-    buildLesson("http-tls", "rsa", "RSA Cryptography", "Advanced", "28m", "RSA"),
-    buildLesson("http-tls", "aes", "AES Symmetric Encryption", "Advanced", "25m", "AES"),
-    buildLesson("http-tls", "diffie-hellman", "Diffie-Hellman Key Exchange", "Advanced", "25m", "Diffie-Hellman"),
+    buildLesson("http-tls", "ssl", "SSL — Tarixi va Merosi", "Intermediate", "18m", "SSL"),
+    buildLesson("http-tls", "tls", "TLS — Transport Qatlami Xavfsizligi", "Intermediate", "25m", "TLS"),
+    buildLesson("http-tls", "ssl-handshake", "SSL/TLS 1.2 Handshake", "Advanced", "30m", "TLS 1.2 handshake"),
+    buildLesson("http-tls", "certificates", "X.509 Sertifikatlari", "Intermediate", "25m", "X.509 sertifikatlari"),
+    buildLesson("http-tls", "certificate-authorities", "Sertifikat Markazlari", "Intermediate", "20m", "sertifikat markazlari"),
+    buildLesson("http-tls", "pki", "Ochiq Kalit Infratuzilmasi (PKI)", "Advanced", "28m", "PKI"),
+    buildLesson("http-tls", "rsa", "RSA Kriptografiyasi", "Advanced", "28m", "RSA"),
+    buildLesson("http-tls", "aes", "AES Simmetrik Shifrlash", "Advanced", "25m", "AES"),
+    buildLesson("http-tls", "diffie-hellman", "Diffie-Hellman Kalit Almashinuvi", "Advanced", "25m", "Diffie-Hellman"),
     buildLesson("http-tls", "hsts", "HSTS", "Intermediate", "15m", "HSTS"),
-    buildLesson("http-tls", "csp", "Content Security Policy (CSP)", "Intermediate", "22m", "CSP"),
-    buildLesson("http-tls", "sop", "Same-Origin Policy", "Intermediate", "20m", "the Same-Origin Policy"),
+    buildLesson("http-tls", "csp", "Kontent Xavfsizlik Siyosati (CSP)", "Intermediate", "22m", "CSP"),
+    buildLesson("http-tls", "sop", "Bir Xil Kelib Chiqish Siyosati", "Intermediate", "20m", "Same-Origin Policy"),
     buildLesson("http-tls", "cors", "CORS", "Intermediate", "25m", "CORS"),
     buildLesson("http-tls", "http2", "HTTP/2", "Intermediate", "25m", "HTTP/2"),
     buildLesson("http-tls", "http3", "HTTP/3", "Advanced", "25m", "HTTP/3"),
@@ -407,9 +407,9 @@ const section2: CourseSection = {
 
 const section3: CourseSection = {
   id: "web-servers",
-  title: "Web Servers",
+  title: "Web Serverlar",
   description:
-    "Compare and operate the major web servers — Apache, NGINX, IIS, Caddy and Tomcat — their architectures, configuration and security hardening.",
+    "Asosiy veb serverlarni solishtiring va boshqaring — Apache, NGINX, IIS, Caddy va Tomcat — arxitekturalari, konfiguratsiyasi va xavfsizlikni mustahkamlash.",
   icon: "Server",
   color: "#8800ff",
   totalDuration: "4h 45m",
@@ -516,8 +516,8 @@ const section3: CourseSection = {
           "Caddy is a Go-based server defined by automatic, ACME-driven HTTPS and a minimal config. It trades fine-grained control for operational simplicity and secure-by-default behaviour.",
       }
     ),
-    buildLesson("web-servers", "iis", "Microsoft IIS", "Intermediate", "25m", "Microsoft IIS"),
-    buildLesson("web-servers", "tomcat", "Apache Tomcat", "Intermediate", "25m", "Apache Tomcat"),
+    buildLesson("web-servers", "iis", "Microsoft IIS", "Intermediate", "25m", "Microsoft IIS veb server"),
+    buildLesson("web-servers", "tomcat", "Apache Tomcat", "Intermediate", "25m", "Apache Tomcat veb server"),
   ],
 };
 
@@ -527,9 +527,9 @@ const section3: CourseSection = {
 
 const section4: CourseSection = {
   id: "server-infrastructure",
-  title: "Server Infrastructure",
+  title: "Server Infratuzilmasi",
   description:
-    "From bare metal to cloud, firewalls to service mesh — understand the infrastructure that hosts and protects modern applications.",
+    "Bare metaldan cloudgacha, firewalllardan service mesh gacha — zamonaviy ilovalarni xosting va himoya qiladigan infratuzilmani tushuning.",
   icon: "HardDrive",
   color: "#00ff88",
   totalDuration: "9h 00m",
@@ -644,23 +644,23 @@ const section4: CourseSection = {
           "Load balancing spreads traffic for scale and availability. L4 is fast and generic; L7 is HTTP-aware and feature-rich. Health checks, algorithms and affinity must be tuned; the LB is also the ideal TLS/WAF enforcement point.",
       }
     ),
-    buildLesson("server-infrastructure", "dedicated-server", "Dedicated Servers", "Beginner", "18m", "dedicated servers"),
-    buildLesson("server-infrastructure", "vps", "Virtual Private Servers (VPS)", "Beginner", "18m", "VPS hosting"),
-    buildLesson("server-infrastructure", "cloud-computing", "Cloud Computing", "Beginner", "22m", "cloud computing"),
+    buildLesson("server-infrastructure", "dedicated-server", "Dedicated Serverlar", "Beginner", "18m", "dedicated serverlar"),
+    buildLesson("server-infrastructure", "vps", "Virtual Private Serverlar (VPS)", "Beginner", "18m", "VPS xosting"),
+    buildLesson("server-infrastructure", "cloud-computing", "Bulut Hisoblash", "Beginner", "22m", "bulut hisoblash"),
     buildLesson("server-infrastructure", "aws", "Amazon Web Services (AWS)", "Intermediate", "28m", "AWS"),
     buildLesson("server-infrastructure", "azure", "Microsoft Azure", "Intermediate", "25m", "Microsoft Azure"),
     buildLesson("server-infrastructure", "gcp", "Google Cloud Platform", "Intermediate", "25m", "Google Cloud Platform"),
-    buildLesson("server-infrastructure", "linux-networking", "Linux Networking", "Intermediate", "28m", "Linux networking"),
-    buildLesson("server-infrastructure", "firewalls", "Firewalls", "Intermediate", "25m", "firewalls"),
-    buildLesson("server-infrastructure", "ufw", "UFW — Uncomplicated Firewall", "Beginner", "15m", "UFW"),
-    buildLesson("server-infrastructure", "vpn", "VPNs", "Intermediate", "28m", "VPNs"),
-    buildLesson("server-infrastructure", "reverse-proxy", "Reverse Proxies", "Intermediate", "22m", "reverse proxies"),
-    buildLesson("server-infrastructure", "cdn", "Content Delivery Networks", "Intermediate", "25m", "CDNs"),
+    buildLesson("server-infrastructure", "linux-networking", "Linux Tarmoqlash", "Intermediate", "28m", "Linux tarmoqlash"),
+    buildLesson("server-infrastructure", "firewalls", "Firewalllar", "Intermediate", "25m", "firewalllar"),
+    buildLesson("server-infrastructure", "ufw", "UFW — Oddiy Firewall", "Beginner", "15m", "UFW"),
+    buildLesson("server-infrastructure", "vpn", "VPN-lar", "Intermediate", "28m", "VPN-lar"),
+    buildLesson("server-infrastructure", "reverse-proxy", "Teskari Proksilar", "Intermediate", "22m", "teskari proksilar"),
+    buildLesson("server-infrastructure", "cdn", "Kontent Yetkazib Berish Tarmoqlari", "Intermediate", "25m", "CDN-lar"),
     buildLesson("server-infrastructure", "haproxy", "HAProxy", "Advanced", "25m", "HAProxy"),
-    buildLesson("server-infrastructure", "docker-networking", "Docker Networking", "Advanced", "28m", "Docker networking"),
-    buildLesson("server-infrastructure", "kubernetes-networking", "Kubernetes Networking", "Advanced", "32m", "Kubernetes networking"),
-    buildLesson("server-infrastructure", "service-mesh", "Service Mesh", "Advanced", "28m", "service mesh"),
-    buildLesson("server-infrastructure", "zero-trust", "Zero Trust Architecture", "Advanced", "28m", "Zero Trust"),
+    buildLesson("server-infrastructure", "docker-networking", "Docker Tarmoqlash", "Advanced", "28m", "Docker tarmoqlash"),
+    buildLesson("server-infrastructure", "kubernetes-networking", "Kubernetes Tarmoqlash", "Advanced", "32m", "Kubernetes tarmoqlash"),
+    buildLesson("server-infrastructure", "service-mesh", "Xizmat To'ri (Service Mesh)", "Advanced", "28m", "service mesh"),
+    buildLesson("server-infrastructure", "zero-trust", "Nol Ishonch Arxitekturasi", "Advanced", "28m", "Zero Trust"),
   ],
 };
 
@@ -670,9 +670,9 @@ const section4: CourseSection = {
 
 const section5: CourseSection = {
   id: "software-architecture",
-  title: "Software Architecture",
+  title: "Dasturiy Ta'minot Arxitekturasi",
   description:
-    "Architectural styles that shape how systems scale, fail and evolve — monoliths, microservices, serverless, event-driven and hybrid designs.",
+    "Tizimlar qanday scale, fail va evolve bo'lishini belgilaydigan arxitektura stillar — monolitlar, mikroservislar, serverless, hodisaga asoslangan va gibrid dizaynlar.",
   icon: "Boxes",
   color: "#0088ff",
   totalDuration: "4h 30m",
@@ -781,8 +781,8 @@ const section5: CourseSection = {
           "Serverless runs stateless, event-triggered functions with provider-managed scaling and pay-per-use billing. It removes server management but demands least-privilege IAM per function and awareness of cold starts and execution limits.",
       }
     ),
-    buildLesson("software-architecture", "event-driven", "Event-Driven Architecture", "Advanced", "28m", "event-driven architecture"),
-    buildLesson("software-architecture", "hybrid-architecture", "Hybrid Architecture", "Advanced", "25m", "hybrid architecture"),
+    buildLesson("software-architecture", "event-driven", "Hodisaga Asoslangan Arxitektura", "Advanced", "28m", "hodisaga asoslangan arxitektura"),
+    buildLesson("software-architecture", "hybrid-architecture", "Gibrid Arxitektura", "Advanced", "25m", "gibrid arxitektura"),
   ],
 };
 
@@ -792,9 +792,9 @@ const section5: CourseSection = {
 
 const section6: CourseSection = {
   id: "network-security",
-  title: "Network Security",
+  title: "Tarmoq Xavfsizligi",
   description:
-    "Attacks and defences — from man-in-the-middle and DDoS to IDS/IPS, SIEM and the colour-coded teams of modern cyber operations.",
+    "Hujumlar va mudofaa — MITM va DDoS dan IDS/IPS, SIEM va zamonaviy kiberoperatsiyalarning rangli jamoalarigacha.",
   icon: "ShieldAlert",
   color: "#ff0066",
   totalDuration: "8h 45m",
@@ -937,19 +937,19 @@ const section6: CourseSection = {
     buildLesson("network-security", "arp-spoofing", "ARP Spoofing", "Advanced", "25m", "ARP spoofing"),
     buildLesson("network-security", "dns-spoofing", "DNS Spoofing", "Advanced", "25m", "DNS spoofing"),
     buildLesson("network-security", "session-hijacking", "Session Hijacking", "Advanced", "25m", "session hijacking"),
-    buildLesson("network-security", "ssl-stripping", "SSL Stripping", "Advanced", "22m", "SSL stripping"),
-    buildLesson("network-security", "syn-flood", "SYN Flood Attacks", "Intermediate", "20m", "SYN flood attacks"),
-    buildLesson("network-security", "port-scanning", "Port Scanning", "Intermediate", "22m", "port scanning"),
-    buildLesson("network-security", "enumeration", "Enumeration", "Intermediate", "22m", "network enumeration"),
-    buildLesson("network-security", "siem", "SIEM", "Intermediate", "25m", "SIEM"),
-    buildLesson("network-security", "waf", "Web Application Firewalls", "Intermediate", "25m", "WAFs"),
-    buildLesson("network-security", "zero-day", "Zero-Day Vulnerabilities", "Advanced", "22m", "zero-day vulnerabilities"),
-    buildLesson("network-security", "threat-intelligence", "Threat Intelligence", "Intermediate", "22m", "threat intelligence"),
-    buildLesson("network-security", "soc", "Security Operations Center (SOC)", "Intermediate", "25m", "the SOC"),
-    buildLesson("network-security", "blue-team", "Blue Team Operations", "Intermediate", "22m", "blue team operations"),
-    buildLesson("network-security", "red-team", "Red Team Operations", "Advanced", "25m", "red team operations"),
-    buildLesson("network-security", "purple-team", "Purple Team Operations", "Advanced", "22m", "purple team operations"),
-    buildLesson("network-security", "incident-response", "Incident Response", "Intermediate", "28m", "incident response"),
+    buildLesson("network-security", "ssl-stripping", "SSL Stripping Hujumi", "Advanced", "22m", "SSL stripping"),
+    buildLesson("network-security", "syn-flood", "SYN Flood Hujumlari", "Intermediate", "20m", "SYN flood hujumlari"),
+    buildLesson("network-security", "port-scanning", "Port Skanerlash", "Intermediate", "22m", "port skanerlash"),
+    buildLesson("network-security", "enumeration", "Enumeration (Ro'yxatga Olish)", "Intermediate", "22m", "tarmoq enumeratsiyasi"),
+    buildLesson("network-security", "siem", "SIEM Tizimlari", "Intermediate", "25m", "SIEM"),
+    buildLesson("network-security", "waf", "Veb Ilova Firewalllar (WAF)", "Intermediate", "25m", "WAF-lar"),
+    buildLesson("network-security", "zero-day", "Nol Kunlik Zaifliklar", "Advanced", "22m", "nol kunlik zaifliklar"),
+    buildLesson("network-security", "threat-intelligence", "Tahdid Razvedkasi", "Intermediate", "22m", "tahdid razvedkasi"),
+    buildLesson("network-security", "soc", "Xavfsizlik Operatsiyalari Markazi (SOC)", "Intermediate", "25m", "SOC"),
+    buildLesson("network-security", "blue-team", "Ko'k Jamoa Operatsiyalari", "Intermediate", "22m", "ko'k jamoa operatsiyalari"),
+    buildLesson("network-security", "red-team", "Qizil Jamoa Operatsiyalari", "Advanced", "25m", "qizil jamoa operatsiyalari"),
+    buildLesson("network-security", "purple-team", "Binafsha Jamoa Operatsiyalari", "Advanced", "22m", "binafsha jamoa operatsiyalari"),
+    buildLesson("network-security", "incident-response", "Hodisalarga Javob Berish", "Intermediate", "28m", "hodisalarga javob berish"),
   ],
 };
 
@@ -959,9 +959,9 @@ const section6: CourseSection = {
 
 const section7: CourseSection = {
   id: "pentesting",
-  title: "Penetration Testing",
+  title: "Penetratsion Testlash",
   description:
-    "The professional pentester's toolkit — Wireshark, Burp Suite, Nmap, Metasploit and more — used legally and effectively.",
+    "Professional pentestchi toolkiti — Wireshark, Burp Suite, Nmap, Metasploit va boshqalar — qonuniy va samarali foydalaniladi.",
   icon: "Crosshair",
   color: "#8800ff",
   totalDuration: "5h 30m",

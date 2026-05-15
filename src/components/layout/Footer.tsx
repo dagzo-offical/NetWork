@@ -3,46 +3,77 @@ import { ShieldCheck, Code2, Terminal } from "lucide-react";
 
 export function Footer() {
   return (
-    <footer className="relative z-10 border-t border-white/5 bg-bg-primary/80 backdrop-blur-xl">
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 py-10">
-        <div className="flex flex-col gap-8 sm:flex-row sm:justify-between">
-          <div className="max-w-sm">
-            <div className="flex items-center gap-2 mb-3">
-              <ShieldCheck className="h-6 w-6 text-neon-green" />
-              <span className="font-bold gradient-text">NetSec Academy</span>
+    <footer
+      style={{
+        position: "relative",
+        zIndex: 10,
+        borderTop: "1px solid rgba(255,255,255,0.05)",
+        background: "rgba(10,10,15,0.85)",
+        backdropFilter: "blur(20px)",
+      }}
+    >
+      <div style={{ maxWidth: "1280px", margin: "0 auto", padding: "40px 24px" }}>
+        <div style={{ display: "flex", flexDirection: "column", gap: "32px" }}>
+          {/* Brand */}
+          <div style={{ maxWidth: "340px" }}>
+            <div style={{ display: "flex", alignItems: "center", gap: "8px", marginBottom: "10px" }}>
+              <ShieldCheck size={22} color="#00ff88" />
+              <span
+                style={{
+                  fontWeight: 800,
+                  fontSize: "15px",
+                  background: "linear-gradient(135deg, #00ff88, #0088ff)",
+                  WebkitBackgroundClip: "text",
+                  WebkitTextFillColor: "transparent",
+                  backgroundClip: "text",
+                }}
+              >
+                NetSec Academy
+              </span>
             </div>
-            <p className="text-sm text-slate-500 leading-relaxed">
-              A premium, hands-on platform for mastering network security,
-              infrastructure and penetration testing — from packets to PKI.
+            <p style={{ fontSize: "13px", color: "#64748b", lineHeight: 1.7 }}>
+              Tarmoq xavfsizligi, infratuzilma va penetratsion testlashni o&apos;rganish uchun
+              premium, amaliy platforma — paketlardan PKI gacha.
             </p>
           </div>
-          <div className="grid grid-cols-2 gap-8 text-sm">
-            <div className="flex flex-col gap-2">
-              <span className="text-slate-300 font-medium mb-1">Learn</span>
-              <Link href="/courses" className="text-slate-500 hover:text-neon-green">
-                All Courses
+
+          {/* Links */}
+          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "32px", fontSize: "13px" }}>
+            <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
+              <span style={{ color: "#e2e8f0", fontWeight: 600, marginBottom: "4px" }}>O&apos;rganish</span>
+              <Link href="/courses" style={{ color: "#64748b", textDecoration: "none" }}>
+                Barcha Kurslar
               </Link>
-              <Link href="/dashboard" className="text-slate-500 hover:text-neon-green">
+              <Link href="/dashboard" style={{ color: "#64748b", textDecoration: "none" }}>
                 Dashboard
               </Link>
-              <Link href="/certificate" className="text-slate-500 hover:text-neon-green">
-                Certificate
+              <Link href="/certificate" style={{ color: "#64748b", textDecoration: "none" }}>
+                Sertifikat
               </Link>
             </div>
-            <div className="flex flex-col gap-2">
-              <span className="text-slate-300 font-medium mb-1">Connect</span>
-              <span className="flex items-center gap-1.5 text-slate-500">
-                <Code2 className="h-4 w-4" /> Open Source
+            <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
+              <span style={{ color: "#e2e8f0", fontWeight: 600, marginBottom: "4px" }}>Platforma</span>
+              <span style={{ display: "flex", alignItems: "center", gap: "6px", color: "#64748b" }}>
+                <Code2 size={14} /> Ochiq Manba
               </span>
-              <span className="flex items-center gap-1.5 text-slate-500">
-                <Terminal className="h-4 w-4" /> Built for hackers
+              <span style={{ display: "flex", alignItems: "center", gap: "6px", color: "#64748b" }}>
+                <Terminal size={14} /> Hackerlar uchun qurilgan
               </span>
             </div>
           </div>
         </div>
-        <div className="mt-8 border-t border-white/5 pt-6 text-xs text-slate-600">
-          © {new Date().getFullYear()} NetSec Academy. For educational use only.
-          Always test only systems you are authorised to assess.
+
+        <div
+          style={{
+            marginTop: "32px",
+            borderTop: "1px solid rgba(255,255,255,0.05)",
+            paddingTop: "20px",
+            fontSize: "11px",
+            color: "#475569",
+          }}
+        >
+          © {new Date().getFullYear()} NetSec Academy. Faqat ta&apos;lim maqsadlarida.
+          Faqat ruxsat berilgan tizimlarni tekshiring.
         </div>
       </div>
     </footer>
