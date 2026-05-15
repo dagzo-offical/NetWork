@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import { ArrowRight, RotateCcw, X } from "lucide-react";
 import type { Lesson, TestAttempt } from "@/lib/types";
@@ -10,7 +10,76 @@ import { getAdjacentLessons } from "@/lib/course-data";
 import { TestQuestion } from "./TestQuestion";
 import { TestResult } from "./TestResult";
 import { CooldownTimer } from "./CooldownTimer";
+import { getCooldownRemaining } from "@/hooks/useTest";
 import { PASSING_SCORE } from "@/lib/constants";
+
+function formatTime(sec: number): string {
+  const m = Math.floor(sec / 60);
+  const s = sec % 60;
+  return `${String(m).padStart(2, "0")}:${String(s).padStart(2, "0")}`;
+}
+
+/** Live countdown shown after a failed attempt */
+function FailedCooldown({ lessonId }: { lessonId: string }) {
+  const [remaining, setRemaining] = useState(() => getCooldownRemaining(lessonId));
+
+  useEffect(() => {
+    if (remaining <= 0) return;
+    const id = setInterval(() => {
+      setRemaining(getCooldownRemaining(lessonId));
+    }, 1000);
+    return () => clearInterval(id);
+  }, [lessonId, remaining]);
+
+  if (remaining <= 0) return null;
+
+  return (
+    <div
+      style={{
+        marginTop: "14px",
+        padding: "12px 16px",
+        borderRadius: "10px",
+        background: "rgba(255,0,102,0.07)",
+        border: "1px solid rgba(255,0,102,0.2)",
+        textAlign: "center",
+      }}
+    >
+      <p style={{ color: "#94a3b8", fontSize: "12px", marginBottom: "6px" }}>
+        Qayta topshirish mumkin bo&apos;lguncha:
+      </p>
+      <span
+        style={{
+          fontFamily: "monospace",
+          fontSize: "28px",
+          fontWeight: 800,
+          color: "#ff0066",
+          letterSpacing: "2px",
+        }}
+      >
+        {formatTime(remaining)}
+      </span>
+      <div
+        style={{
+          marginTop: "8px",
+          height: "4px",
+          borderRadius: "2px",
+          background: "rgba(255,255,255,0.06)",
+          overflow: "hidden",
+        }}
+      >
+        <div
+          style={{
+            height: "100%",
+            background: "linear-gradient(90deg, #ff0066, #8800ff)",
+            borderRadius: "2px",
+            width: `${(remaining / (30 * 60)) * 100}%`,
+            transition: "width 1s linear",
+          }}
+        />
+      </div>
+    </div>
+  );
+}
 
 export function TestModal({
   open,
@@ -28,12 +97,23 @@ export function TestModal({
       (progress.testResults[lesson.id] ?? []).flatMap(
         (a) => a.questions.map((q) => q.question)
       ),
+    // Only recompute when lesson changes, not on every progress update
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [lesson.id]
   );
 
   const test = useTest(lesson.id, lesson.title, previousQuestions);
   const { next } = getAdjacentLessons(lesson.sectionId, lesson.id);
+
+  // Lock body scroll while modal is open
+  useEffect(() => {
+    if (open) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
+    return () => { document.body.style.overflow = ""; };
+  }, [open]);
 
   const handleSubmit = async () => {
     const res = await test.submit();
@@ -65,7 +145,7 @@ export function TestModal({
       style={{
         position: "fixed",
         inset: 0,
-        zIndex: 100,
+        zIndex: 1000,
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
@@ -76,11 +156,12 @@ export function TestModal({
       <div
         onClick={dismissible ? onClose : undefined}
         style={{
-          position: "absolute",
+          position: "fixed",
           inset: 0,
-          background: "rgba(0,0,0,0.8)",
-          backdropFilter: "blur(8px)",
+          background: "rgba(0,0,0,0.92)",
+          backdropFilter: "blur(10px)",
           cursor: dismissible ? "pointer" : "default",
+          zIndex: 0,
         }}
       />
 
@@ -88,14 +169,15 @@ export function TestModal({
       <div
         style={{
           position: "relative",
+          zIndex: 1,
           width: "100%",
           maxWidth: "680px",
           maxHeight: "85vh",
           overflowY: "auto",
-          background: "rgba(10,10,20,0.98)",
+          background: "rgba(10,10,20,0.99)",
           border: "1px solid rgba(0,255,136,0.25)",
           borderRadius: "18px",
-          boxShadow: "0 0 60px rgba(0,255,136,0.1)",
+          boxShadow: "0 0 80px rgba(0,0,0,0.8), 0 0 40px rgba(0,255,136,0.08)",
           padding: "28px",
         }}
       >
@@ -120,6 +202,7 @@ export function TestModal({
                 cursor: "pointer",
                 color: "#64748b",
                 display: "flex",
+                flexShrink: 0,
               }}
             >
               <X size={16} />
@@ -277,9 +360,10 @@ export function TestModal({
               </button>
             ) : (
               <div style={{ textAlign: "center" }}>
-                <p style={{ color: "#94a3b8", fontSize: "13px", marginBottom: "14px" }}>
-                  Darsni qayta ko&apos;ring — 30 daqiqa cooldown tugagach qayta topshirishingiz mumkin.
+                <p style={{ color: "#94a3b8", fontSize: "13px", marginBottom: "10px" }}>
+                  Darsni qayta ko&apos;ring — cooldown tugagach qayta topshirishingiz mumkin.
                 </p>
+                <FailedCooldown lessonId={lesson.id} />
                 <button
                   onClick={onClose}
                   style={{
@@ -293,6 +377,7 @@ export function TestModal({
                     color: "#94a3b8",
                     fontSize: "13px",
                     cursor: "pointer",
+                    marginTop: "14px",
                   }}
                 >
                   <RotateCcw size={14} /> Yopish va Ko&apos;rish
