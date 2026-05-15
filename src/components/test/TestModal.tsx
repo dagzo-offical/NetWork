@@ -1,5 +1,6 @@
 "use client";
 
+import { useMemo } from "react";
 import { useRouter } from "next/navigation";
 import { ArrowRight, RotateCcw, X } from "lucide-react";
 import type { Lesson, TestAttempt } from "@/lib/types";
@@ -22,8 +23,13 @@ export function TestModal({
 }) {
   const router = useRouter();
   const { progress, completeLesson } = useProgress();
-  const previousQuestions = (progress.testResults[lesson.id] ?? []).flatMap(
-    (a) => a.questions.map((q) => q.question)
+  const previousQuestions = useMemo(
+    () =>
+      (progress.testResults[lesson.id] ?? []).flatMap(
+        (a) => a.questions.map((q) => q.question)
+      ),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [lesson.id]
   );
 
   const test = useTest(lesson.id, lesson.title, previousQuestions);

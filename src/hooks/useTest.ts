@@ -59,7 +59,9 @@ export function useTest(lessonId: string, lessonTopic: string, previousQuestions
       setError("Savollarni yaratib bo'lmadi. Qayta urinib ko'ring.");
       setPhase("error");
     }
-  }, [lessonId, lessonTopic, previousQuestions]);
+  // previousQuestions intentionally excluded: we don't want a reload mid-session
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [lessonId, lessonTopic]);
 
   useEffect(() => {
     void loadQuestions();
