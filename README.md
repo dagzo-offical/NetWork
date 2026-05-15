@@ -1,36 +1,42 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# NetSec Academy
+
+A premium, dark-futuristic **Network Security & Infrastructure** course platform
+built with Next.js 15+ (App Router), TypeScript, Tailwind CSS, Framer Motion and
+Mermaid.js.
+
+## Features
+
+- **7 curriculum sections, 100+ lessons** — Network Fundamentals, HTTP/TLS, Web
+  Servers, Server Infrastructure, Software Architecture, Network Security and
+  Penetration Testing. Each lesson has 14 deep content sections (theory, packet
+  flow, attack vectors, defenses, config/CLI examples, Wireshark analysis, etc.).
+- **AI-graded exams** — every lesson ends with a 3-question written exam graded
+  by an intelligent heuristic scorer (`/api/validate`). Section final exams have
+  20 questions, a 2-hour timer and tab-switch anti-cheat detection.
+- **Progressive unlocks** — lessons and sections unlock as you pass exams. A
+  failed lesson exam triggers a 30-minute cooldown.
+- **Progress tracking** — XP, levels, study streaks, achievements and a study
+  heatmap, all persisted in `localStorage`.
+- **Certificate** — unlocked once every section final exam is passed.
+- **Cyber UI** — glassmorphism cards, neon glow, animated gradient borders, an
+  animated canvas network-particle background and Mermaid diagrams.
 
 ## Getting Started
 
-First, run the development server:
-
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000).
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Project Structure
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- `src/lib/course-data.ts` — all course content
+- `src/lib/ai-validator.ts` / `src/lib/question-bank.ts` — grading logic
+- `src/app/api/*` — validation and question-generation API routes
+- `src/hooks/*` — progress, test and timer hooks
+- `src/components/*` — layout, UI, home, dashboard, course and test components
 
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+The validation API can be swapped to a real LLM by replacing `scoreAnswer` in
+`src/app/api/validate/route.ts` — no client code changes required.

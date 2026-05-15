@@ -1,7 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useMemo, useState } from "react";
-import { useRouter } from "next/navigation";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { motion } from "framer-motion";
 import { AlertTriangle, Loader2, Eye, ArrowRight } from "lucide-react";
 import type { CourseSection, ExamAttempt, TestQuestion } from "@/lib/types";
@@ -38,7 +37,6 @@ function buildExamQuestions(section: CourseSection): TestQuestion[] {
 }
 
 export function FinalExam({ section }: { section: CourseSection }) {
-  const router = useRouter();
   const { recordExam } = useProgress();
   const [phase, setPhase] = useState<Phase>("intro");
   const [questions] = useState<TestQuestion[]>(() => buildExamQuestions(section));
@@ -47,14 +45,8 @@ export function FinalExam({ section }: { section: CourseSection }) {
   const [result, setResult] = useState<ValidationResult | null>(null);
   const [tabSwitches, setTabSwitches] = useState(0);
   const [startedAt, setStartedAt] = useState(0);
-
-  const timer = useTimer(
-    EXAM_TIME_LIMIT_MINUTES * 60,
-    () => {
-      if (phase === "active") void submit();
-    },
-    false
-  );
+  const phaseRef = useRef<Phase>("intro");
+  phaseRef.current = phase;
 
   const submit = useCallback(async () => {
     setPhase("grading");
@@ -79,6 +71,14 @@ export function FinalExam({ section }: { section: CourseSection }) {
     recordExam(attempt);
     setPhase("result");
   }, [questions, answers, section.id, section.title, startedAt, recordExam]);
+
+  const timer = useTimer(
+    EXAM_TIME_LIMIT_MINUTES * 60,
+    () => {
+      if (phaseRef.current === "active") void submit();
+    },
+    false
+  );
 
   // Anti-cheat: count tab switches while the exam is active.
   useEffect(() => {
