@@ -4,10 +4,6 @@ import { useEffect, useState } from "react";
 import { Lock } from "lucide-react";
 import { formatTime } from "@/lib/utils";
 
-/**
- * Shows the remaining 30-minute cooldown after a failed test attempt.
- * Calls `onComplete` once the cooldown elapses.
- */
 export function CooldownTimer({
   seconds,
   onComplete,
@@ -35,22 +31,62 @@ export function CooldownTimer({
   const pct = seconds > 0 ? (1 - remaining / seconds) * 100 : 100;
 
   return (
-    <div className="text-center py-8">
-      <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full border border-neon-red/40 bg-neon-red/10">
-        <Lock className="h-7 w-7 text-neon-red" />
+    <div style={{ textAlign: "center", padding: "40px 0" }}>
+      <div
+        style={{
+          width: "64px",
+          height: "64px",
+          borderRadius: "50%",
+          background: "rgba(255,0,102,0.1)",
+          border: "1px solid rgba(255,0,102,0.4)",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          margin: "0 auto 16px",
+        }}
+      >
+        <Lock size={28} color="#ff0066" />
       </div>
-      <h3 className="text-lg font-semibold text-slate-100">Test Locked</h3>
-      <p className="mt-1 text-sm text-slate-400 max-w-sm mx-auto">
-        You did not pass. Take time to review the lesson — the exam unlocks
-        again when the cooldown ends.
+
+      <h3 style={{ color: "#e2e8f0", fontWeight: 700, fontSize: "18px", marginBottom: "8px" }}>
+        Test Qulflangan
+      </h3>
+      <p style={{ color: "#94a3b8", fontSize: "13px", maxWidth: "340px", margin: "0 auto 20px", lineHeight: 1.6 }}>
+        O&apos;ta olmadingiz. Darsni qayta o&apos;qing — cooldown tugagach qayta topshirishingiz mumkin.
       </p>
-      <div className="mt-5 font-mono text-3xl text-neon-red tabular-nums">
+
+      <div
+        style={{
+          fontFamily: "monospace",
+          fontSize: "36px",
+          fontWeight: 800,
+          color: "#ff0066",
+          letterSpacing: "2px",
+          marginBottom: "16px",
+        }}
+      >
         {formatTime(remaining)}
       </div>
-      <div className="mt-4 mx-auto max-w-xs h-2 rounded-full bg-white/5 overflow-hidden border border-white/10">
+
+      <div
+        style={{
+          maxWidth: "280px",
+          margin: "0 auto",
+          height: "6px",
+          borderRadius: "3px",
+          background: "rgba(255,255,255,0.05)",
+          overflow: "hidden",
+          border: "1px solid rgba(255,255,255,0.08)",
+        }}
+      >
         <div
-          className="h-full bg-gradient-to-r from-neon-red to-neon-purple transition-all duration-1000"
-          style={{ width: `${pct}%` }}
+          style={{
+            height: "100%",
+            background: "linear-gradient(90deg, #ff0066, #8800ff)",
+            borderRadius: "3px",
+            width: `${pct}%`,
+            transition: "width 1s linear",
+          }}
         />
       </div>
     </div>

@@ -1,36 +1,70 @@
 "use client";
 
-import { useParams, notFound } from "next/navigation";
+import { useParams } from "next/navigation";
 import Link from "next/link";
-import { motion } from "framer-motion";
-import {
-  CheckCircle2,
-  Circle,
-  Lock,
-  Clock,
-  GraduationCap,
-  ArrowLeft,
-} from "lucide-react";
+import { CheckCircle2, Circle, Lock, Clock, GraduationCap, ArrowLeft } from "lucide-react";
 import { getSection } from "@/lib/course-data";
 import { useProgress } from "@/hooks/useProgress";
-import { Icon } from "@/components/ui/Icon";
-import { Badge, difficultyColor } from "@/components/ui/Badge";
-import { Progress } from "@/components/ui/Progress";
-import { Button } from "@/components/ui/Button";
+
+const DIFFICULTY_LABELS: Record<string, string> = {
+  Beginner: "Boshlang'ich",
+  Intermediate: "O'rta",
+  Advanced: "Ilg'or",
+};
+
+const DIFFICULTY_COLORS: Record<string, string> = {
+  Beginner: "#00ff88",
+  Intermediate: "#0088ff",
+  Advanced: "#ff0066",
+};
+
+const UZ_TITLES: Record<string, string> = {
+  "network-fundamentals": "Tarmoq Asoslari",
+  "http-tls": "HTTP, HTTPS, TLS va SSL",
+  "web-servers": "Web Serverlar",
+  "server-infrastructure": "Server Infratuzilmasi",
+  "software-architecture": "Dasturiy Ta'minot Arxitekturasi",
+  "network-security": "Tarmoq Xavfsizligi",
+  "pentesting": "Penetratsion Testlash",
+};
+
+const UZ_DESCRIPTIONS: Record<string, string> = {
+  "network-fundamentals": "Tarmoqlar qanday ishlashini chuqur o'rganing — fizik ramkalardan mantiqiy manzillash, routing va transport qatlamigacha.",
+  "http-tls": "Zamonaviy veb protokollarini o'zlashtirishning asosi — so'rovlar, headers, cookies va kriptografik handshake.",
+  "web-servers": "Apache, NGINX, IIS, Caddy va Tomcat — arxitektura, konfiguratsiya va xavfsizlikni mustahkamlash.",
+  "server-infrastructure": "Bare metal dan cloudgacha, firewall dan service mesh gacha — zamonaviy ilovalarni xosting va himoya qilish.",
+  "software-architecture": "Tizimlar qanday scale, fail va evolve bo'lishini belgilaydigan arxitektura stillar.",
+  "network-security": "Hujumlar va mudofaa — MITM, DDoS, IDS/IPS, SIEM va zamonaviy kiberoperatsiyalar.",
+  "pentesting": "Professional pentestchi toolkiti — Wireshark, Burp Suite, Nmap, Metasploit va boshqalar.",
+};
+
+const SECTION_COLORS: Record<string, string> = {
+  "network-fundamentals": "#00ff88",
+  "http-tls": "#0088ff",
+  "web-servers": "#8800ff",
+  "server-infrastructure": "#00ff88",
+  "software-architecture": "#0088ff",
+  "network-security": "#ff0066",
+  "pentesting": "#8800ff",
+};
 
 export default function SectionPage() {
   const params = useParams<{ sectionId: string }>();
   const section = getSection(params.sectionId);
-  const {
-    isLessonComplete,
-    isLessonUnlocked,
-    sectionProgress,
-    loaded,
-    isSectionExamPassed,
-  } = useProgress();
+  const { isLessonComplete, isLessonUnlocked, sectionProgress, loaded, isSectionExamPassed } = useProgress();
 
-  if (!section) return notFound();
+  if (!section) {
+    return (
+      <div style={{ padding: "60px 24px", textAlign: "center", color: "#94a3b8" }}>
+        Bo&apos;lim topilmadi.{" "}
+        <Link href="/courses" style={{ color: "#00ff88" }}>Orqaga</Link>
+      </div>
+    );
+  }
 
+  const color = SECTION_COLORS[section.id] ?? "#00ff88";
+  const title = UZ_TITLES[section.id] ?? section.title;
+  const desc = UZ_DESCRIPTIONS[section.id] ?? section.description;
   const prog = loaded
     ? sectionProgress(section.id)
     : { done: 0, total: section.lessons.length, percent: 0 };
@@ -38,126 +72,262 @@ export default function SectionPage() {
   const examPassed = loaded && isSectionExamPassed(section.id);
 
   return (
-    <div className="mx-auto max-w-5xl px-4 sm:px-6 py-10">
-      <Link
-        href="/courses"
-        className="inline-flex items-center gap-1.5 text-sm text-slate-400 hover:text-neon-green mb-6"
-      >
-        <ArrowLeft className="h-4 w-4" /> All Courses
-      </Link>
+    <div style={{ minHeight: "100vh", padding: "40px 24px" }}>
+      <div style={{ maxWidth: "900px", margin: "0 auto" }}>
 
-      <motion.div
-        initial={{ opacity: 0, y: 16 }}
-        animate={{ opacity: 1, y: 0 }}
-        className="glass gradient-border rounded-xl p-6 mb-8"
-      >
-        <div className="flex items-start gap-4">
-          <div
-            className="flex h-14 w-14 shrink-0 items-center justify-center rounded-xl border"
-            style={{
-              backgroundColor: `${section.color}1a`,
-              borderColor: `${section.color}55`,
-            }}
-          >
-            <Icon name={section.icon} className="h-7 w-7" />
-          </div>
-          <div className="flex-1">
-            <h1 className="text-2xl font-bold text-slate-100">
-              {section.title}
-            </h1>
-            <p className="mt-1.5 text-sm text-slate-400 leading-relaxed">
-              {section.description}
-            </p>
-            <div className="mt-3 flex flex-wrap items-center gap-3">
-              <Badge color="slate">{section.lessons.length} lessons</Badge>
-              <span className="flex items-center gap-1 text-xs text-slate-500">
-                <Clock className="h-3.5 w-3.5" /> {section.totalDuration}
+        {/* Back link */}
+        <Link
+          href="/courses"
+          style={{
+            textDecoration: "none",
+            display: "inline-flex",
+            alignItems: "center",
+            gap: "6px",
+            color: "#94a3b8",
+            fontSize: "14px",
+            marginBottom: "24px",
+          }}
+        >
+          <ArrowLeft size={16} /> Barcha Kurslar
+        </Link>
+
+        {/* Section header card */}
+        <div
+          style={{
+            background: "rgba(13,13,26,0.85)",
+            border: `1px solid ${color}40`,
+            borderRadius: "16px",
+            padding: "28px",
+            marginBottom: "24px",
+            backdropFilter: "blur(16px)",
+            boxShadow: `0 0 30px ${color}15`,
+          }}
+        >
+          <h1 style={{ color: "#e2e8f0", fontSize: "28px", fontWeight: 800, marginBottom: "8px" }}>
+            {title}
+          </h1>
+          <p style={{ color: "#94a3b8", fontSize: "14px", lineHeight: 1.7, marginBottom: "16px" }}>
+            {desc}
+          </p>
+          <div style={{ display: "flex", gap: "12px", flexWrap: "wrap", marginBottom: "16px" }}>
+            <span
+              style={{
+                background: "rgba(255,255,255,0.05)",
+                border: "1px solid rgba(255,255,255,0.1)",
+                borderRadius: "20px",
+                padding: "4px 12px",
+                fontSize: "12px",
+                color: "#cbd5e1",
+              }}
+            >
+              📚 {section.lessons.length} ta dars
+            </span>
+            <span
+              style={{
+                background: "rgba(255,255,255,0.05)",
+                border: "1px solid rgba(255,255,255,0.1)",
+                borderRadius: "20px",
+                padding: "4px 12px",
+                fontSize: "12px",
+                color: "#cbd5e1",
+                display: "flex",
+                alignItems: "center",
+                gap: "4px",
+              }}
+            >
+              <Clock size={12} /> {section.totalDuration}
+            </span>
+            {examPassed && (
+              <span
+                style={{
+                  background: "#00ff8820",
+                  border: "1px solid #00ff8840",
+                  borderRadius: "20px",
+                  padding: "4px 12px",
+                  fontSize: "12px",
+                  color: "#00ff88",
+                }}
+              >
+                ✓ Bo'lim yakunlangan
               </span>
-              {examPassed && <Badge color="green">Section Mastered</Badge>}
+            )}
+          </div>
+
+          {/* Progress bar */}
+          <div>
+            <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "6px" }}>
+              <span style={{ fontSize: "12px", color: "#64748b" }}>
+                {prog.done} / {prog.total} dars tugatildi
+              </span>
+              <span style={{ fontSize: "12px", color: color }}>
+                {prog.percent}%
+              </span>
+            </div>
+            <div
+              style={{
+                height: "6px",
+                background: "rgba(255,255,255,0.07)",
+                borderRadius: "3px",
+                overflow: "hidden",
+              }}
+            >
+              <div
+                style={{
+                  height: "100%",
+                  width: `${prog.percent}%`,
+                  background: `linear-gradient(90deg, ${color}, ${color}80)`,
+                  boxShadow: `0 0 10px ${color}50`,
+                  transition: "width 0.8s ease",
+                  borderRadius: "3px",
+                }}
+              />
             </div>
           </div>
         </div>
-        <div className="mt-5">
-          <Progress value={prog.percent} showLabel />
-        </div>
-      </motion.div>
 
-      <div className="flex flex-col gap-2.5 mb-8">
-        {section.lessons.map((lesson, i) => {
-          const done = loaded && isLessonComplete(lesson.id);
-          const unlocked =
-            !loaded || isLessonUnlocked(section.id, lesson.id);
-          return (
-            <motion.div
-              key={lesson.id}
-              initial={{ opacity: 0, x: -12 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ delay: i * 0.03 }}
-            >
+        {/* Lessons list */}
+        <div style={{ display: "flex", flexDirection: "column", gap: "8px", marginBottom: "24px" }}>
+          {section.lessons.map((lesson, i) => {
+            const done = loaded && isLessonComplete(lesson.id);
+            const unlocked = !loaded || isLessonUnlocked(section.id, lesson.id);
+            const diffColor = DIFFICULTY_COLORS[lesson.difficulty] ?? "#00ff88";
+            const diffLabel = DIFFICULTY_LABELS[lesson.difficulty] ?? lesson.difficulty;
+
+            return (
               <Link
+                key={lesson.id}
                 href={unlocked ? `/courses/${section.id}/${lesson.id}` : "#"}
-                className={!unlocked ? "pointer-events-none" : ""}
+                style={{ textDecoration: "none", pointerEvents: unlocked ? "auto" : "none" }}
               >
                 <div
-                  className={`glass rounded-lg p-4 flex items-center gap-4 transition-all ${
-                    unlocked ? "glass-hover cursor-pointer" : "opacity-50"
-                  }`}
+                  style={{
+                    background: "rgba(13,13,26,0.8)",
+                    border: `1px solid ${done ? color + "40" : "rgba(255,255,255,0.07)"}`,
+                    borderRadius: "10px",
+                    padding: "14px 18px",
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "14px",
+                    opacity: unlocked ? 1 : 0.5,
+                    transition: "all 0.2s ease",
+                    backdropFilter: "blur(8px)",
+                    cursor: unlocked ? "pointer" : "not-allowed",
+                  }}
+                  onMouseEnter={(e) => {
+                    if (unlocked) {
+                      (e.currentTarget as HTMLDivElement).style.border = `1px solid ${color}50`;
+                      (e.currentTarget as HTMLDivElement).style.background = "rgba(13,13,26,0.95)";
+                    }
+                  }}
+                  onMouseLeave={(e) => {
+                    if (unlocked) {
+                      (e.currentTarget as HTMLDivElement).style.border = `1px solid ${done ? color + "40" : "rgba(255,255,255,0.07)"}`;
+                      (e.currentTarget as HTMLDivElement).style.background = "rgba(13,13,26,0.8)";
+                    }
+                  }}
                 >
-                  <div className="shrink-0">
+                  {/* Status icon */}
+                  <div style={{ flexShrink: 0 }}>
                     {done ? (
-                      <CheckCircle2 className="h-6 w-6 text-neon-green" />
+                      <CheckCircle2 size={22} color="#00ff88" />
                     ) : !unlocked ? (
-                      <Lock className="h-6 w-6 text-slate-600" />
+                      <Lock size={22} color="#475569" />
                     ) : (
-                      <Circle className="h-6 w-6 text-slate-500" />
+                      <Circle size={22} color="#475569" />
                     )}
                   </div>
-                  <span className="font-mono text-sm text-slate-600 w-6">
+
+                  {/* Number */}
+                  <span style={{ color: "#475569", fontSize: "12px", fontFamily: "monospace", width: "20px", flexShrink: 0 }}>
                     {String(i + 1).padStart(2, "0")}
                   </span>
-                  <div className="flex-1 min-w-0">
-                    <p className="text-sm font-medium text-slate-100 truncate">
+
+                  {/* Title + meta */}
+                  <div style={{ flex: 1, minWidth: 0 }}>
+                    <p style={{ color: "#e2e8f0", fontSize: "14px", fontWeight: 600, marginBottom: "4px" }}>
                       {lesson.title}
                     </p>
-                    <div className="mt-1 flex items-center gap-2">
-                      <Badge color={difficultyColor(lesson.difficulty)}>
-                        {lesson.difficulty}
-                      </Badge>
-                      <span className="flex items-center gap-1 text-xs text-slate-500">
-                        <Clock className="h-3 w-3" /> {lesson.duration}
+                    <div style={{ display: "flex", gap: "8px", alignItems: "center" }}>
+                      <span
+                        style={{
+                          background: `${diffColor}20`,
+                          border: `1px solid ${diffColor}40`,
+                          borderRadius: "12px",
+                          padding: "1px 8px",
+                          fontSize: "10px",
+                          color: diffColor,
+                        }}
+                      >
+                        {diffLabel}
+                      </span>
+                      <span style={{ color: "#64748b", fontSize: "11px", display: "flex", alignItems: "center", gap: "3px" }}>
+                        <Clock size={11} /> {lesson.duration}
                       </span>
                     </div>
                   </div>
                 </div>
               </Link>
-            </motion.div>
-          );
-        })}
-      </div>
+            );
+          })}
+        </div>
 
-      <div className="glass rounded-xl p-6 text-center">
-        <GraduationCap
-          className={`mx-auto h-8 w-8 ${
-            allComplete ? "text-neon-green" : "text-slate-600"
-          }`}
-        />
-        <h3 className="mt-2 font-semibold text-slate-100">
-          Final Exam — {section.title}
-        </h3>
-        <p className="mt-1 text-sm text-slate-400">
-          {allComplete
-            ? "All lessons complete. Take the final exam to master this section."
-            : `Complete all ${section.lessons.length} lessons to unlock the final exam.`}
-        </p>
-        <div className="mt-4">
+        {/* Final exam card */}
+        <div
+          style={{
+            background: "rgba(13,13,26,0.85)",
+            border: `1px solid ${allComplete ? color + "50" : "rgba(255,255,255,0.07)"}`,
+            borderRadius: "16px",
+            padding: "28px",
+            textAlign: "center",
+            backdropFilter: "blur(16px)",
+          }}
+        >
+          <GraduationCap size={36} color={allComplete ? color : "#475569"} style={{ margin: "0 auto 12px" }} />
+          <h3 style={{ color: "#e2e8f0", fontWeight: 700, fontSize: "18px", marginBottom: "8px" }}>
+            Final Imtihon — {title}
+          </h3>
+          <p style={{ color: "#94a3b8", fontSize: "13px", marginBottom: "20px" }}>
+            {allComplete
+              ? "Barcha darslar tugallandi. Final imtihonni topshiring va bo'limni yakunlang."
+              : `Final imtihon uchun barcha ${section.lessons.length} ta darsni tugatishingiz kerak.`}
+          </p>
+
           {allComplete ? (
-            <Button variant="solid" href={`/exam/${section.id}`}>
-              Start Final Exam
-            </Button>
+            <Link
+              href={`/exam/${section.id}`}
+              style={{
+                textDecoration: "none",
+                display: "inline-block",
+                padding: "12px 28px",
+                borderRadius: "8px",
+                background: `linear-gradient(135deg, ${color}, ${color}99)`,
+                color: color === "#ff0066" ? "#fff" : "#000",
+                fontWeight: 700,
+                fontSize: "14px",
+                boxShadow: `0 0 20px ${color}30`,
+              }}
+            >
+              🎓 Final Imtihonni Boshlash
+            </Link>
           ) : (
-            <Button variant="ghost" disabled>
-              <Lock className="h-4 w-4" /> Exam Locked
-            </Button>
+            <button
+              disabled
+              style={{
+                padding: "12px 28px",
+                borderRadius: "8px",
+                background: "rgba(255,255,255,0.05)",
+                border: "1px solid rgba(255,255,255,0.1)",
+                color: "#475569",
+                fontWeight: 600,
+                fontSize: "14px",
+                cursor: "not-allowed",
+                display: "inline-flex",
+                alignItems: "center",
+                gap: "6px",
+              }}
+            >
+              <Lock size={14} /> Imtihon Qulflangan
+            </button>
           )}
         </div>
       </div>

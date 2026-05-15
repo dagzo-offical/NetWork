@@ -16,32 +16,79 @@ export function TestQuestion({
   disabled?: boolean;
 }) {
   const words = value.trim() ? value.trim().split(/\s+/).length : 0;
+
   return (
-    <div className="glass rounded-lg p-4">
-      <div className="flex items-start gap-3 mb-3">
-        <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-neon-green/15 border border-neon-green/40 text-sm font-semibold text-neon-green">
+    <div
+      style={{
+        background: "rgba(255,255,255,0.03)",
+        border: "1px solid rgba(255,255,255,0.08)",
+        borderRadius: "12px",
+        padding: "16px",
+      }}
+    >
+      <div style={{ display: "flex", gap: "12px", marginBottom: "12px", alignItems: "flex-start" }}>
+        <span
+          style={{
+            flexShrink: 0,
+            width: "28px",
+            height: "28px",
+            borderRadius: "8px",
+            background: "rgba(0,255,136,0.15)",
+            border: "1px solid rgba(0,255,136,0.4)",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            fontSize: "13px",
+            fontWeight: 700,
+            color: "#00ff88",
+          }}
+        >
           {index + 1}
         </span>
-        <p className="text-sm text-slate-200 leading-relaxed pt-0.5">
+        <p style={{ color: "#e2e8f0", fontSize: "14px", lineHeight: 1.6, paddingTop: "4px" }}>
           {question.question}
         </p>
       </div>
+
       <textarea
         value={value}
         onChange={(e) => onChange(e.target.value)}
         disabled={disabled}
         rows={5}
-        placeholder="Write a detailed, technical answer..."
-        className="w-full resize-y rounded-lg bg-bg-primary/80 border border-white/10 focus:border-neon-green/50 focus:outline-none focus:ring-1 focus:ring-neon-green/40 p-3 text-sm text-slate-200 placeholder:text-slate-600 disabled:opacity-50"
+        placeholder="Batafsil, texnik javob yozing..."
+        style={{
+          width: "100%",
+          resize: "vertical",
+          borderRadius: "8px",
+          background: "rgba(0,0,0,0.4)",
+          border: `1px solid ${value.trim() ? "rgba(0,255,136,0.3)" : "rgba(255,255,255,0.08)"}`,
+          padding: "12px",
+          fontSize: "13px",
+          color: "#e2e8f0",
+          outline: "none",
+          fontFamily: "inherit",
+          lineHeight: 1.6,
+          boxSizing: "border-box",
+          opacity: disabled ? 0.5 : 1,
+          cursor: disabled ? "not-allowed" : "text",
+          transition: "border-color 0.2s ease",
+        }}
+        onFocus={(e) => {
+          (e.target as HTMLTextAreaElement).style.border = "1px solid rgba(0,255,136,0.5)";
+          (e.target as HTMLTextAreaElement).style.boxShadow = "0 0 0 2px rgba(0,255,136,0.1)";
+        }}
+        onBlur={(e) => {
+          (e.target as HTMLTextAreaElement).style.border = `1px solid ${value.trim() ? "rgba(0,255,136,0.3)" : "rgba(255,255,255,0.08)"}`;
+          (e.target as HTMLTextAreaElement).style.boxShadow = "none";
+        }}
       />
-      <div className="mt-1.5 flex justify-between text-xs">
-        <span className="text-slate-600">
-          Be specific — terminology and mechanisms are graded.
+
+      <div style={{ marginTop: "6px", display: "flex", justifyContent: "space-between", fontSize: "11px" }}>
+        <span style={{ color: "#64748b" }}>
+          Terminlar va mexanizmlar baholanadi
         </span>
-        <span
-          className={words >= 25 ? "text-neon-green" : "text-slate-500"}
-        >
-          {words} words
+        <span style={{ color: words >= 25 ? "#00ff88" : "#64748b" }}>
+          {words} ta so&apos;z
         </span>
       </div>
     </div>
