@@ -15,7 +15,7 @@ function buildLesson(
   content?: Partial<LessonContent>
 ): Lesson {
   const fallback: LessonContent = {
-    introduction: `${title} — zamonaviy tarmoq va xavfsizlikning asosiy qurilish bloki. Ushbu darsda ${topic} nima ekanligini, nima uchun muhimligini va real ishlab chiqarish tarmoqlarida qanday ishlashini o'rganamiz.`,
+    introduction: `${title} — zamonaviy tarmoq va axborot xavfsizligining asosiy tushunchalaridan biri. Ushbu darsda ${topic} nima ekanligini, u nima uchun muhim ekanligini va real ishlab chiqarish muhitlarida qanday ishlashini chuqur o'rganamiz. Bu bilim tarmoqlarni loyihalash, muammolarni bartaraf etish va xavfsizlik tahdidlarini tahlil qilish uchun zaruriy poydevor bo'lib xizmat qiladi.`,
     theory: `Kontseptual jihatdan, ${topic} tarmoqning qatlamli modelida ishlaydi. Uning stekdagi o'rni — va yuqori va quyi qatlamlar bilan o'zaro ta'sirini tushunish — nosozliklarni tashxislash va xavfsizlik haqida mulohaza yuritish uchun zarurdir. Biz protokol/komponent dizayn maqsadlarini, uning ma'lumotlar tuzilmalarini va dizaynerlar qilgan murosalarni ko'rib chiqamiz.`,
     realWorldArchitecture: `Ishlab chiqarishda ${topic} kamdan-kam hollarda alohida joylashtiriladi. U routerlar, switchlar, load balancerlar, firewalllar va kuzatuv vositalari keng arxitekturasida joylashgan. Korxonalar va bulut provayderlari uni qanday ulashtirishini, jumladan ortiqchalik, masshtablash va nosozlik domenlarini ko'rib chiqamiz.`,
     packetFlow: `${topic} bilan bog'liq trafik tarmoqdan o'tganda, aniq ketma-ketlikda freymlar va paketlar almashiladi. Biz ushbu oqimni hop-by-hop kuzatamiz, har bir qatlamda qaysi maydonlar o'zgarishini va paket yozuvida nima ko'rinishini aniqlaymiz.`,
@@ -101,19 +101,19 @@ const section1: CourseSection = {
       "kompyuter tarmoqlari",
       {
         introduction:
-          "Tarmoq — ma'lumot almashish uchun ulangan ikki yoki undan ortiq qurilma. Bu oddiy g'oya kabel orqali ulangan ikkita noutbukdan tortib, global Internetdagi milliardlab qurilmalargacha kengayadi. Ushbu dars har bir keyingi dars tayanadigan lug'atni — node, link, host, protokol, topologiya — o'rnatadi.",
+          "Tarmoq — ma'lumot almashish maqsadida bir-biriga ulangan ikki yoki undan ortiq qurilmalar to'plami. Bu g'oya juda oddiy ko'rinsa-da, uning tatbiqi kabel orqali ulangan ikkita noutbukdan tortib, global Internetdagi milliardlab qurilmalargacha kengayadi. Tarmoqlar bizni dunyo bilan bog'laydigan, xizmatlarni ishlata oladigan va ma'lumot almasha oladigan asosiy infratuzilmadir. Ushbu dars keyingi barcha darslarga zamin bo'ladigan fundamental tushunchalarni — tugun (node), havola (link), host, protokol va tarmoq topologiyasi — chuqur o'rgatadi. Bu bilimlar bo'lmasdan tarmoq xavfsizligini tushunib bo'lmaydi.",
         theory:
-          "Tarmoq uchta narsa bilan belgilanadi: tugunlar (endpoint va oraliq qurilmalar), havolalar (signallarni tashuvchi muhit — mis, tolali optik, radio) va protokollar (ma'lumotlarni formatlash va almashinish uchun kelishilgan qoidalar). Muloqot qatlamli: har bir qatlam bitta muammoni hal qiladi va yuqori qatlamga toza abstraksiya beradi. OSI modeli yetti qatlamni belgilaydi (Fizik, Ma'lumotlar havolasi, Tarmoq, Transport, Sessiya, Taqdimot, Ilova); TCP/IP modeli bularni to'rttaga qisqartiradi (Havola, Internet, Transport, Ilova). Qatlamlash veb-brauzerga Wi-Fi yoki Ethernet ustida ishlayotganligini e'tiborsiz qoldirishga imkon beradi.",
+          "Har qanday tarmoq uchta asosiy tarkibiy qismdan iborat: tugunlar (endpoint qurilmalar va oraliq qurilmalar — kompyuter, router, switch, server), havolalar (signallarni uzatuvchi muhit — mis sim, tolali optik kabel yoki radio to'lqin) va protokollar (ma'lumotlarni qanday formatlash va almashinish kerakligini belgilovchi kelishilgan qoidalar to'plami). Tarmoqda muloqot qatlamlar orqali amalga oshiriladi: har bir qatlam bitta muammoni hal qilib, yuqori qatlamga toza abstraksiya taqdim etadi. OSI modeli yetti qatlamni belgilaydi — Fizik, Ma'lumotlar havolasi, Tarmoq, Transport, Sessiya, Taqdimot va Ilova. Amaliyotda ishlatiladigan TCP/IP modeli bularni to'rtta qatlamga birlashtiradi: Havola, Internet, Transport va Ilova. Qatlamlash tufayli, masalan, veb-brauzer o'zi Wi-Fi yoki Ethernet ustida ishlayotganini bilishi shart emas — bu vazifani quyi qatlamlar hal qiladi.",
         realWorldArchitecture:
-          "Odatiy ofis tarmog'ida end qurilmalar (noutbuklar, telefonlar) access switchlarga, ular distribution/core switchga, u esa router/firewallga ulangan bo'lib, ISP ga yetib boradi. Simsiz kirish nuqtalari radio mijozlarni simli LAN ga ko'prik orqali ulaydi. Serverlar alohida VLAN da joylashgan. Bu kirish/tarqatish/yadro ierarxiyasi broadcast domenlarini kichik va nosozlik domenlarini izolyatsiyalangan saqlaydi.",
+          "Odatiy korporativ ofis tarmog'ida end qurilmalar (noutbuklar, telefonlar, printerlar) access switchlarga ulanadi. Access switchlar distribution/core switchga, u esa router va firewallga ulanib, nihoyat ISP orqali Internetga chiqadi. Simsiz kirish nuqtalari (Wi-Fi AP) radio orqali ulanadigan qurilmalarni simli LAN ga ko'prik orqali bog'laydi. Serverlar alohida VLAN da joylashtiriladi va kirish qoidalar bilan cheklanadi. Bu uch bosqichli kirish/tarqatish/yadro ierarxiyasi broadcast domenlarini kichik, nosozlik domenlarini izolyatsiyalangan saqlaydi va tarmoqni boshqarish osonlashadi.",
         packetFlow:
-          "Noutbuk A bir xil LAN dagi server B ga xabar yuborayotganda: ilova ma'lumot ishlab chiqaradi, transport qatlami TCP/UDP sarlavhasi qo'shadi, tarmoq qatlami manba/manzil IP bilan IP sarlavhasi qo'shadi, ma'lumotlar havolasi qatlami manba/manzil MAC bilan Ethernet freymiga o'raydi va fizik qatlam bitlarni simga kodlaydi. Switch manzil MAC ni o'qib, freymni faqat to'g'ri portdan yuboradi. B jarayonni teskari — har bir sarlavha qatlamini ajratib — amalga oshiradi.",
+          "Noutbuk A bir xil LAN dagi server B ga xabar yuborayotganda quyidagi jarayon sodir bo'ladi: ilova ma'lumot yaratadi; transport qatlami TCP yoki UDP sarlavhasini qo'shadi (portlar, tartib raqamlari); tarmoq qatlami manba va manzil IP manzillari bilan IP sarlavhasini qo'shadi; ma'lumotlar havolasi qatlami manba va manzil MAC manzillari bilan Ethernet freymiga o'raydi; fizik qatlam bitlarni elektr signalga aylantirib simga yuboradi. Switch freymni qabul qilib, manzil MAC ni jadvalidan qidiradi va freymni faqat to'g'ri portdan yuboradi. Server B bu jarayonni teskari tartibda bajarib, har bir sarlavhani ajratib olib, oxirida asl ma'lumotni oladi.",
         securityImplications:
-          "Har bir umumiy muhit tinglab turish imkoniyatidir. Hub da (yoki buzilgan switchda) har qanday tugun boshqalarga tegishli trafikni ko'rishi mumkin. Broadcast trafigi segmentdagi har bir tugunga yetib boradi. Tarmoq portiga ulanadigan tajovuzkor o'sha broadcast domenidagi har bir qurilmaga Layer 2 kirishini oladi — shuning uchun fizik port xavfsizligi va tarmoq segmentatsiyasi asosiy boshqaruvlardir.",
+          "Har qanday umumiy muhit tinglab turish (eavesdropping) uchun potensial imkoniyatdir. Hubda yoki kompromis qilingan switchda har qanday tugun boshqalarga tegishli trafikni ko'ra oladi. Broadcast trafigi segmentdagi barcha tugunlarga yetib boradi. Tarmoq portiga ulangan tajovuzkor o'sha broadcast domenidagi barcha qurilmalar bilan Layer 2 aloqasiga kirishi mumkin. Shuning uchun fizik port xavfsizligi (802.1X autentifikatsiya), VLAN bilan segmentatsiya va tarmoqqa kirishni nazorat qilish asosiy xavfsizlik boshqaruvlaridir.",
         commonMistakes: [
-          "OSI modelini (o'qitish abstraksiyasi) stek aslida qanday amalga oshirilishi (TCP/IP) bilan chalkashtirib yuborish.",
-          "Switch xavfsizlik ta'minlaydi deb o'ylash — u samaradorlik ta'minlaydi, maxfiylik emas.",
-          "Segmentatsiyasiz bitta katta tekis tarmoq loyihalash.",
+          "OSI modelini (o'qitish maqsadidagi abstraksiya) TCP/IP stek amalda qanday ishlashini tushunmasdan yod olish — bu ikkalasi turli maqsadlarda mavjud.",
+          "Switch xavfsizlik ta'minlaydi deb hisoblash — switch samaradorlikni ta'minlaydi, maxfiylikni emas; u barcha trafikni bir xil broadcast domenida ko'rsatishi mumkin.",
+          "Tarmoqni segmentatsiyasiz yagona katta tekis (flat) tuzilmada loyihalash — bu tajovuzkorga bir qurilmani buzib, hamma narsaga kirish imkonini beradi.",
         ],
         diagrams: [
           {
@@ -130,7 +130,7 @@ const section1: CourseSection = {
           },
         ],
         summary:
-          "Tarmoq = tugunlar + havolalar + protokollar, qatlamlarga tashkil etilgan. Qatlamlash muammolarni ajratadi; switchlar MAC bo'yicha, routerlar IP bo'yicha yo'naltiradi. Umumiy muhit tinglab turish xavfini anglatadi, shuning uchun segmentatsiya asosiy xavfsizlik nazoravidir.",
+          "Tarmoq = tugunlar + havolalar + protokollar, ular qatlamlarga tashkil etilgan. Qatlamlash har bir muammoni alohida hal qilishga imkon beradi: switch MAC manzil bo'yicha freymlarni yo'naltiradi, router esa IP manzil bo'yicha paketlarni yo'naltiradi. Umumiy tarmoq muhiti tinglab turish xavfini anglatadi, shuning uchun VLAN segmentatsiyasi, port xavfsizligi va 802.1X autentifikatsiya asosiy xavfsizlik nazoravlaridir.",
       }
     ),
     buildLesson(
@@ -142,7 +142,7 @@ const section1: CourseSection = {
       "Internet va avtonom tizimlar",
       {
         introduction:
-          "Internet — bitta tarmoq emas — bu trafik almashishga kelishgan ~75,000 ta mustaqil boshqariladigan tarmoqlar (Avtonom Tizimlar) tarmog'i. Ushbu dars noutbukingizdan boshqa qit'adagi serverga paket qanday yetib borishini tushuntiradi.",
+          "Internet bitta tarmoq emas — bu trafik almashishga o'zaro kelishgan taxminan 75,000 ta mustaqil boshqariladigan tarmoqlar (Avtonom Tizimlar) majmui. Siz brauzerda URL yozganingizda, so'rovingiz bir necha millisekund ichida bir necha mamlakat bo'ylab sakrab o'tadi. Bu dars noutbukingizdan boshqa qit'adagi serverga paket qanday yo'l bosib borishini — DNS, routing, BGP va tranzit mexanizmlari orqali — batafsil tushuntiradi.",
         theory:
           "Har bir Avtonom Tizim (AS) noyob AS raqamiga ega va o'ziga tegishli IP prefikslarini e'lon qiladi. BGP (Border Gateway Protocol) — ASlarni bir-biriga ulashga biriktiradigan routing protokoli: har bir AS qo'shnilarga qaysi prefikslariga yetib borishi mumkinligini va qaysi AS-yo'l orqali aytadi. AS ichida IGP (OSPF yoki IS-IS) eng qisqa yo'llarni topadi. Internetda markaziy nazorat yo'q — ulanish millionlab BGP e'lonlaridan kelib chiqadi.",
         realWorldArchitecture:
@@ -186,7 +186,7 @@ const section1: CourseSection = {
       "tarmoq miqyosi tasnifi",
       {
         introduction:
-          "Tarmoqlar geografik miqyos bo'yicha tasniflanadi. LAN, MAN va WAN faqat hajm jihatidan emas, balki egalik, texnologiya, kechikish va narx jihatidan ham farq qiladi — va bu farqlar arxitektura qarorlarini belgilaydi.",
+          "Tarmoqlar nafaqat ulangan qurilmalar soni, balki qamrab olgan geografik masofa bo'yicha ham tasniflanadi. LAN (mahalliy tarmoq), MAN (shahar miqyosidagi tarmoq) va WAN (keng hududli tarmoq) bir-biridan faqat o'lcham jihatidan emas, balki egalik huquqi, ishlatiladigan texnologiya, kechikish va narx jihatidan ham tubdan farq qiladi. Bu farqlarni tushunish to'g'ri tarmoq arxitekturasini tanlash va xavfsizlik siyosatini belgilash uchun zaruriy asos hisoblanadi.",
         theory:
           "LAN (Mahalliy Tarmoq) bino yoki kampusni qamrab oladi, shaxsiy mulk, Ethernet/Wi-Fi ishlatadi va submillisekund kechikish bilan yuqori o'tkazuvchanlik taklif etadi. MAN (Metropoliten Tarmoq) shaharni qamrab oladi, ko'pincha tashuvchi tomonidan tolali optik halqalarda qurilgan. WAN (Keng Tarmoq) mamlakatlar yoki kontinentlarni qamrab oladi, odatda tashuvchilardan ijaraga olinadi va yuqori kechikish va past bit o'tkazuvchanligiga ega. Internet eng katta WANdir.",
         realWorldArchitecture:

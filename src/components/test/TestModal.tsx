@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
+import { createPortal } from "react-dom";
 import { useRouter } from "next/navigation";
 import { ArrowRight, RotateCcw, X } from "lucide-react";
 import type { Lesson, TestAttempt } from "@/lib/types";
@@ -136,16 +137,16 @@ export function TestModal({
     else router.push(`/courses/${lesson.sectionId}`);
   };
 
-  if (!open) return null;
+  if (!open || typeof document === "undefined") return null;
 
   const dismissible = test.phase !== "validating";
 
-  return (
+  const modal = (
     <div
       style={{
         position: "fixed",
         inset: 0,
-        zIndex: 1000,
+        zIndex: 9999,
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
@@ -156,12 +157,10 @@ export function TestModal({
       <div
         onClick={dismissible ? onClose : undefined}
         style={{
-          position: "fixed",
+          position: "absolute",
           inset: 0,
-          background: "rgba(0,0,0,0.92)",
-          backdropFilter: "blur(10px)",
+          background: "rgba(0,0,0,0.95)",
           cursor: dismissible ? "pointer" : "default",
-          zIndex: 0,
         }}
       />
 
@@ -389,4 +388,6 @@ export function TestModal({
       </div>
     </div>
   );
+
+  return createPortal(modal, document.body);
 }
