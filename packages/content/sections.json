@@ -1,0 +1,39 @@
+{
+  "sections": [
+    {
+      "id": "network-fundamentals",
+      "title": "Network Fundamentals",
+      "lessonCount": 20
+    },
+    {
+      "id": "http-https-tls-ssl",
+      "title": "HTTP / HTTPS / TLS / SSL",
+      "lessonCount": 25
+    },
+    {
+      "id": "web-servers",
+      "title": "Web Serverlar",
+      "lessonCount": 20
+    },
+    {
+      "id": "server-infrastructure",
+      "title": "Server Infrastructure",
+      "lessonCount": 20
+    },
+    {
+      "id": "software-architecture",
+      "title": "Software Architecture",
+      "lessonCount": 20
+    },
+    {
+      "id": "network-security",
+      "title": "Network Security",
+      "lessonCount": 20
+    },
+    {
+      "id": "pentesting",
+      "title": "Pentesting",
+      "lessonCount": 20
+    }
+  ]
+}
