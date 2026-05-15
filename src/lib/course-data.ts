@@ -243,137 +243,137 @@ const section2: CourseSection = {
     buildLesson(
       "http-tls",
       "http-architecture",
-      "HTTP Architecture",
+      "HTTP Arxitekturasi",
       "Beginner",
       "25m",
-      "the HTTP protocol",
+      "HTTP protokoli",
       {
         introduction:
-          "HTTP (HyperText Transfer Protocol) is the request/response protocol that powers the web. Every page load, API call and image fetch is HTTP. This lesson explains its stateless client-server design and message structure.",
+          "HTTP (HyperText Transfer Protocol) — vebni harakatga keltiruvchi so'rov/javob protokoli. Har bir sahifa yuklanishi, API chaqiruvi va rasm olish HTTP orqali amalga oshiriladi. Bu dars uning holatsiz mijoz-server dizayni va xabar tuzilmasini tushuntiradi.",
         theory:
-          "HTTP is a stateless, text-based (in HTTP/1.x) application-layer protocol. A client sends a request — method, target URI, version, headers, optional body — and the server returns a response — status line, headers, optional body. Statelessness means each request is independent; the server keeps no memory of prior requests unless the application adds state via cookies or tokens. HTTP runs over TCP (HTTP/1.1, HTTP/2) or QUIC/UDP (HTTP/3).",
+          "HTTP — holatsiz, matnli (HTTP/1.x da) ilova qatlami protokoli. Mijoz so'rov yuboradi — metod, maqsad URI, versiya, sarlavhalar, ixtiyoriy tana — va server javob qaytaradi — holat qatori, sarlavhalar, ixtiyoriy tana. Holatsizlik har bir so'rov mustaqil ekanligini anglatadi; server oldingi so'rovlarni cookie-lar yoki tokenlar orqali ilova holat qo'shmasdan eslamaydi. HTTP TCP ustida (HTTP/1.1, HTTP/2) yoki QUIC/UDP ustida (HTTP/3) ishlaydi.",
         realWorldArchitecture:
-          "In production, a browser rarely talks directly to an application server. The request hits a CDN edge, then a load balancer, then a reverse proxy (NGINX), then an application server, which may call microservices and databases. Each hop may add, remove or rewrite HTTP headers. Keep-alive connections and connection pooling reduce TCP setup cost.",
+          "Ishlab chiqarishda brauzer kamdan-kam hollarda ilova serveriga to'g'ridan-to'g'ri murojaat qiladi. So'rov CDN chekka tuguniga, so'ng load balancerga, so'ng teskari proksi (NGINX) ga, so'ng mikroservislar va ma'lumotlar bazalariga murojaat qilishi mumkin bo'lgan ilova serveriga etib boradi. Har bir hopda HTTP sarlavhalari qo'shilishi, o'chirilishi yoki qayta yozilishi mumkin. Keep-alive ulanishlar va ulanish hovuzi TCP o'rnatish narxini kamaytiradi.",
         packetFlow:
-          "1) DNS resolves the host. 2) TCP three-way handshake (SYN, SYN-ACK, ACK). 3) For HTTPS, a TLS handshake. 4) The client sends the HTTP request line and headers, blank line, then body. 5) The server responds. 6) With keep-alive the TCP connection is reused for further requests. A packet capture shows the request as readable text (over HTTP) or as encrypted TLS records (over HTTPS).",
+          "1) DNS hostni IP ga hal qiladi. 2) TCP uch tomonlama handshake (SYN, SYN-ACK, ACK). 3) HTTPS uchun TLS handshake. 4) Mijoz HTTP so'rov qatori va sarlavhalarini, bo'sh qatorni, so'ng tanani yuboradi. 5) Server javob beradi. 6) Keep-alive bilan TCP ulanishi keyingi so'rovlar uchun qayta ishlatiladi. Paket yozuvi so'rovni o'qilishi mumkin matn (HTTP ustida) yoki shifrlangan TLS yozuvlari (HTTPS ustida) sifatida ko'rsatadi.",
         securityImplications:
-          "Plain HTTP is fully readable and modifiable by anyone on the path — credentials, cookies and content are exposed. Header injection, request smuggling (exploiting parsing differences between proxies) and verbose error pages are all real risks. Always serve over HTTPS and normalise headers at the edge.",
+          "Oddiy HTTP yo'ldagi har kim tomonidan to'liq o'qilishi va o'zgartirilishi mumkin — hisob ma'lumotlari, cookie-lar va kontent ochiq. Sarlavha in'yeksiyasi, so'rov kontrabandasi (proksilar o'rtasidagi tahlil farqlaridan foydalanish) va batafsil xato sahifalari real xavflardir. Har doim HTTPS orqali xizmat ko'rsating va chekka tugunida sarlavhalarni normallashtiring.",
         attackVectors: [
           {
-            name: "HTTP request smuggling",
+            name: "HTTP so'rovini kontrabanda qilish",
             description:
-              "Conflicting Content-Length / Transfer-Encoding interpretation between a front-end proxy and back-end server lets an attacker desync the connection.",
+              "Old tomonlama proksi va orqa tomonlama server o'rtasida Content-Length / Transfer-Encoding talqinidagi ziddiyat tajovuzkorga ulanishni desinxronizatsiya qilishga imkon beradi.",
             severity: "Critical",
           },
           {
-            name: "Plaintext interception",
-            description: "On HTTP, any on-path attacker reads and rewrites traffic.",
+            name: "Oddiy matnni ushlab qolish",
+            description: "HTTP da, yo'ldagi har qanday tajovuzkor trafikni o'qiydi va qayta yozadi.",
             severity: "High",
           },
         ],
         configExamples: [
           {
             language: "http",
-            description: "A raw HTTP/1.1 request and response.",
+            description: "Xom HTTP/1.1 so'rov va javob.",
             code: "GET /index.html HTTP/1.1\nHost: example.com\nUser-Agent: curl/8.0\nAccept: */*\n\nHTTP/1.1 200 OK\nContent-Type: text/html\nContent-Length: 138\n\n<!doctype html>...",
           },
         ],
         diagrams: [
           {
             type: "mermaid",
-            title: "HTTP request lifecycle",
+            title: "HTTP so'rov hayot davri",
             content:
-              "sequenceDiagram\n  Client->>DNS: resolve host\n  Client->>Server: TCP SYN/ACK\n  Client->>Server: HTTP GET /\n  Server-->>Client: 200 OK + body",
+              "sequenceDiagram\n  Client->>DNS: hostni hal qilish\n  Client->>Server: TCP SYN/ACK\n  Client->>Server: HTTP GET /\n  Server-->>Client: 200 OK + tana",
           },
         ],
         summary:
-          "HTTP is a stateless request/response protocol. Production traffic crosses CDNs, load balancers and proxies that rewrite headers. Plain HTTP is insecure; parsing inconsistencies enable request smuggling.",
+          "HTTP — holatsiz so'rov/javob protokoli. Ishlab chiqarish trafigi sarlavhalarni qayta yozuvchi CDN-lar, load balancerlar va proksilardan o'tadi. Oddiy HTTP xavfli; tahlil nomuvofiqliklari so'rov kontrabandini yoqadi.",
       }
     ),
     buildLesson(
       "http-tls",
       "http-methods",
-      "HTTP Methods",
+      "HTTP Metodlari",
       "Beginner",
       "20m",
-      "HTTP methods",
+      "HTTP metodlari",
       {
         introduction:
-          "HTTP methods (verbs) declare the intent of a request. Choosing the right one — and respecting its semantics around safety and idempotency — is the foundation of correct, cacheable, secure APIs.",
+          "HTTP metodlari (fe'llar) so'rovning niyatini e'lon qiladi. To'g'ri metodni tanlash — va xavfsizlik hamda idempotentlik atrofidagi semantikani hurmat qilish — to'g'ri, keshlanishi mumkin, xavfsiz API-larning asosi.",
         theory:
-          "GET retrieves a resource and must be safe (no side effects). HEAD is GET without a body. POST submits data and is neither safe nor idempotent. PUT replaces a resource and is idempotent. PATCH partially updates. DELETE removes a resource (idempotent). OPTIONS reports capabilities and drives CORS preflight. A method is safe if it does not modify state; idempotent if repeating it has the same effect as doing it once.",
+          "GET resursni oladi va xavfsiz bo'lishi kerak (yon ta'sirlarsiz). HEAD tanasiz GET. POST ma'lumotlarni yuboradi va na xavfsiz, na idempotent. PUT resursni almashtiradi va idempotent. PATCH qisman yangilaydi. DELETE resursni o'chiradi (idempotent). OPTIONS imkoniyatlarni bildiradi va CORS preflight ni boshqaradi. Metod holatni o'zgartirmasa xavfsiz; bir marta bajarishning ta'siri kabi takrorlansa idempotent.",
         realWorldArchitecture:
-          "REST APIs map methods to CRUD operations. Caches and CDNs will only cache safe methods (GET/HEAD). Load balancers may route by method. Browsers automatically retry idempotent requests on connection failure but not POST — which is why payment endpoints use idempotency keys.",
+          "REST API-lari metodlarni CRUD operatsiyalariga moslashtiradi. Keshlar va CDN-lar faqat xavfsiz metodlarni (GET/HEAD) keshlaydi. Load balancerlar metod bo'yicha yo'naltirishi mumkin. Brauzerlar ulanish muvaffaqiyatsizligida idempotent so'rovlarni avtomatik qayta urinadi, lekin POST ni emas — shuning uchun to'lov endpointlari idempotentlik kalitlaridan foydalanadi.",
         packetFlow:
-          "The method is the first token on the request line. A CORS preflight is an automatic OPTIONS request the browser sends before a non-simple cross-origin request, carrying Access-Control-Request-Method.",
+          "Metod so'rov qatoridagi birinchi tokendir. CORS preflight — brauzer oddiy bo'lmagan cross-origin so'rovdan oldin avtomatik yuboradigan OPTIONS so'rovi bo'lib, Access-Control-Request-Method ni olib yuradi.",
         securityImplications:
-          "Allowing unsafe methods on read-only endpoints, or leaving TRACE/PUT enabled on a server, expands attack surface. Verb tampering can bypass naive authorisation checks that only protect GET/POST.",
+          "Faqat o'qish uchun endpointlarda xavfli metodlarga ruxsat berish yoki serverda TRACE/PUT ni yoqiq qoldirish hujum yuzasini kengaytiradi. Fe'l soxtalashtirish faqat GET/POST ni himoya qiladigan sodda avtorizatsiya tekshiruvlarini chetlab o'tishi mumkin.",
         commonMistakes: [
-          "Using GET for state-changing actions — they get cached, logged in URLs, and prefetched.",
-          "Assuming PATCH is idempotent (it generally is not).",
-          "Leaving TRACE enabled, enabling Cross-Site Tracing.",
+          "Holat o'zgartiruvchi harakatlar uchun GET ishlatish — ular keshlanadi, URL-larda joylashtiriladi va oldindan yuklanadi.",
+          "PATCH idempotent deb faraz qilish (u odatda emas).",
+          "Cross-Site Tracing imkoniyatini beruvchi TRACE ni yoqiq qoldirish.",
         ],
         summary:
-          "Methods declare intent. GET/HEAD are safe; GET/PUT/DELETE are idempotent; POST/PATCH are neither. Respecting these semantics keeps caching, retries and security correct.",
+          "Metodlar niyatni e'lon qiladi. GET/HEAD xavfsiz; GET/PUT/DELETE idempotent; POST/PATCH na xavfsiz, na idempotent. Bu semantikani hurmat qilish keshlash, qayta urinish va xavfsizlikni to'g'ri saqlaydi.",
       }
     ),
     buildLesson(
       "http-tls",
       "tls-handshake",
-      "The TLS 1.3 Handshake",
+      "TLS 1.3 Handshake",
       "Advanced",
       "35m",
-      "the TLS handshake",
+      "TLS handshake",
       {
         introduction:
-          "The TLS handshake is the negotiation that turns an insecure TCP connection into an encrypted, authenticated channel. TLS 1.3 streamlined it to a single round trip. This lesson dissects every message.",
+          "TLS handshake — xavfli TCP ulanishini shifrlangan, autentifikatsiyalangan kanalga aylantiruvchi muzokaralar. TLS 1.3 uni bitta round-trip ga soddalashtirdi. Bu dars har bir xabarni tahlil qiladi.",
         theory:
-          "TLS provides confidentiality (encryption), integrity (AEAD ciphers) and authentication (certificates). The 1.3 handshake: the client sends ClientHello with supported cipher suites, a key share (an ephemeral Diffie-Hellman public key) and extensions. The server replies with ServerHello (chosen suite, its key share), then — now encrypted — Certificate, CertificateVerify (a signature proving it holds the private key) and Finished. Both sides derive identical session keys from the DH exchange via the HKDF key schedule. TLS 1.3 removed RSA key exchange, static DH, and weak ciphers, and made forward secrecy mandatory.",
+          "TLS maxfiylik (shifrlash), yaxlitlik (AEAD shifrlar) va autentifikatsiya (sertifikatlar) ta'minlaydi. 1.3 handshake: mijoz qo'llab-quvvatlanadigan shifr to'plamlari, kalit ulushi (vaqtinchalik Diffie-Hellman ochiq kaliti) va kengaytmalar bilan ClientHello yuboradi. Server ServerHello (tanlangan to'plam, uning kalit ulushi), so'ng — endi shifrlangan — Certificate, CertificateVerify (shaxsiy kalitga egaligini isbotlovchi imzo) va Finished bilan javob beradi. Ikkala tomon ham HKDF kalit jadvali orqali DH almashinuvidan bir xil sessiya kalitlarini oladi. TLS 1.3 RSA kalit almashinuvini, statik DH ni va zaif shifrlarni olib tashladi va forward secrecy ni majburiy qildi.",
         realWorldArchitecture:
-          "TLS is usually terminated at the edge — on a CDN, load balancer or reverse proxy — which holds the certificate and private key. Traffic to the back-end may be re-encrypted (mTLS inside a service mesh) or sent in plaintext within a trusted segment. Session resumption (PSK tickets) and 0-RTT let returning clients skip a round trip.",
+          "TLS odatda chekka da — CDN, load balancer yoki teskari proksi da — yakunlanadi, u sertifikat va shaxsiy kalitni saqlaydi. Orqa tomonga trafik qayta shifrlangan (service mesh ichida mTLS) yoki ishonchli segment ichida oddiy matnda yuborilishi mumkin. Sessiyani tiklash (PSK ticketlari) va 0-RTT qaytuvchi mijozlarga round-tripni o'tkazib yuborishga imkon beradi.",
         packetFlow:
-          "After the TCP handshake: ClientHello → ServerHello → {EncryptedExtensions, Certificate, CertificateVerify, Finished} → Finished. Application data can flow after the client's Finished — one round trip. With 0-RTT, the client sends data inside the very first flight.",
+          "TCP handshake dan keyin: ClientHello → ServerHello → {EncryptedExtensions, Certificate, CertificateVerify, Finished} → Finished. Ilova ma'lumotlari mijozning Finished dan keyin oqishi mumkin — bitta round-trip. 0-RTT bilan mijoz ma'lumotlarni birinchi uchishda yuboradi.",
         securityImplications:
-          "Forward secrecy (ephemeral DH) means a future private-key compromise cannot decrypt past traffic. 0-RTT data is replayable and must be idempotent only. Downgrade attacks try to force older TLS/cipher versions — TLS 1.3 includes downgrade sentinels. A weak or compromised CA undermines the whole trust chain.",
+          "Forward secrecy (vaqtinchalik DH) kelajakdagi shaxsiy kalit buzilishi o'tgan trafikni parolini ocholmasligini anglatadi. 0-RTT ma'lumotlari takrorlanishi mumkin va faqat idempotent bo'lishi kerak. Pasaytirish hujumlari eski TLS/shifr versiyalarini majburlashga urinadi — TLS 1.3 pasaytirish sentinellarini o'z ichiga oladi. Zaif yoki buzilgan CA butun ishonch zanjirini buzadi.",
         attackVectors: [
           {
-            name: "Protocol downgrade",
+            name: "Protokolni pasaytirish",
             description:
-              "An on-path attacker strips TLS 1.3 support to force a vulnerable older version or cipher.",
+              "Yo'ldagi tajovuzkor TLS 1.3 qo'llab-quvvatlashini olib tashlab, zaif eski versiya yoki shifrni majburlaydi.",
             severity: "High",
           },
           {
-            name: "0-RTT replay",
-            description: "Early-data sent in 0-RTT can be captured and replayed by an attacker.",
+            name: "0-RTT takrorlash",
+            description: "0-RTT da yuborilgan erta ma'lumotlar tajovuzkor tomonidan ushlanib takrorlanishi mumkin.",
             severity: "Medium",
           },
         ],
         configExamples: [
           {
             language: "bash",
-            description: "Inspect a server's TLS handshake and certificate.",
-            code: "openssl s_client -connect example.com:443 -tls1_3 -servername example.com\n# Look at: Cipher, Server certificate, Verify return code",
+            description: "Server TLS handshake va sertifikatini tekshirish.",
+            code: "openssl s_client -connect example.com:443 -tls1_3 -servername example.com\n# Tekshiring: Cipher, Server certificate, Verify return code",
           },
         ],
         cliExamples: [
           {
             language: "bash",
-            description: "Enumerate supported TLS versions and ciphers.",
+            description: "Qo'llab-quvvatlanadigan TLS versiyalari va shifrlarni sanab o'tish.",
             code: "nmap --script ssl-enum-ciphers -p 443 example.com",
           },
         ],
         wiresharkAnalysis:
-          "Filter on `tls.handshake`. You will see ClientHello and ServerHello in clear text; everything after the ServerHello key share is encrypted. Inspect the `Supported Versions` and `Key Share` extensions to confirm TLS 1.3.",
+          "`tls.handshake` ga filtrlang. ClientHello va ServerHello ni aniq matnda ko'rasiz; ServerHello kalit ulushidan keyin hamma narsa shifrlangan. TLS 1.3 ni tasdiqlash uchun `Supported Versions` va `Key Share` kengaytmalarini tekshiring.",
         diagrams: [
           {
             type: "mermaid",
-            title: "TLS 1.3 one round-trip handshake",
+            title: "TLS 1.3 bir round-trip handshake",
             content:
-              "sequenceDiagram\n  Client->>Server: ClientHello + key_share\n  Server->>Client: ServerHello + key_share\n  Server->>Client: {Certificate, CertVerify, Finished}\n  Client->>Server: {Finished}\n  Client->>Server: Application Data",
+              "sequenceDiagram\n  Client->>Server: ClientHello + key_share\n  Server->>Client: ServerHello + key_share\n  Server->>Client: {Certificate, CertVerify, Finished}\n  Client->>Server: {Finished}\n  Client->>Server: Ilova Ma'lumotlari",
           },
         ],
         summary:
-          "TLS 1.3 establishes an encrypted, authenticated channel in one round trip using ephemeral Diffie-Hellman for mandatory forward secrecy. Certificates authenticate the server; HKDF derives keys; 0-RTT trades a round trip for replay risk.",
+          "TLS 1.3 majburiy forward secrecy uchun vaqtinchalik Diffie-Hellman ishlatib bir round-tripda shifrlangan, autentifikatsiyalangan kanal o'rnatadi. Sertifikatlar serverni autentifikatsiya qiladi; HKDF kalitlarni hosil qiladi; 0-RTT round-tripni takrorlash xavfiga almashtiradi.",
       }
     ),
     buildLesson("http-tls", "http-headers", "HTTP Sarlavhalari", "Beginner", "22m", "HTTP sarlavhalari"),
@@ -420,42 +420,42 @@ const section3: CourseSection = {
       "NGINX",
       "Intermediate",
       "30m",
-      "the NGINX web server",
+      "NGINX veb server",
       {
         introduction:
-          "NGINX is an event-driven web server, reverse proxy and load balancer that powers a large share of the world's busiest sites. Its asynchronous architecture is the key to its performance.",
+          "NGINX — dunyo ning eng band saytlarining katta qismini quvvatlaydigan hodisaga asoslangan veb server, teskari proksi va load balancer. Uning asinxron arxitekturasi ishlash samaradorligining kalitidir.",
         theory:
-          "Unlike a thread-per-connection model, NGINX uses a small number of worker processes, each running an event loop that multiplexes thousands of connections via epoll/kqueue. This keeps memory flat and avoids context-switch overhead under high concurrency (the C10k problem). Configuration is declarative: an http block contains server blocks (virtual hosts), which contain location blocks matched by URI.",
+          "Har ulanish uchun bir oqim modelidan farqli o'laroq, NGINX epoll/kqueue orqali minglab ulanishlarni multiplekslaydi, kichik ishchi jarayonlar to'plamini ishlatadi. Bu xotirani tekis ushlab turadi va yuqori bir vaqtlilikda kontekst almashinuvi xarajatlaridan qochadi (C10k muammosi). Konfiguratsiya deklarativ: http bloki server bloklarini (virtual hostlar) o'z ichiga oladi, ular URI bo'yicha mos keladigan location bloklarini o'z ichiga oladi.",
         realWorldArchitecture:
-          "NGINX is typically the front door: terminating TLS, serving static assets, and reverse-proxying dynamic requests to application servers (PHP-FPM, Node, Gunicorn) over an upstream block. It load-balances across upstreams, caches responses, rate-limits, and rewrites headers. NGINX Plus and the open-source build also act as API gateways.",
+          "NGINX odatda old eshik: TLS ni yakunlash, statik aktivlarni xizmat qilish va dinamik so'rovlarni upstream bloki orqali ilova serverlariga (PHP-FPM, Node, Gunicorn) teskari proksi qilish. U upstreamlar bo'ylab yukni taqsimlaydi, javoblarni keshlaydi, tezlikni cheklaydi va sarlavhalarni qayta yozadi. NGINX Plus va ochiq manba versiyasi API gateway sifatida ham ishlaydi.",
         packetFlow:
-          "A client connects to port 443. NGINX accepts the socket in a worker, completes the TLS handshake, parses the HTTP request, matches a server and location block, and either serves a file or opens an upstream connection to a backend, streaming the response back — often while caching it.",
+          "Mijoz 443 portiga ulanadi. NGINX ishchida socketni qabul qiladi, TLS handshake ni yakunlaydi, HTTP so'rovini tahlil qiladi, server va location blokiga mos keladi va fayl xizmat ko'rsatadi yoki backendga upstream ulanish ochib, javobni qaytarib o'tkazadi — ko'pincha uni keshlaydi.",
         securityImplications:
-          "Misconfigured location matching can expose files (e.g. an alias path traversal). Missing `proxy_pass` header hygiene can leak internal hosts. NGINX should run as an unprivileged user, drop the version banner, enforce TLS settings, and apply `limit_req` to blunt floods.",
+          "Noto'g'ri sozlangan location mos kelishi fayllarni ochib qo'yishi mumkin (masalan, alias yo'l kesib o'tish). Etishmayotgan `proxy_pass` sarlavha gigyenasi ichki hostlarni oshkor qilishi mumkin. NGINX imtiyozsiz foydalanuvchi sifatida ishlashi, versiya banneri ni o'chirishi, TLS sozlamalarini qo'llashi va floodlarni to'mtoqlash uchun `limit_req` qo'llashi kerak.",
         configExamples: [
           {
             language: "nginx",
-            description: "A hardened reverse-proxy server block.",
+            description: "Mustahkamlangan teskari proksi server bloki.",
             code: "server {\n  listen 443 ssl;\n  server_name app.example.com;\n  ssl_certificate     /etc/ssl/app.crt;\n  ssl_certificate_key /etc/ssl/app.key;\n  ssl_protocols TLSv1.2 TLSv1.3;\n  add_header Strict-Transport-Security \"max-age=63072000\" always;\n\n  location / {\n    proxy_pass http://127.0.0.1:3000;\n    proxy_set_header Host $host;\n    proxy_set_header X-Real-IP $remote_addr;\n    limit_req zone=api burst=20 nodelay;\n  }\n}",
           },
         ],
         cliExamples: [
           {
             language: "bash",
-            description: "Test and reload configuration safely.",
-            code: "nginx -t            # validate config\nnginx -s reload     # graceful reload\nsystemctl status nginx",
+            description: "Konfiguratsiyani xavfsiz tekshirish va qayta yuklash.",
+            code: "nginx -t            # konfiguratsiyani tekshirish\nnginx -s reload     # muammosiz qayta yuklash\nsystemctl status nginx",
           },
         ],
         diagrams: [
           {
             type: "mermaid",
-            title: "NGINX as reverse proxy",
+            title: "NGINX teskari proksi sifatida",
             content:
-              "graph LR\n  C[Clients] --> N[NGINX :443]\n  N -->|static| F[(Filesystem)]\n  N -->|/api| A1[App :3000]\n  N -->|/api| A2[App :3001]",
+              "graph LR\n  C[Mijozlar] --> N[NGINX :443]\n  N -->|statik| F[(Fayl tizimi)]\n  N -->|/api| A1[Ilova :3000]\n  N -->|/api| A2[Ilova :3001]",
           },
         ],
         summary:
-          "NGINX uses an event-driven worker model to handle massive concurrency with flat memory. It excels as a TLS-terminating reverse proxy, static server and load balancer; hardening focuses on location matching, headers and rate limiting.",
+          "NGINX tekis xotira bilan massiv bir vaqtlilikni boshqarish uchun hodisaga asoslangan ishchi modelidan foydalanadi. TLS ni yakunlovchi teskari proksi, statik server va load balancer sifatida ajralib turadi; mustahkamlash location moslashtirish, sarlavhalar va tezlikni cheklashga qaratilgan.",
       }
     ),
     buildLesson(
@@ -464,27 +464,27 @@ const section3: CourseSection = {
       "Apache HTTP Server",
       "Intermediate",
       "28m",
-      "the Apache web server",
+      "Apache veb server",
       {
         introduction:
-          "Apache HTTP Server is the veteran of web servers — endlessly modular and configurable. Understanding its Multi-Processing Modules (MPMs) is the key to running it well.",
+          "Apache HTTP Server — veb serverlarning faxriysi — cheksiz modulli va sozlanishi mumkin. Uning Ko'p Jarayon Modullarini (MPM) tushunish uni yaxshi boshqarishning kalitidir.",
         theory:
-          "Apache's behaviour is set by its MPM. `prefork` uses one process per connection (safe with non-thread-safe modules like classic mod_php, but memory-heavy). `worker` uses threads within processes. `event` (the modern default) frees worker threads during keep-alive idle time, approaching NGINX-like concurrency. Functionality is added through modules (mod_rewrite, mod_ssl, mod_security).",
+          "Apache ning xatti-harakati MPM bilan belgilanadi. `prefork` har ulanish uchun bitta jarayondan foydalanadi (klassik mod_php kabi thread-safe bo'lmagan modullar bilan xavfsiz, lekin xotirani ko'p iste'mol qiladi). `worker` jarayonlar ichida threadlardan foydalanadi. `event` (zamonaviy standart) keep-alive bo'sh vaqtida ishchi threadlarni ozod qilib, NGINX ga o'xshash bir vaqtlilikka yaqinlashadi. Funksionallik modullar orqali qo'shiladi (mod_rewrite, mod_ssl, mod_security).",
         realWorldArchitecture:
-          "Apache is common in shared hosting and LAMP stacks, and where `.htaccess` per-directory overrides are valued. It is frequently fronted by NGINX or a CDN for static caching, with Apache handling dynamic PHP via mod_php or PHP-FPM.",
+          "Apache umumiy xosting va LAMP stacklarida, `.htaccess` katalog darajasidagi ustmalarni qadrlashda keng tarqalgan. U ko'pincha statik keshlash uchun NGINX yoki CDN tomonidan old tomonda joylashtiriladi, Apache esa mod_php yoki PHP-FPM orqali dinamik PHP ni boshqaradi.",
         packetFlow:
-          "A connection is accepted by the active MPM, dispatched to a process/thread, the request is parsed, the configured handlers and modules run in the request-processing phases, and a response is generated.",
+          "Ulanish faol MPM tomonidan qabul qilinadi, jarayon/threadga yo'naltiriladi, so'rov tahlil qilinadi, sozlangan ishlovchilar va modullar so'rov qayta ishlash bosqichlarida ishlaydi va javob yaratiladi.",
         securityImplications:
-          "`.htaccess` flexibility is also a risk — it lets directory-level config drift. Information disclosure via ServerTokens/ServerSignature, directory listing via mod_autoindex, and outdated modules are common findings. mod_security adds a WAF layer.",
+          "`.htaccess` moslashuvchanligi ham xavfdir — u katalog darajasidagi konfiguratsiya siljishiga imkon beradi. ServerTokens/ServerSignature orqali ma'lumot oshkor qilish, mod_autoindex orqali katalog ro'yxati va eskirgan modullar keng tarqalgan topilmalar. mod_security WAF qatlamini qo'shadi.",
         configExamples: [
           {
             language: "apache",
-            description: "A hardened virtual host.",
+            description: "Mustahkamlangan virtual host.",
             code: "<VirtualHost *:443>\n  ServerName app.example.com\n  SSLEngine on\n  SSLCertificateFile /etc/ssl/app.crt\n  SSLProtocol -all +TLSv1.2 +TLSv1.3\n  ServerTokens Prod\n  ServerSignature Off\n  <Directory /var/www/app>\n    Options -Indexes\n    AllowOverride None\n    Require all granted\n  </Directory>\n</VirtualHost>",
           },
         ],
         summary:
-          "Apache is the modular, mature web server; its MPM choice (prefork/worker/event) defines concurrency and memory behaviour. Hardening targets .htaccess sprawl, information disclosure and module currency.",
+          "Apache — modulli, etuk veb server; MPM tanlovi (prefork/worker/event) bir vaqtlilik va xotira xatti-harakatini belgilaydi. Mustahkamlash .htaccess tarqalishini, ma'lumot oshkor qilishni va modul joriyligini maqsad qilib oladi.",
       }
     ),
     buildLesson(
@@ -493,27 +493,27 @@ const section3: CourseSection = {
       "Caddy",
       "Beginner",
       "22m",
-      "the Caddy web server",
+      "Caddy veb server",
       {
         introduction:
-          "Caddy is a modern web server whose headline feature is fully automatic HTTPS — it obtains and renews TLS certificates with zero configuration.",
+          "Caddy — asosiy xususiyati to'liq avtomatik HTTPS bo'lgan zamonaviy veb server — u nol konfiguratsiya bilan TLS sertifikatlarini oladi va yangilaydi.",
         theory:
-          "Caddy is written in Go, ships as a single static binary, and uses the ACME protocol to automatically provision certificates from Let's Encrypt or ZeroSSL. Its configuration (the Caddyfile) is intentionally minimal, and it exposes a JSON config API for dynamic reconfiguration without restarts.",
+          "Caddy Go da yozilgan, bitta statik binary sifatida etkaziladi va Let's Encrypt yoki ZeroSSL dan sertifikatlarni avtomatik ta'minlash uchun ACME protokolidan foydalanadi. Uning konfiguratsiyasi (Caddyfile) ataylab minimal va u qayta ishga tushirmasdan dinamik qayta konfiguratsiya uchun JSON konfiguratsiya API sini ochadi.",
         realWorldArchitecture:
-          "Caddy suits small-to-medium deployments, internal tools and edge nodes where operational simplicity matters. It serves static sites, reverse-proxies to applications, and handles certificate lifecycle automatically — eliminating an entire class of expired-certificate outages.",
+          "Caddy operatsion soddalik muhim bo'lgan kichik-o'rta joylashuvlar, ichki vositalar va chekka tugunlarga mos keladi. U statik saytlarga xizmat ko'rsatadi, ilovalarga teskari proksi qiladi va sertifikat hayot davrini avtomatik boshqaradi — muddati o'tgan sertifikat uzilishlarining butun sinfini bartaraf etadi.",
         packetFlow:
-          "On first request for a hostname, Caddy performs an ACME challenge (HTTP-01 or TLS-ALPN-01) to prove domain control, receives a certificate, caches it, and serves TLS. Renewals happen in the background well before expiry.",
+          "Hostname uchun birinchi so'rovda Caddy domen nazoratini isbotlash uchun ACME muammosini (HTTP-01 yoki TLS-ALPN-01) bajaradi, sertifikat oladi, uni keshlaydi va TLS xizmati ko'rsatadi. Yangilanishlar muddati tugashidan ancha oldin fonda amalga oshiriladi.",
         securityImplications:
-          "Automatic HTTPS removes human error from certificate management. Caddy defaults to secure TLS settings. The main risks are exposing the admin API and over-broad on-demand TLS, which an attacker could abuse to trigger many ACME requests.",
+          "Avtomatik HTTPS sertifikat boshqaruvidan inson xatosini olib tashlaydi. Caddy xavfsiz TLS sozlamalarini standart qilib belgilaydi. Asosiy xavflar admin API ni ochish va talabga binoan keng TLS bo'lib, tajovuzkor ko'plab ACME so'rovlarini ishga tushirish uchun suiiste'mol qilishi mumkin.",
         configExamples: [
           {
             language: "caddy",
-            description: "A complete Caddyfile with automatic HTTPS.",
+            description: "Avtomatik HTTPS bilan to'liq Caddyfile.",
             code: "app.example.com {\n  reverse_proxy 127.0.0.1:3000\n  encode gzip zstd\n  header Strict-Transport-Security \"max-age=31536000\"\n}",
           },
         ],
         summary:
-          "Caddy is a Go-based server defined by automatic, ACME-driven HTTPS and a minimal config. It trades fine-grained control for operational simplicity and secure-by-default behaviour.",
+          "Caddy — avtomatik, ACME boshqaradigan HTTPS va minimal konfiguratsiya bilan belgilangan Go asosidagi server. U nozik nazoratni operatsion soddalik va standart bo'yicha xavfsiz xatti-harakat bilan almashtiradi.",
       }
     ),
     buildLesson("web-servers", "iis", "Microsoft IIS", "Intermediate", "25m", "Microsoft IIS veb server"),
@@ -537,111 +537,111 @@ const section4: CourseSection = {
     buildLesson(
       "server-infrastructure",
       "iptables",
-      "Linux Firewalling with iptables",
+      "iptables bilan Linux Firewall",
       "Advanced",
       "32m",
       "iptables",
       {
         introduction:
-          "iptables is the classic interface to the Linux kernel's netfilter packet-filtering framework. Even where nftables or UFW are used, they ultimately drive the same kernel hooks — so understanding iptables is foundational.",
+          "iptables — Linux kernelining netfilter paket filtrlash freymworkiga klassik interfeys. nftables yoki UFW ishlatilgan joylarda ham ular oxir-oqibat bir xil kernel hooklarini boshqaradi — shuning uchun iptables ni tushunish asosiy.",
         theory:
-          "netfilter exposes hooks as the packet traverses the kernel. iptables organises rules into tables (filter, nat, mangle, raw) and chains (INPUT, OUTPUT, FORWARD, PREROUTING, POSTROUTING). A packet is matched against the rules in the relevant chain in order; the first matching rule's target (ACCEPT, DROP, REJECT, or a jump) decides its fate. If no rule matches, the chain's default policy applies. Connection tracking (conntrack) makes the firewall stateful — it can ACCEPT packets belonging to ESTABLISHED connections without re-evaluating every rule.",
+          "netfilter paket kerneldan o'tayotganda hooklar ochadi. iptables qoidalarni jadvallar (filter, nat, mangle, raw) va zanjirlar (INPUT, OUTPUT, FORWARD, PREROUTING, POSTROUTING) ga tartiblashtiradi. Paket tegishli zanjiridagi qoidalarga tartib bilan mos keltiriladi; birinchi mos keladigan qoidaning maqsadi (ACCEPT, DROP, REJECT yoki sakrash) uning taqdirini hal qiladi. Hech qanday qoida mos kelmasa, zanjirning standart siyosati qo'llaniladi. Ulanishni kuzatish (conntrack) firewallni holatli qiladi — u har qoidani qayta baholamasdan ESTABLISHED ulanishlarga tegishli paketlarni ACCEPT qilishi mumkin.",
         realWorldArchitecture:
-          "A server firewall sets default-DROP on INPUT, allows loopback, allows ESTABLISHED/RELATED, then explicitly permits required services (SSH, HTTPS). NAT rules in PREROUTING/POSTROUTING implement port forwarding and masquerading. In cloud environments, host iptables complements (does not replace) security groups and network ACLs.",
+          "Server firewall INPUT da standart-DROP belgilaydi, loopback ga ruxsat beradi, ESTABLISHED/RELATED ga ruxsat beradi, so'ng kerakli xizmatlarni (SSH, HTTPS) aniq ruxsatlaydi. PREROUTING/POSTROUTING dagi NAT qoidalari port yo'naltirish va masqueradni amalga oshiradi. Bulut muhitlarida host iptables xavfsizlik guruhlari va tarmoq ACL larini to'ldiradi (almashtirmaydi).",
         packetFlow:
-          "An inbound packet hits PREROUTING (raw, then conntrack, then mangle, then nat). A routing decision sends locally-destined packets to INPUT and transit packets to FORWARD. Locally-generated packets traverse OUTPUT then POSTROUTING. The filter table's INPUT/FORWARD/OUTPUT chains make the accept/drop decision.",
+          "Kiruvchi paket PREROUTING ga (raw, so'ng conntrack, so'ng mangle, so'ng nat) etib boradi. Yo'naltirish qarori mahalliy manzilli paketlarni INPUT ga va tranzit paketlarni FORWARD ga yuboradi. Mahalliy yaratilgan paketlar OUTPUT so'ng POSTROUTING dan o'tadi. filter jadvalining INPUT/FORWARD/OUTPUT zanjirlar qabul/tushirish qarorini qabul qiladi.",
         securityImplications:
-          "An overly permissive default policy, rule ordering mistakes (a broad ACCEPT before a specific DROP), or forgetting IPv6 (ip6tables is separate) all create holes. Stateful rules must be present or legitimate return traffic is blocked. Rules are not persistent across reboot unless saved.",
+          "Haddan tashqari ruxsatli standart siyosat, qoida tartiblash xatolari (aniq DROP dan oldin keng ACCEPT) yoki IPv6 ni unutish (ip6tables alohida) barchasi teshiklar yaratadi. Holat qoidalari bo'lishi kerak yoki qonuniy qaytish trafiki bloklanadi. Qoidalar saqlangan bo'lmasa qayta ishga tushirishda saqlanmaydi.",
         configExamples: [
           {
             language: "bash",
-            description: "A minimal stateful host firewall.",
+            description: "Minimal holatli host firewall.",
             code: "iptables -P INPUT DROP\niptables -P FORWARD DROP\niptables -A INPUT -i lo -j ACCEPT\niptables -A INPUT -m conntrack --ctstate ESTABLISHED,RELATED -j ACCEPT\niptables -A INPUT -p tcp --dport 22 -j ACCEPT\niptables -A INPUT -p tcp --dport 443 -j ACCEPT",
           },
         ],
         cliExamples: [
           {
             language: "bash",
-            description: "Inspect and persist rules.",
+            description: "Qoidalarni tekshirish va saqlash.",
             code: "iptables -L -n -v --line-numbers\niptables-save > /etc/iptables/rules.v4",
           },
         ],
         diagrams: [
           {
             type: "mermaid",
-            title: "Packet path through netfilter",
+            title: "Netfilter orqali paket yo'li",
             content:
-              "graph LR\n  IN[Packet in] --> PRE[PREROUTING]\n  PRE --> RT{Routing}\n  RT -->|local| INP[INPUT]\n  RT -->|transit| FWD[FORWARD]\n  FWD --> POST[POSTROUTING]\n  INP --> APP[Local process]",
+              "graph LR\n  IN[Paket kirdi] --> PRE[PREROUTING]\n  PRE --> RT{Yo'naltirish}\n  RT -->|mahalliy| INP[INPUT]\n  RT -->|tranzit| FWD[FORWARD]\n  FWD --> POST[POSTROUTING]\n  INP --> APP[Mahalliy jarayon]",
           },
         ],
         summary:
-          "iptables drives netfilter's hooks via tables and chains. A correct host firewall is default-DROP, allows loopback and ESTABLISHED traffic, then whitelists services. Statefulness via conntrack and rule ordering are where mistakes happen.",
+          "iptables jadvallar va zanjirlar orqali netfilter hooklarini boshqaradi. To'g'ri host firewall standart-DROP, loopback va ESTABLISHED trafikka ruxsat beradi, so'ng xizmatlarni oq ro'yxatga kiritadi. conntrack orqali holatlilik va qoida tartibi xatolar sodir bo'ladigan joydir.",
       }
     ),
     buildLesson(
       "server-infrastructure",
       "ssh",
-      "SSH — Secure Shell",
+      "SSH — Xavfsiz Shell",
       "Intermediate",
       "30m",
       "SSH",
       {
         introduction:
-          "SSH is the encrypted protocol for remote administration, file transfer and tunnelling. It is the front door to nearly every server, which makes hardening it a security priority.",
+          "SSH — masofaviy boshqarish, fayl uzatish va tunnellash uchun shifrlangan protokol. U deyarli har bir serverning old eshigi bo'lib, uni mustahkamlash xavfsizlik ustuvorligiga aylanadi.",
         theory:
-          "SSH provides an encrypted, authenticated channel over TCP/22. The handshake negotiates a key-exchange algorithm (typically ECDH/curve25519) to derive session keys, then authenticates the server via its host key and the client via a password or — preferably — public-key cryptography. The client proves possession of a private key whose public half is in the server's authorized_keys. Multiple logical channels (shell, port forwards, SFTP) are multiplexed over the one connection.",
+          "SSH TCP/22 orqali shifrlangan, autentifikatsiyalangan kanal ta'minlaydi. Handshake sessiya kalitlarini olish uchun kalit almashinuv algoritmini (odatda ECDH/curve25519) kelishib oladi, so'ng server host kaliti orqali va mijoz parol yoki — afzalroq — ochiq kalit kriptografiyasi orqali autentifikatsiyalanadi. Mijoz server authorized_keys da ochiq yarmi bo'lgan shaxsiy kalitga egaligini isbotlaydi. Bir necha mantiqiy kanallar (shell, port yo'naltirish, SFTP) bitta ulanish ustida multiplekslanadi.",
         realWorldArchitecture:
-          "Production access uses key-based auth (passwords disabled), often through a bastion/jump host that is the only SSH-exposed system. Keys may be short-lived certificates issued by an SSH CA. Agent forwarding, ProxyJump and config files streamline multi-hop access. Session recording and MFA add accountability.",
+          "Ishlab chiqarish kirishi kalit asosidagi autentifikatsiyadan (parollar o'chirilgan) foydalanadi, ko'pincha SSH ga ochiq yagona tizim bo'lgan bastion/sakrash xost orqali. Kalitlar SSH CA tomonidan berilgan qisqa muddatli sertifikatlar bo'lishi mumkin. Agent yo'naltirish, ProxyJump va konfiguratsiya fayllari ko'p hopli kirishni soddalashtiradi. Sessiyani yozib olish va MFA javobgarlikni oshiradi.",
         packetFlow:
-          "TCP handshake on 22 → SSH version exchange → algorithm negotiation → ECDH key exchange and host-key verification → user authentication → channel requests (pty, exec, direct-tcpip for port forwarding). All payload after key exchange is encrypted and integrity-protected.",
+          "22 da TCP handshake → SSH versiya almashinuvi → algoritm kelishuvi → ECDH kalit almashinuvi va host kalitini tekshirish → foydalanuvchi autentifikatsiyasi → kanal so'rovlari (pty, exec, port yo'naltirish uchun direct-tcpip). Kalit almashinuvidan keyin barcha yuk shifrlangan va yaxlitlik bilan himoyalangan.",
         securityImplications:
-          "SSH on the public Internet is constantly brute-forced. Password auth, weak keys, root login, and stale authorized_keys are the main risks. Compromised agent forwarding can let a compromised host hijack your keys. Host-key changes may indicate a man-in-the-middle.",
+          "Ommaviy Internetdagi SSH doimiy ravishda kuch bilan sinab ko'riladi. Parol autentifikatsiyasi, zaif kalitlar, root kirish va eskirgan authorized_keys asosiy xavflar. Buzilgan agent yo'naltirish buzilgan hostga kalitlaringizni o'g'irlashga imkon berishi mumkin. Host kaliti o'zgarishlari o'rtadagi odamni ko'rsatishi mumkin.",
         configExamples: [
           {
             language: "bash",
-            description: "Hardened sshd_config directives.",
+            description: "Mustahkamlangan sshd_config direktivlari.",
             code: "PermitRootLogin no\nPasswordAuthentication no\nPubkeyAuthentication yes\nKexAlgorithms curve25519-sha256\nAllowUsers deploy admin\nMaxAuthTries 3",
           },
         ],
         cliExamples: [
           {
             language: "bash",
-            description: "Generate a key and jump through a bastion.",
+            description: "Kalit yaratish va bastion orqali sakrash.",
             code: "ssh-keygen -t ed25519 -C 'deploy@laptop'\nssh -J bastion.example.com deploy@10.0.1.20",
           },
         ],
         summary:
-          "SSH gives an encrypted, mutually-authenticated admin channel. Use key (or certificate) auth, disable passwords and root login, front access with a bastion, and watch host-key changes for MITM.",
+          "SSH shifrlangan, o'zaro autentifikatsiyalangan admin kanalini ta'minlaydi. Kalit (yoki sertifikat) autentifikatsiyasidan foydalaning, parollar va root kirishni o'chiring, kirishni bastion bilan kuchaytiring va MITM uchun host kaliti o'zgarishlarini kuzating.",
       }
     ),
     buildLesson(
       "server-infrastructure",
       "load-balancing",
-      "Load Balancing",
+      "Yukni Taqsimlash",
       "Intermediate",
       "28m",
-      "load balancing",
+      "yukni taqsimlash",
       {
         introduction:
-          "Load balancing distributes traffic across multiple servers to achieve scalability, high availability and zero-downtime deployments. It is a cornerstone of every resilient architecture.",
+          "Yukni taqsimlash trafikni ko'plab serverlar bo'ylab tarqatib, masshtablilik, yuqori mavjudlik va nol vaqt ichida joylashtirishga erishadi. U har bir chidamli arxitekturaning burchak toshi.",
         theory:
-          "A load balancer operates at Layer 4 (transport — routing by IP/port, fast and protocol-agnostic) or Layer 7 (application — routing by HTTP host, path, headers, enabling smart features). Algorithms include round-robin, least-connections, weighted, IP-hash (for stickiness) and EWMA latency-based. Health checks remove unhealthy backends. Session affinity ('sticky sessions') keeps a user pinned to one backend when state is local.",
+          "Load balancer 4-qatlamda (transport — IP/port bo'yicha yo'naltirish, tez va protokolga mustaqil) yoki 7-qatlamda (ilova — HTTP host, yo'l, sarlavhalar bo'yicha yo'naltirish, aqlli xususiyatlarni yoqish) ishlaydi. Algoritmlar round-robin, eng kam ulanishlar, og'irlikli, IP-hash (yopishqoqlik uchun) va EWMA kechikish asosidagi. Sog'liq tekshiruvlari nosog'lom backendlarni olib tashlaydi. Sessiya yaqinligi ('yopishqoq sessiyalar') holat mahalliy bo'lganda foydalanuvchini bitta backendga qadalib qoldirib turadi.",
         realWorldArchitecture:
-          "Cloud load balancers (AWS ALB/NLB, GCP LB) sit in front of auto-scaling groups across multiple availability zones. A global load balancer uses DNS or anycast to route users to the nearest region. Internally, service meshes load-balance east-west traffic between microservices. Blue-green and canary deployments are implemented by shifting load-balancer weights.",
+          "Bulut load balancerlari (AWS ALB/NLB, GCP LB) bir necha mavjudlik zonalari bo'ylab avtomatik masshtablash guruhlari oldida joylashadi. Global load balancer foydalanuvchilarni eng yaqin mintaqaga yo'naltirish uchun DNS yoki anycastdan foydalanadi. Ichki tomondan, service meshlari mikroservislar o'rtasida sharq-g'arb trafikni taqsimlaydi. Ko'k-yashil va canary joylashuvlar load-balancer og'irliklarini siljitish orqali amalga oshiriladi.",
         packetFlow:
-          "L4: the LB forwards or NATs the packet to a chosen backend; the backend may reply directly to the client (DSR) or via the LB. L7: the LB terminates the client TCP/TLS connection, parses HTTP, selects a backend by rules, and opens its own connection to it — letting it pool connections, retry, and rewrite.",
+          "L4: LB paketni tanlangan backendga yo'naltiradi yoki NAT qiladi; backend to'g'ridan-to'g'ri mijozga (DSR) yoki LB orqali javob berishi mumkin. L7: LB mijoz TCP/TLS ulanishini yakunlaydi, HTTP ni tahlil qiladi, qoidalar bo'yicha backend tanlaydi va unga o'z ulanishini ochadi — ulanishlarni hovuzda saqlash, qayta urinish va qayta yozishga imkon beradi.",
         securityImplications:
-          "The load balancer is a TLS-termination point and a high-value target. It is also a natural place to enforce WAF rules, rate limiting and DDoS absorption. Misconfigured health checks can cause cascading failures; sticky sessions can create hotspots and uneven load.",
+          "Load balancer TLS yakunlash nuqtasi va yuqori qimmatli nishon. U shuningdek WAF qoidalari, tezlikni cheklash va DDoS so'rilishini qo'llash uchun tabiiy joy. Noto'g'ri sozlangan sog'liq tekshiruvlari kaskadli nosozliklarga olib kelishi mumkin; yopishqoq sessiyalar hotspotlar va notekis yuk yaratishi mumkin.",
         diagrams: [
           {
             type: "mermaid",
-            title: "L7 load balancing across AZs",
+            title: "AZ lar bo'ylab L7 yukni taqsimlash",
             content:
-              "graph TD\n  C[Clients] --> LB[L7 Load Balancer]\n  LB --> A[Backend AZ-a]\n  LB --> B[Backend AZ-b]\n  LB --> D[Backend AZ-c]",
+              "graph TD\n  C[Mijozlar] --> LB[L7 Load Balancer]\n  LB --> A[Backend AZ-a]\n  LB --> B[Backend AZ-b]\n  LB --> D[Backend AZ-c]",
           },
         ],
         summary:
-          "Load balancing spreads traffic for scale and availability. L4 is fast and generic; L7 is HTTP-aware and feature-rich. Health checks, algorithms and affinity must be tuned; the LB is also the ideal TLS/WAF enforcement point.",
+          "Yukni taqsimlash masshtab va mavjudlik uchun trafikni tarqatadi. L4 tez va umumiy; L7 HTTP ga mos va funksiyalarga boy. Sog'liq tekshiruvlari, algoritmlar va yaqinlik moslashtirilishi kerak; LB shuningdek ideal TLS/WAF qo'llash nuqtasi.",
       }
     ),
     buildLesson("server-infrastructure", "dedicated-server", "Dedicated Serverlar", "Beginner", "18m", "dedicated serverlar"),
@@ -680,105 +680,105 @@ const section5: CourseSection = {
     buildLesson(
       "software-architecture",
       "microservices",
-      "Microservices Architecture",
+      "Mikroservislar Arxitekturasi",
       "Advanced",
       "32m",
-      "microservices",
+      "mikroservislar",
       {
         introduction:
-          "Microservices structure an application as a suite of small, independently deployable services, each owning one business capability. The style trades operational complexity for organisational and scaling agility.",
+          "Mikroservislar ilovani kichik, mustaqil joylashtirilishi mumkin bo'lgan xizmatlar to'plami sifatida tuzib, har biri bitta biznes qobiliyatiga egalik qiladi. Bu uslub operatsion murakkablikni tashkiliy va masshtablash epchilligi bilan almashtiradi.",
         theory:
-          "Each microservice has its own codebase, data store and deployment lifecycle, and communicates with others over the network — synchronously via HTTP/gRPC or asynchronously via messaging. Services are organised around business domains (bounded contexts). The decoupling lets teams deploy independently and scale hot services in isolation, but it turns in-process function calls into network calls subject to latency, partial failure and the CAP theorem.",
+          "Har bir mikroservisning o'z kodlar bazasi, ma'lumotlar ombori va joylash hayot davri bor va boshqalar bilan tarmoq orqali — sinxron ravishda HTTP/gRPC yoki asinxron ravishda xabar almashish orqali muloqot qiladi. Xizmatlar biznes domenlaridan (cheklangan kontekstlar) atrofida tashkil etilgan. Ajratish jamoalarga mustaqil joylashtirishga va issiq xizmatlarni izolyatsiyada masshtablashga imkon beradi, lekin jarayondagi funksiya chaqiruvlarini kechikish, qisman nosozlik va CAP teoremasiga bog'liq tarmoq chaqiruvlariga aylantiradi.",
         realWorldArchitecture:
-          "A microservices platform typically includes an API gateway (edge routing, auth), service discovery, a service mesh (mTLS, retries, observability), per-service databases, a message broker (Kafka, RabbitMQ), centralised logging/tracing, and a container orchestrator (Kubernetes). Resilience patterns — timeouts, retries with backoff, circuit breakers, bulkheads — are mandatory, not optional.",
+          "Mikroservislar platformasi odatda API gateway (chekka yo'naltirish, autentifikatsiya), xizmat kashfiyoti, service mesh (mTLS, qayta urinishlar, kuzatuvchanlik), xizmat boshiga ma'lumotlar bazalari, xabar brokeri (Kafka, RabbitMQ), markazlashtirilgan jurnallash/kuzatish va konteyner orkestratori (Kubernetes) ni o'z ichiga oladi. Chidamlilik naqshlari — vaqt chegaralari, backoff bilan qayta urinishlar, elektr uzgichlar, to'siq devorlar — majburiy, ixtiyoriy emas.",
         packetFlow:
-          "A client request enters the API gateway, which authenticates it and routes to service A. Service A may call services B and C; each call is a fresh TLS connection (or a mesh-managed one). A distributed trace ID is propagated through every hop so the whole transaction can be reconstructed.",
+          "Mijoz so'rovi API gateway ga kiradi, u uni autentifikatsiya qiladi va A xizmatiga yo'naltiradi. A xizmati B va C xizmatlarini chaqirishi mumkin; har bir chaqiruv yangi TLS ulanimi (yoki mesh boshqaradigan). Tarqatilgan iz ID har bir hop orqali tarqatiladi, shunda butun tranzaksiya qayta tiklanuvchan.",
         securityImplications:
-          "The network is now the attack surface: every inter-service call must be authenticated and encrypted (mTLS) — 'zero trust' inside the cluster. A larger number of services means more endpoints, more secrets and more dependencies to patch. The blast radius of one compromised service is limited only by segmentation and least-privilege.",
+          "Tarmoq endi hujum yuzasi: har bir xizmatlar arasi chaqiruv autentifikatsiyalanishi va shifrlangan (mTLS) bo'lishi kerak — klaster ichida 'nol ishonch'. Ko'proq xizmatlar ko'proq endpointlar, ko'proq sirlar va ko'proq yamoq uchun bog'liqliklarni anglatadi. Buzilgan bitta xizmatning portlash radiusi faqat segmentatsiya va minimal imtiyoz bilan cheklangan.",
         attackVectors: [
           {
-            name: "Lateral movement between services",
+            name: "Xizmatlar o'rtasida yon harakat",
             description:
-              "A compromised service with broad network reach and over-scoped credentials pivots to others.",
+              "Keng tarmoq erishuviga va haddan tashqari keng hisob ma'lumotlariga ega buzilgan xizmat boshqalarga o'tadi.",
             severity: "High",
           },
           {
-            name: "Cascading failure",
+            name: "Kaskadli nosozlik",
             description:
-              "One slow service exhausts caller threads, propagating failure across the system without circuit breakers.",
+              "Bitta sekin xizmat chaqiruvchi threadlarni tugaturib, elektr uzgichlarsiz nosozlikni tizim bo'ylab tarqatadi.",
             severity: "Medium",
           },
         ],
         diagrams: [
           {
             type: "mermaid",
-            title: "Microservices request flow",
+            title: "Mikroservislar so'rov oqimi",
             content:
-              "graph TD\n  C[Client] --> GW[API Gateway]\n  GW --> A[Orders Service]\n  A --> B[Inventory Service]\n  A --> D[Payment Service]\n  B --> DB1[(Inventory DB)]\n  D --> DB2[(Payment DB)]",
+              "graph TD\n  C[Mijoz] --> GW[API Gateway]\n  GW --> A[Buyurtmalar Xizmati]\n  A --> B[Inventar Xizmati]\n  A --> D[To'lov Xizmati]\n  B --> DB1[(Inventar MB)]\n  D --> DB2[(To'lov MB)]",
           },
         ],
         summary:
-          "Microservices = independently deployable, domain-aligned services communicating over the network. They enable team and scaling autonomy at the cost of distributed-systems complexity, demanding mTLS, resilience patterns and strong observability.",
+          "Mikroservislar = tarmoq orqali muloqot qiluvchi mustaqil joylashtirilishi mumkin, domen ga mos xizmatlar. Ular tarqatilgan tizimlar murakkabligi hisobiga jamoa va masshtablash mustaqilligini yoqadi, mTLS, chidamlilik naqshlari va kuchli kuzatuvchanlikni talab qiladi.",
       }
     ),
     buildLesson(
       "software-architecture",
       "monolith",
-      "Monolithic Architecture",
+      "Monolit Arxitektura",
       "Beginner",
       "22m",
-      "monolithic architecture",
+      "monolit arxitektura",
       {
         introduction:
-          "A monolith is an application built and deployed as a single unit. Long unfashionable, it remains the correct default for most projects — and a well-structured monolith beats a badly-structured microservices estate every time.",
+          "Monolit — bitta birlik sifatida qurilgan va joylashtirilgan ilova. Uzoq vaqt modadan chiqqan, u ko'p loyihalar uchun to'g'ri standart bo'lib qolmoqda — va yaxshi tuzilgan monolit har safar yomon tuzilgan mikroservislar uyumini mag'lub etadi.",
         theory:
-          "In a monolith, all modules (UI, business logic, data access) run in one process and one deployment artifact. Calls between modules are fast, in-process function calls — no network, no serialisation, no partial failure. A single database means easy transactions and joins. The trade-off: the whole app scales as a unit, one bug can crash everything, and a large codebase can become tightly coupled ('the big ball of mud') without discipline.",
+          "Monolitda barcha modullar (UI, biznes logikasi, ma'lumotlarga kirish) bitta jarayon va bitta joylash artefaktida ishlaydi. Modullar o'rtasidagi chaqiruvlar tez, jarayondagi funksiya chaqiruvlari — tarmoq yo'q, serializatsiya yo'q, qisman nosozlik yo'q. Bitta ma'lumotlar bazasi oson tranzaksiyalar va birlashtirishlarni anglatadi. Munosib kelishim: butun ilova birlik sifatida masshtablanadi, bitta xato hamma narsani ishdan chiqarishi mumkin va katta kodlar bazasi intizom bo'lmasa zich bog'liq ('loyqa to'p') bo'lib qolishi mumkin.",
         realWorldArchitecture:
-          "A monolith deploys behind a load balancer as several identical instances for horizontal scaling and availability, all sharing one database (often with read replicas). A 'modular monolith' enforces internal module boundaries, keeping the option open to extract a service later if a genuine need arises.",
+          "Monolit gorizontal masshtablash va mavjudlik uchun bitta ma'lumotlar bazasini (ko'pincha o'qish replikalari bilan) ulashadigan bir necha bir xil nusxalar sifatida load balancer ortida joylashtiriladi. 'Modulli monolit' ichki modul chegaralarini qo'llaydi, haqiqiy ehtiyoj yuzaga kelsa xizmatni keyinroq chiqarish imkoniyatini ochiq saqlaydi.",
         packetFlow:
-          "A client request hits the load balancer, lands on one instance, and is handled entirely within that process — routing, business logic and database access — before a single response is returned. There are no internal network hops.",
+          "Mijoz so'rovi load balancerga etib boradi, bitta nusxaga tushadi va bitta javob qaytarilishidan oldin butunlay o'sha jarayon ichida — yo'naltirish, biznes logikasi va ma'lumotlar bazasiga kirish — boshqariladi. Ichki tarmoq hoplari yo'q.",
         securityImplications:
-          "The attack surface is smaller and simpler — one process, one set of dependencies, one deployment to patch. But there is no internal segmentation: a remote-code-execution flaw compromises the entire application and its database credentials at once.",
+          "Hujum yuzasi kichikroq va oddiyroq — bitta jarayon, bog'liqliklarning bitta to'plami, yamash uchun bitta joylash. Lekin ichki segmentatsiya yo'q: masofaviy-kod-bajarish kamchiligi bir vaqtning o'zida butun ilovani va uning ma'lumotlar bazasi hisob ma'lumotlarini buzadi.",
         diagrams: [
           {
             type: "mermaid",
-            title: "Scaled monolith",
+            title: "Masshtablangan monolit",
             content:
-              "graph TD\n  C[Clients] --> LB[Load Balancer]\n  LB --> M1[Monolith Instance 1]\n  LB --> M2[Monolith Instance 2]\n  M1 --> DB[(Shared Database)]\n  M2 --> DB",
+              "graph TD\n  C[Mijozlar] --> LB[Load Balancer]\n  LB --> M1[Monolit Nusxa 1]\n  LB --> M2[Monolit Nusxa 2]\n  M1 --> DB[(Umumiy MB)]\n  M2 --> DB",
           },
         ],
         summary:
-          "A monolith is one deployable unit: simple, fast internally, easy to reason about, with a small attack surface. Its limits are unit-scaling and coupling — both manageable with a disciplined modular structure.",
+          "Monolit — bitta joylash birligi: oddiy, ichkarida tez, haqida mulohaza yuritish oson, kichik hujum yuzasi bilan. Uning chegaralari birlik masshtablash va bog'liqlik — ikkalasi ham intizomli modulli tuzilma bilan boshqariladigan.",
       }
     ),
     buildLesson(
       "software-architecture",
       "serverless",
-      "Serverless Architecture",
+      "Serverless Arxitektura",
       "Intermediate",
       "28m",
-      "serverless architecture",
+      "serverless arxitektura",
       {
         introduction:
-          "Serverless lets you run code without managing servers. You deploy functions; the cloud provider handles provisioning, scaling and patching, billing you only for actual execution time.",
+          "Serverless serverlarni boshqarmasdan kod ishlatishga imkon beradi. Siz funksiyalarni joylashtirasiz; bulut provayderi ta'minlash, masshtablash va yamoqni boshqaradi, faqat haqiqiy bajarish vaqti uchun hisob-kitob qiladi.",
         theory:
-          "Function-as-a-Service (FaaS — AWS Lambda, Azure Functions, Cloud Functions) runs short-lived, stateless, event-triggered functions. The provider scales them from zero to thousands of concurrent instances automatically. 'Serverless' more broadly also covers managed databases, queues and storage. Key constraints: functions are stateless (state lives in external stores), have execution time limits, and suffer 'cold starts' — added latency when a new instance must be initialised.",
+          "Funksiya-xizmat-sifatida (FaaS — AWS Lambda, Azure Functions, Cloud Functions) qisqa muddatli, holatsiz, hodisaga tetiklangan funksiyalarni bajaradi. Provayderlar ularni noldan minglab bir vaqtli nusxalargacha avtomatik masshtablaydi. 'Serverless' kengroq ma'noda boshqariladigan ma'lumotlar bazalari, navbatlar va saqlashni ham qamrab oladi. Asosiy cheklovlar: funksiyalar holatsiz (holat tashqi omborlarda yashaydi), bajarish vaqti chegaralariga ega va 'sovuq ishga tushirish' dan aziyat chekadi — yangi nusxa ishga tushirilishi kerak bo'lganda qo'shimcha kechikish.",
         realWorldArchitecture:
-          "A serverless app wires event sources (API Gateway, queues, object-storage events, schedules) to functions, which read/write managed services (DynamoDB, S3). There are no servers to patch or scale. It excels for spiky, event-driven and glue workloads; it fits steady high-throughput or long-running jobs less well economically.",
+          "Serverless ilova hodisa manbalarini (API Gateway, navbatlar, ob'ekt-saqlash hodisalari, jadvallar) boshqariladigan xizmatlarni (DynamoDB, S3) o'qib/yozuvchi funksiyalarga ulaydi. Yamash yoki masshtablash uchun serverlar yo'q. U o'zgaruvchan, hodisaga asoslangan va yopishtirgich ishlar uchun mukammal; doimiy yuqori o'tkazuvchanlik yoki uzoq muddatli ishlar uchun iqtisodiy jihatdan kamroq mos.",
         packetFlow:
-          "An event (HTTP request via API Gateway, a new file in storage, a queue message) triggers the platform to route it to a function instance — reusing a warm one or cold-starting a new one. The function executes, calls managed services, returns a result, and the instance is frozen for potential reuse.",
+          "Hodisa (API Gateway orqali HTTP so'rovi, saqlashdagi yangi fayl, navbat xabari) platformani funksiya nusxasiga yo'naltirish uchun tetiklaydi — issiq nusxani qayta ishlatish yoki yangi nusxani sovuq ishga tushirish. Funksiya bajariladi, boshqariladigan xizmatlarni chaqiradi, natija qaytaradi va nusxa potensial qayta ishlatish uchun muzlatiladi.",
         securityImplications:
-          "No servers to patch shrinks one attack surface but enlarges others: every function needs a tightly-scoped IAM role (over-privileged roles are the top serverless risk), dependencies still need patching, and event-data injection (e.g. from an untrusted upload event) must be validated. Function-event-data is an injection vector unique to this model.",
+          "Yamash uchun serverlar yo'qligi bitta hujum yuzasini kamaytiradi, lekin boshqalarini kengaytiradi: har bir funksiya qat'iy belgilangan IAM roliga muhtoj (haddan tashqari imtiyozli rollar serverless ning eng yuqori xavfi), bog'liqliklar hali ham yamoqni talab qiladi va hodisa-ma'lumot in'yeksiyasi (masalan, ishonchsiz yuklash hodisasidan) tekshirilishi kerak. Funksiya-hodisa-ma'lumot ushbu modelga xos in'yeksiya vektori.",
         diagrams: [
           {
             type: "mermaid",
-            title: "Event-driven serverless flow",
+            title: "Hodisaga asoslangan serverless oqimi",
             content:
-              "graph LR\n  API[API Gateway] --> F1[Function: handleOrder]\n  S3[Object Storage event] --> F2[Function: processImage]\n  F1 --> DB[(Managed DB)]\n  F2 --> Q[Queue]",
+              "graph LR\n  API[API Gateway] --> F1[Funksiya: handleOrder]\n  S3[Ob'ekt Saqlash hodisasi] --> F2[Funksiya: processImage]\n  F1 --> DB[(Boshqariladigan MB)]\n  F2 --> Q[Navbat]",
           },
         ],
         summary:
-          "Serverless runs stateless, event-triggered functions with provider-managed scaling and pay-per-use billing. It removes server management but demands least-privilege IAM per function and awareness of cold starts and execution limits.",
+          "Serverless provayderlar boshqaradigan masshtablash va foydalanish uchun to'lov hisobi bilan holatsiz, hodisaga tetiklangan funksiyalarni bajaradi. U server boshqaruvini olib tashlaydi, lekin har funksiya uchun minimal imtiyozli IAM va sovuq ishga tushirish hamda bajarish chegaralaridan xabardorlikni talab qiladi.",
       }
     ),
     buildLesson("software-architecture", "event-driven", "Hodisaga Asoslangan Arxitektura", "Advanced", "28m", "hodisaga asoslangan arxitektura"),
@@ -802,135 +802,135 @@ const section6: CourseSection = {
     buildLesson(
       "network-security",
       "mitm",
-      "Man-in-the-Middle Attacks",
+      "O'rtadagi Odam Hujumlari",
       "Advanced",
       "30m",
-      "man-in-the-middle attacks",
+      "o'rtadagi odam hujumlari",
       {
         introduction:
-          "A Man-in-the-Middle (MITM) attack places an attacker secretly between two communicating parties, able to read and often modify traffic that both sides believe is private. It is the umbrella over many specific techniques.",
+          "O'rtadagi Odam (MITM) hujumi tajovuzkorni ikki muloqot qiluvchi tomon o'rtasiga yashirincha joylashtiradi, ikkala tomon ham shaxsiy deb hisoblagan trafikni o'qiy va ko'pincha o'zgartira oladi. Bu ko'plab aniq texnikalar uchun qamrab oluvchi atama.",
         theory:
-          "A MITM works by violating one of two assumptions: that you are talking to the right party (authentication) or that nobody else can read the channel (confidentiality). Techniques to achieve the position include ARP spoofing (LAN), DNS spoofing, rogue Wi-Fi access points, BGP hijacking (Internet scale) and DHCP spoofing. Once positioned, the attacker can passively eavesdrop or actively inject and alter data. Strong end-to-end cryptography with proper authentication (TLS with certificate validation) defeats a MITM even if the position is achieved.",
+          "MITM ikki taxmindan birini buzish orqali ishlaydi: siz to'g'ri tomon bilan gaplashayapsiz (autentifikatsiya) yoki hech kim boshqasi kanalini o'qiy olmaydi (maxfiylik). Pozitsiyaga erishish texnikalariga ARP soxtalashtirish (LAN), DNS soxtalashtirish, qallob Wi-Fi kirish nuqtalari, BGP hijacking (Internet miqyosi) va DHCP soxtalashtirish kiradi. Bir marta pozitsiyalangach, tajovuzkor passiv eshitishi yoki faol ma'lumot kiritishi va o'zgartirishi mumkin. To'g'ri autentifikatsiya bilan kuchli uchdan-uchga kriptografiya (sertifikat tekshiruvi bilan TLS) pozitsiyaga erishilsa ham MITMni mag'lub etadi.",
         realWorldArchitecture:
-          "Defences are layered: switches use Dynamic ARP Inspection and DHCP snooping to stop L2 spoofing; DNSSEC authenticates DNS responses; HSTS and certificate pinning stop TLS-stripping and rogue-certificate attacks; 802.1X authenticates devices onto the network in the first place. Monitoring watches for duplicate MACs and unexpected gateway changes.",
+          "Himoyalar qatlamlangan: switchlar L2 soxtalashtirish ni to'xtatish uchun Dinamik ARP Tekshiruvi va DHCP sniffingdan foydalanadi; DNSSEC DNS javoblarini autentifikatsiya qiladi; HSTS va sertifikat pinnig TLS-stripping va qallob-sertifikat hujumlarini to'xtatadi; 802.1X qurilmalarni birinchi navbatda tarmoqqa autentifikatsiya qiladi. Kuzatuv takroriy MAC larni va kutilmagan shlyuz o'zgarishlarini kuzatadi.",
         packetFlow:
-          "In an ARP-spoofing MITM: the attacker sends forged ARP replies telling the victim that the attacker's MAC owns the gateway IP, and telling the gateway that the attacker owns the victim's IP. Both update their ARP caches. Now every packet between them flows through the attacker, who forwards it on to stay invisible.",
+          "ARP-spoofing MITM da: tajovuzkor qurbonga shuni aytuvchi soxta ARP javoblari yuboradi — tajovuzkorning MAC shlyuz IP si ga egalik qiladi va shlyuzga qurbonning IP si ga tajovuzkor egalik qilishini aytadi. Ikkalasi ham ARP keshlarini yangilaydi. Endi ular o'rtasidagi har bir paket ko'rinmas qolish uchun uni yo'naltiradigan tajovuzkor orqali oqadi.",
         securityImplications:
-          "A successful MITM exposes credentials, session tokens and confidential data, and enables content injection (malware, fake login pages). It is the enabling step for SSL stripping and session hijacking. The only robust defence is authenticated encryption end-to-end — the attacker can sit in the middle but cannot read or forge the traffic.",
+          "Muvaffaqiyatli MITM hisob ma'lumotlari, sessiya tokenlar va maxfiy ma'lumotlarni ochadi va kontent kiritishni (zararli dastur, soxta kirish sahifalari) yoqadi. Bu SSL stripping va sessiya o'g'irlash uchun yoqish qadami. Yagona mustahkam himoya uchdan-uchga autentifikatsiyalangan shifrlash — tajovuzkor o'rtada o'tirishi mumkin, lekin trafikni o'qiy yoki soxtalashtirib bo'lmaydi.",
         attackVectors: [
           {
-            name: "ARP cache poisoning",
-            description: "Forged ARP replies redirect LAN traffic through the attacker.",
+            name: "ARP keshi zaharlanishi",
+            description: "Soxta ARP javoblari LAN trafikni tajovuzkor orqali yo'naltiradi.",
             severity: "High",
           },
           {
-            name: "Rogue access point",
+            name: "Qallob kirish nuqtasi",
             description:
-              "A fake Wi-Fi AP with a familiar SSID lures clients into routing traffic through the attacker.",
+              "Taniqli SSID bilan soxta Wi-Fi AP mijozlarni trafikni tajovuzkor orqali yo'naltirish uchun jalb qiladi.",
             severity: "High",
           },
           {
             name: "SSL stripping",
-            description: "Downgrading a victim's HTTPS connection to HTTP to read it in clear text.",
+            description: "Qurbonning HTTPS ulanishini aniq matnda o'qish uchun HTTP ga pasaytirish.",
             severity: "Critical",
           },
         ],
         cliExamples: [
           {
             language: "bash",
-            description: "Detecting a possible MITM by inspecting the ARP table.",
-            code: "arp -a   # two IPs sharing one MAC = suspected ARP spoofing\nip neigh show",
+            description: "ARP jadvalini tekshirib mumkin bo'lgan MITMni aniqlash.",
+            code: "arp -a   # bitta MACni ulashgan ikki IP = gumon qilinadigan ARP soxtalashtirish\nip neigh show",
           },
         ],
         diagrams: [
           {
             type: "mermaid",
-            title: "MITM interception",
+            title: "MITM ushlab qolish",
             content:
-              "graph LR\n  V[Victim] -->|thinks direct| A[Attacker]\n  A -->|forwards| G[Gateway]\n  G --> A\n  A --> V",
+              "graph LR\n  V[Qurbon] -->|to'g'ridan deb o'ylaydi| A[Tajovuzkor]\n  A -->|yo'naltiradi| G[Shlyuz]\n  G --> A\n  A --> V",
           },
         ],
         summary:
-          "A MITM secretly relays traffic between two parties. It is achieved by breaking authentication or confidentiality at L2, DNS, Wi-Fi or BGP. Authenticated end-to-end encryption (correctly-validated TLS) is the decisive defence.",
+          "MITM ikki tomon o'rtasida trafikni yashirincha o'tkazadi. U L2, DNS, Wi-Fi yoki BGP da autentifikatsiya yoki maxfiylikni buzish orqali erishiladi. Autentifikatsiyalangan uchdan-uchga shifrlash (to'g'ri tekshirilgan TLS) hal qiluvchi himoya.",
       }
     ),
     buildLesson(
       "network-security",
       "ddos",
-      "DDoS Attacks",
+      "DDoS Hujumlari",
       "Advanced",
       "30m",
-      "DDoS attacks",
+      "DDoS hujumlari",
       {
         introduction:
-          "A Distributed Denial-of-Service attack overwhelms a target with traffic from many sources, exhausting bandwidth, connections or compute so legitimate users cannot get through. It is among the most common and disruptive attacks online.",
+          "Tarqatilgan Xizmatni Rad Etish hujumi ko'p manbadan trafik bilan maqsadni bosib, qonuniy foydalanuvchilar o'ta olmasligi uchun tarmoq o'tkazuvchanligi, ulanishlar yoki hisoblashni tugaturadi. U onlayn eng keng tarqalgan va buzuvchi hujumlar qatoriga kiradi.",
         theory:
-          "DDoS attacks are categorised by the layer they target. Volumetric attacks (UDP/ICMP floods, reflection/amplification via DNS, NTP, memcached) saturate raw bandwidth. Protocol attacks (SYN flood, fragmented packets) exhaust connection-table or firewall state. Application-layer attacks (HTTP floods, slowloris) exhaust web-server resources with low traffic volume by mimicking legitimate requests. Amplification multiplies the attacker's bandwidth by abusing services that return large responses to small spoofed-source queries.",
+          "DDoS hujumlari ular maqsadlaydigan qatlam bo'yicha tasniflanadi. Hajmli hujumlar (UDP/ICMP floodlar, DNS, NTP, memcached orqali aks/kuchaytirish) xom tarmoq o'tkazuvchanligini to'ldiradi. Protokol hujumlari (SYN flood, bo'lingan paketlar) ulanish jadvalini yoki firewall holatini tugaturadi. Ilova qatlami hujumlari (HTTP floodlar, slowloris) qonuniy so'rovlarni taqlid qilib past trafik hajmida veb-server resurslarini tugaturadi. Kuchaytirish kichik soxtalashtirish-manbali so'rovlarga katta javoblarni qaytaradigan xizmatlarni suiiste'mol qilib tajovuzkorning tarmoq o'tkazuvchanligini ko'paytiradi.",
         realWorldArchitecture:
-          "Mitigation is layered: a scrubbing/CDN provider (Cloudflare, AWS Shield, Akamai) absorbs volumetric traffic across a globally distributed anycast network, far larger than any single data centre's capacity. Anycast spreads the attack across many sites. At the application layer, rate limiting, CAPTCHAs, connection limits and a WAF filter abusive requests. Capacity planning and autoscaling provide headroom.",
+          "Yumshatish qatlamlangan: tozalash/CDN provayderi (Cloudflare, AWS Shield, Akamai) har qanday yagona ma'lumotlar markazining quvvatidan ancha katta global tarqatilgan anycast tarmoq bo'ylab hajmli trafikni yutadi. Anycast hujumni ko'plab saytlar bo'ylab tarqatadi. Ilova qatlamida tezlikni cheklash, CAPTCHAlar, ulanish chegaralari va WAF suiiste'mol so'rovlarini filtrlaydi. Quvvat rejalashtirish va avtomatik masshtablash zahira ta'minlaydi.",
         packetFlow:
-          "In a SYN flood: the attacker (often with spoofed source IPs) sends a torrent of TCP SYN packets. The server allocates a half-open connection entry and replies SYN-ACK for each, then waits for an ACK that never comes. The backlog queue fills, and legitimate SYNs are dropped. SYN cookies defend this by encoding state in the SYN-ACK so no memory is allocated until the handshake completes.",
+          "SYN flood da: tajovuzkor (ko'pincha soxtalashtirish-manba IP lar bilan) TCP SYN paketlar selini yuboradi. Server har biri uchun yarim-ochiq ulanish yozuvini ajratadi va SYN-ACK javob beradi, so'ng hech qachon kelmaydigan ACK ni kutadi. Nevbat to'ladi va qonuniy SYNlar tushiriladi. SYN cookie'lar handshake tugagunga qadar xotira ajratilmasligi uchun holatni SYN-ACK da kodlash orqali buni himoya qiladi.",
         securityImplications:
-          "DDoS causes outage and revenue loss directly, and is sometimes a smokescreen for an intrusion happening elsewhere. Reflection attacks also implicate the abused third-party servers. Defence requires capacity you do not own — hence reliance on specialist scrubbing providers.",
+          "DDoS to'g'ridan-to'g'ri uzilish va daromad yo'qotishiga olib keladi va ba'zan boshqa joyda sodir bo'layotgan bosqinchilik uchun parda. Aks ettirish hujumlari shuningdek suiiste'mol qilingan uchinchi tomon serverlarini jalb qiladi. Himoya siz ega bo'lmagan quvvatni talab qiladi — shuning uchun mutaxassis tozalash provayderlariga tayanish.",
         attackVectors: [
           {
             name: "SYN flood",
-            description: "Floods half-open TCP connections to exhaust the server's connection backlog.",
+            description: "Server ulanish nevbatini tugaturish uchun yarim-ochiq TCP ulanishlarni to'ldiradi.",
             severity: "High",
           },
           {
-            name: "DNS amplification",
+            name: "DNS kuchaytirish",
             description:
-              "Small spoofed-source DNS queries trigger large responses aimed at the victim, multiplying attacker bandwidth.",
+              "Kichik soxtalashtirish-manbali DNS so'rovlari qurbonga qaratilgan katta javoblarni ishga tushirib, tajovuzkor tarmoq o'tkazuvchanligini ko'paytiradi.",
             severity: "Critical",
           },
           {
             name: "HTTP flood / Slowloris",
             description:
-              "Low-volume, legitimate-looking requests (or deliberately slow ones) exhaust web-server worker capacity.",
+              "Past hajmli, qonuniy ko'rinishdagi so'rovlar (yoki ataylab sekin) veb-server ishchi quvvatini tugaturadi.",
             severity: "High",
           },
         ],
         diagrams: [
           {
             type: "mermaid",
-            title: "Reflection / amplification DDoS",
+            title: "Aks ettirish / kuchaytirish DDoS",
             content:
-              "graph TD\n  A[Attacker: spoofed src = victim] --> R1[Open DNS Resolver]\n  A --> R2[Open NTP Server]\n  R1 -->|large reply| V[Victim]\n  R2 -->|large reply| V",
+              "graph TD\n  A[Tajovuzkor: soxtalashtirish src = qurbon] --> R1[Ochiq DNS Resolver]\n  A --> R2[Ochiq NTP Server]\n  R1 -->|katta javob| V[Qurbon]\n  R2 -->|katta javob| V",
           },
         ],
         summary:
-          "DDoS exhausts a target's bandwidth, state or compute from many sources. It is volumetric, protocol or application-layer. Defence combines anycast scrubbing providers, SYN cookies, rate limiting and a WAF — leaning on capacity the defender does not own.",
+          "DDoS ko'p manbadan maqsadning tarmoq o'tkazuvchanligi, holati yoki hisoblashini tugaturadi. U hajmli, protokol yoki ilova-qatlami. Himoya anycast tozalash provayderlar, SYN cookie'lar, tezlikni cheklash va WAF ni birlashtiradi — himoyachi ega bo'lmagan quvvatga tayanadi.",
       }
     ),
     buildLesson(
       "network-security",
       "ids-ips",
-      "IDS & IPS",
+      "IDS va IPS",
       "Intermediate",
       "28m",
-      "intrusion detection and prevention systems",
+      "bosqinchilikni aniqlash va oldini olish tizimlari",
       {
         introduction:
-          "Intrusion Detection Systems (IDS) and Intrusion Prevention Systems (IPS) watch network or host activity for signs of attack. An IDS alerts; an IPS actively blocks. They are core sensors of a defensive architecture.",
+          "Bosqinchilikni Aniqlash Tizimlari (IDS) va Bosqinchilikni Oldini Olish Tizimlari (IPS) hujum belgilari uchun tarmoq yoki host faoliyatini kuzatadi. IDS ogohlantiradi; IPS faol ravishda bloklaydi. Ular himoya arxitekturasining asosiy sensorlari.",
         theory:
-          "Detection uses two complementary approaches. Signature-based detection matches traffic against a database of known-bad patterns — precise, low false-positive, but blind to novel attacks. Anomaly-based detection builds a baseline of normal behaviour and flags deviations — can catch unknown attacks but is noisier. A NIDS/NIPS inspects network traffic (often via a SPAN port or inline tap); a HIDS/HIPS watches a single host's files, logs and processes. An IDS sits out-of-band and only alerts; an IPS sits inline and can drop, reset or quarantine malicious traffic — at the cost of being a potential bottleneck and single point of failure.",
+          "Aniqlash ikki to'ldiruvchi yondashuvdan foydalanadi. Imzo asosidagi aniqlash trafikni ma'lum-yomon naqshlar ma'lumotlar bazasiga mos keltiradi — aniq, past soxta-ijobiy, lekin yangi hujumlarga ko'r. Anomaliya asosidagi aniqlash odatiy xatti-harakat bazasini qurib og'ishlarni bayroqli qiladi — noma'lum hujumlarni ushlashi mumkin, lekin shimliroq. NIDS/NIPS tarmoq trafikni (ko'pincha SPAN port yoki inline tap orqali) tekshiradi; HIDS/HIPS bitta hostning fayllar, jurnallar va jarayonlarini kuzatadi. IDS off-band o'tiradi va faqat ogohlantirishlar; IPS inline o'tiradi va zararli trafikni tushirishi, tiklashi yoki karantin qilishi mumkin — potensial tiqilinch va yagona nosozlik nuqtasi bo'lish narxida.",
         realWorldArchitecture:
-          "Open-source engines like Suricata, Snort and Zeek are deployed at network choke points and feed alerts into a SIEM for correlation. In cloud environments, equivalent services inspect VPC traffic. IPS rules are tuned carefully: an over-aggressive rule that blocks legitimate traffic is its own denial of service.",
+          "Suricata, Snort va Zeek kabi ochiq manba mexanizmlari tarmoq bo'g'in nuqtalarida joylashtiriladi va korrelyatsiya uchun SIEM ga ogohlantirishlarni uzatadi. Bulut muhitlarida ekvivalent xizmatlar VPC trafikni tekshiradi. IPS qoidalari ehtiyotkorlik bilan moslashtiriladi: qonuniy trafikni bloklaydi haddan tashqari tajovuzkor qoida o'zining xizmatni rad etishi.",
         packetFlow:
-          "A NIDS receives a copy of traffic from a tap or mirror port, reassembles streams, and evaluates each flow against its rule set, emitting alerts. A NIPS sits directly in the traffic path: each packet is inspected before forwarding, and matching malicious traffic is dropped or the connection reset.",
+          "NIDS tap yoki mirror portdan trafik nusxasini oladi, oqimlarni qayta yig'adi va ogohlantirishlar chiqarib har bir oqimni qoidalar to'plamiga nisbatan baholaydi. NIPS to'g'ridan-to'g'ri trafik yo'lida o'tiradi: yo'naltirish oldidan har bir paket tekshiriladi va mos keladigan zararli trafik tushiriladi yoki ulanish tiklanadi.",
         securityImplications:
-          "IDS/IPS dramatically improve visibility and response speed, but attackers evade them with encryption (inspection needs TLS decryption), fragmentation, and slow 'low-and-slow' techniques. False positives erode trust and cause real traffic to be blocked. They are a layer of defence-in-depth, never a complete solution.",
+          "IDS/IPS ko'rinuvchanlik va javob tezligini sezilarli darajada yaxshilaydi, lekin tajovuzkorlar ularni shifrlash (tekshirish TLS parolini ochishni talab qiladi), parchalanish va sekin 'past-va-sekin' texnikalar bilan chetlab o'tadi. Soxta ijobiylari ishonchni yo'q qiladi va haqiqiy trafikni bloklashga sabab bo'ladi. Ular mudofaaning chuqurlashtirish qatlami, hech qachon to'liq yechim emas.",
         diagrams: [
           {
             type: "mermaid",
-            title: "IDS (out-of-band) vs IPS (inline)",
+            title: "IDS (off-band) vs IPS (inline)",
             content:
-              "graph LR\n  NET[Network] --> SW[Switch]\n  SW -->|mirror| IDS[IDS - alert only]\n  NET --> IPS[IPS inline - block] --> SRV[Servers]",
+              "graph LR\n  NET[Tarmoq] --> SW[Switch]\n  SW -->|ko'zgu| IDS[IDS - faqat ogohlantirish]\n  NET --> IPS[IPS inline - bloklash] --> SRV[Serverlar]",
           },
         ],
         summary:
-          "IDS detects and alerts; IPS detects and blocks inline. Detection is signature-based (precise, known threats) or anomaly-based (catches novel ones, noisier). They add essential visibility but are evaded by encryption and fragmentation and must be tuned to limit false positives.",
+          "IDS aniqlab ogohlantiradi; IPS aniqlab inline bloklaydi. Aniqlash imzo asosidagi (aniq, ma'lum tahdidlar) yoki anomaliya asosidagi (yangilarini ushlaydi, shimliroq). Ular muhim ko'rinuvchanlik qo'shadi, lekin shifrlash va parchalanish bilan chetlab o'tiladi va soxta ijobiylarni cheklash uchun moslashtirilishi kerak.",
       }
     ),
     buildLesson("network-security", "packet-sniffing", "Packet Sniffing", "Intermediate", "22m", "packet sniffing"),
@@ -975,41 +975,41 @@ const section7: CourseSection = {
       "Wireshark",
       {
         introduction:
-          "Wireshark is the world's most widely used network protocol analyser. It captures live traffic and dissects every packet down to individual protocol fields — indispensable for troubleshooting, security analysis and learning how networks really work.",
+          "Wireshark — dunyoda eng keng qo'llaniladigan tarmoq protokoli analizatori. U jonli trafikni ushlab oladi va har bir paketni individual protokol maydonlarigacha tahlil qiladi — nosozliklarni bartaraf etish, xavfsizlikni tahlil qilish va tarmoqlar haqiqatda qanday ishlashini o'rganish uchun zaruriy.",
         theory:
-          "Wireshark captures frames from a network interface (via libpcap/npcap), then applies hundreds of protocol dissectors to decode each layer — Ethernet, IP, TCP, TLS, HTTP and more. Two filter systems exist: capture filters (BPF syntax, applied before capture, to limit what is recorded) and display filters (applied after, to focus on what is shown). Features like 'Follow Stream' reassemble a whole conversation, and Statistics views summarise endpoints, conversations and protocol hierarchy.",
+          "Wireshark tarmoq interfeysidan (libpcap/npcap orqali) freymlarni ushlab oladi, so'ng har bir qatlamni — Ethernet, IP, TCP, TLS, HTTP va boshqalarni — dekodlash uchun yuzlab protokol dissektorlarini qo'llaydi. Ikki filtr tizimi mavjud: ushlash filtrlari (BPF sintaksisi, nima yozilishini cheklash uchun ushlashdan oldin qo'llaniladi) va ko'rsatish filtrlari (nima ko'rsatilishiga e'tibor qaratish uchun keyin qo'llaniladi). 'Oqimni Kuzatish' kabi xususiyatlar butun suhbatni qayta tiklaydi va Statistika ko'rinishlari endpointlar, suhbatlar va protokol ierarxiyasini xulosalaydi.",
         realWorldArchitecture:
-          "To see traffic that is not yours, you need a SPAN/mirror port on a switch, a network TAP, or to be on the host itself. On modern switched networks you only see your own traffic plus broadcasts by default. For encrypted traffic, Wireshark can decrypt TLS if supplied with the session keys (via the SSLKEYLOGFILE environment variable) or the server's private key for non-forward-secret ciphers.",
+          "O'zingizga tegishli bo'lmagan trafikni ko'rish uchun switchda SPAN/mirror port, tarmoq TAP yoki hostda bo'lishingiz kerak. Zamonaviy kommutatsiyalangan tarmoqlarda standart bo'yicha faqat o'z trafikingizni va broadcastlarni ko'rasiz. Shifrlangan trafik uchun Wireshark sessiya kalitlari (SSLKEYLOGFILE muhit o'zgaruvchisi orqali) yoki forward-secret bo'lmagan shifrlar uchun serverning shaxsiy kaliti bilan ta'minlansa TLS ni parolini ochishi mumkin.",
         packetFlow:
-          "Wireshark places the interface in promiscuous (or monitor, for Wi-Fi) mode, timestamps each captured frame, runs the dissector chain, and stores packets in memory or a pcap/pcapng file. Display filters re-evaluate the stored set instantly without re-capturing.",
+          "Wireshark interfeysi promiskuitet (yoki Wi-Fi uchun monitor) rejimga qo'yadi, har bir ushlangan freymni vaqt tamg'asi qiladi, dissector zanjirini ishlatadi va paketlarni xotirada yoki pcap/pcapng faylida saqlaydi. Ko'rsatish filtrlari qayta ushlashsiz saqlangan to'plamni darhol qayta baholaydi.",
         securityImplications:
-          "Wireshark is a defensive and analytical tool, but capture files are highly sensitive — they can contain credentials, tokens and personal data in clear text. Capturing traffic you are not authorised to inspect is illegal in most jurisdictions. Wireshark itself has had dissector vulnerabilities, so capture with least privilege (dumpcap), not as root.",
+          "Wireshark himoya va tahlil vositasi, lekin ushlash fayllari juda maxfiy — ular aniq matnda hisob ma'lumotlari, tokenlar va shaxsiy ma'lumotlarni o'z ichiga olishi mumkin. Tekshirishga ruxsat etilmagan trafikni ushlash ko'p yurisdiksiyalarda noqonuniy. Wireshark o'zida dissector zaifliklari bo'lgan, shuning uchun minimal imtiyoz bilan ushlang (dumpcap), root sifatida emas.",
         cliExamples: [
           {
             language: "bash",
-            description: "Capture and filter from the command line with tshark.",
-            code: "# Capture 100 packets on eth0 to a file\ntshark -i eth0 -c 100 -w capture.pcapng\n\n# Display only HTTP requests from a saved capture\ntshark -r capture.pcapng -Y 'http.request' -T fields -e ip.src -e http.host -e http.request.uri",
+            description: "tshark bilan buyruq qatoridan ushlash va filtrlash.",
+            code: "# eth0 da 100 paketni faylga yozish\ntshark -i eth0 -c 100 -w capture.pcapng\n\n# Saqlangan ushlashdan faqat HTTP so'rovlarni ko'rsatish\ntshark -r capture.pcapng -Y 'http.request' -T fields -e ip.src -e http.host -e http.request.uri",
           },
         ],
         configExamples: [
           {
             language: "text",
-            description: "Useful Wireshark display filters.",
-            code: "tcp.port == 443                # all HTTPS traffic\nhttp.response.code >= 400      # HTTP errors\ntcp.flags.syn == 1 && tcp.flags.ack == 0   # connection attempts\ndns.flags.response == 0        # DNS queries\nip.addr == 10.0.0.5 && tcp.analysis.retransmission",
+            description: "Foydali Wireshark ko'rsatish filtrlari.",
+            code: "tcp.port == 443                # barcha HTTPS trafik\nhttp.response.code >= 400      # HTTP xatolari\ntcp.flags.syn == 1 && tcp.flags.ack == 0   # ulanish urinishlari\ndns.flags.response == 0        # DNS so'rovlari\nip.addr == 10.0.0.5 && tcp.analysis.retransmission",
           },
         ],
         wiresharkAnalysis:
-          "Capture a page load, apply `tls.handshake.type == 1` to find the ClientHello, then `tls.handshake.type == 2` for the ServerHello. Use Statistics > Conversations to see which endpoints exchanged the most data, and 'Follow > TCP Stream' to read a full HTTP exchange.",
+          "Sahifa yuklanishini ushlang, ClientHello ni topish uchun `tls.handshake.type == 1` qo'llang, so'ng ServerHello uchun `tls.handshake.type == 2`. Qaysi endpointlar eng ko'p ma'lumot almashinganini ko'rish uchun Statistika > Suhbatlardan, to'liq HTTP almashinuvini o'qish uchun 'Kuzatish > TCP Oqimi' dan foydalaning.",
         diagrams: [
           {
             type: "mermaid",
-            title: "Wireshark capture pipeline",
+            title: "Wireshark ushlash quvuri",
             content:
-              "graph LR\n  NIC[Interface] --> CAP[libpcap capture]\n  CAP --> CF[Capture filter]\n  CF --> DIS[Dissectors]\n  DIS --> DF[Display filter]\n  DF --> UI[Packet list / detail]",
+              "graph LR\n  NIC[Interfeys] --> CAP[libpcap ushlash]\n  CAP --> CF[Ushlash filtri]\n  CF --> DIS[Dissektorlar]\n  DIS --> DF[Ko'rsatish filtri]\n  DF --> UI[Paket ro'yxati / tafsilot]",
           },
         ],
         summary:
-          "Wireshark captures and fully dissects network traffic. Capture filters limit what is recorded; display filters focus the view. Seeing others' traffic needs a mirror port or TAP; capture files are sensitive and capturing without authorisation is illegal.",
+          "Wireshark tarmoq trafikni ushlab to'liq tahlil qiladi. Ushlash filtrlari nima yozilishini cheklaydi; ko'rsatish filtrlari ko'rinishga e'tibor qaratadi. Boshqalarning trafikni ko'rish mirror port yoki TAP talab qiladi; ushlash fayllari maxfiy va ruxsatsiz ushlash noqonuniy.",
       }
     ),
     buildLesson(
@@ -1021,32 +1021,32 @@ const section7: CourseSection = {
       "Nmap",
       {
         introduction:
-          "Nmap (Network Mapper) is the standard tool for network discovery and security auditing. It answers the first questions of any assessment: what hosts are alive, what ports are open, and what services and operating systems are running.",
+          "Nmap (Network Mapper) — tarmoq kashfiyoti va xavfsizlik auditi uchun standart vosita. U har qanday baholashning birinchi savollariga javob beradi: qaysi hostlar tirik, qaysi portlar ochiq va qaysi xizmatlar va operatsion tizimlar ishlayapti.",
         theory:
-          "Nmap works in phases: host discovery (which IPs respond — the 'ping scan'), port scanning (which TCP/UDP ports are open), service/version detection (probing open ports to identify the software and version), and optional OS fingerprinting. Scan types differ in stealth and reliability: a TCP connect scan (-sT) completes the full handshake; a SYN 'half-open' scan (-sS) sends SYN and never completes, making it faster and quieter; UDP scans (-sU) are slow and ambiguous. The Nmap Scripting Engine (NSE) runs Lua scripts for vulnerability checks, enumeration and more.",
+          "Nmap bosqichlarda ishlaydi: host kashfiyoti (qaysi IP lar javob beradi — 'ping skanerlash'), port skanerlash (qaysi TCP/UDP portlar ochiq), xizmat/versiya aniqlash (dastur va versiyani aniqlash uchun ochiq portlarni zondlash) va ixtiyoriy OS barmoq izi olish. Skanerlash turlari yashirinlik va ishonchlilikda farq qiladi: TCP ulanish skanerlash (-sT) to'liq handshakeni yakunlaydi; SYN 'yarim-ochiq' skanerlash (-sS) SYN yuboradi va hech qachon yakunlamaydi, uni tezroq va ovozroq qiladi; UDP skanerlash (-sU) sekin va noaniq. Nmap Skriptlash Mexanizmi (NSE) zaiflik tekshiruvlari, sanab o'tish va boshqalar uchun Lua skriptlarini bajaradi.",
         realWorldArchitecture:
-          "Pentesters run Nmap from a position with network reach to the target — an external scan from the Internet, or an internal scan from inside the perimeter. Defenders use it for asset inventory and to verify firewall rules. Firewalls and IDS detect and may rate-limit or block scans, so timing templates (-T0 slow/stealthy to -T5 fast/loud) trade speed against detectability.",
+          "Penttestchilar Nmap ni maqsadga tarmoq erishuviga ega pozitsiyadan ishlatadi — Internetdan tashqi skanerlash yoki perimetr ichidan ichki skanerlash. Himoyachilar uni aktivlar inventarizatsiyasi va firewall qoidalarini tasdiqlash uchun ishlatadi. Firewalllar va IDS skanerlashlarni aniqlaydi va tezlikni cheklashi yoki bloklashi mumkin, shuning uchun vaqt shablonlari (-T0 sekin/yashirin dan -T5 tez/shovqinligacha) tezlikni aniqlanishga nisbatan almashtiradi.",
         packetFlow:
-          "A SYN scan sends a TCP SYN to each target port. A SYN-ACK reply means the port is open (Nmap then sends RST to tear down the half-open connection); a RST reply means closed; no reply or an ICMP unreachable means filtered. Version detection then opens full connections to matching open ports and compares banner responses against a signature database.",
+          "SYN skanerlash har bir maqsad portiga TCP SYN yuboradi. SYN-ACK javobi port ochiq ekanligini anglatadi (Nmap keyin yarim-ochiq ulanishni yopish uchun RST yuboradi); RST javobi yopiq; javob yo'q yoki ICMP erishib bo'lmaydi filtrlangan. Versiya aniqlash so'ng mos ochiq portlarga to'liq ulanishlarni ochadi va banner javoblarini imzolar ma'lumotlar bazasiga nisbatan solishtiradv.",
         securityImplications:
-          "Nmap is dual-use: essential for defenders' asset management and for attackers' reconnaissance. Unauthorised scanning is illegal in many jurisdictions and is itself treated as a hostile act. Aggressive scans (-A, -T5, full NSE) can crash fragile services. Always operate within an authorised scope.",
+          "Nmap ikki tomonlama: himoyachilarning aktivlar boshqaruvi va tajovuzkorlarning razvedkasi uchun zaruriy. Ruxsatsiz skanerlash ko'p yurisdiksiyalarda noqonuniy va o'zi dushmanlik harakati sifatida ko'riladi. Tajovuzkor skanerlashlar (-A, -T5, to'liq NSE) nozik xizmatlarni ishdan chiqarishi mumkin. Har doim ruxsat etilgan doirada ishlang.",
         cliExamples: [
           {
             language: "bash",
-            description: "Common Nmap invocations.",
-            code: "# Fast SYN scan of the top 1000 ports\nnmap -sS -T4 192.168.1.0/24\n\n# Service/version + OS detection + default scripts\nnmap -sV -O -sC 10.0.0.10\n\n# Full TCP port range with vuln scripts\nnmap -p- --script vuln 10.0.0.10",
+            description: "Keng tarqalgan Nmap chaqiruvlari.",
+            code: "# Eng yuqori 1000 portning tez SYN skanerlashi\nnmap -sS -T4 192.168.1.0/24\n\n# Xizmat/versiya + OS aniqlash + standart skriptlar\nnmap -sV -O -sC 10.0.0.10\n\n# Zaiflik skriptlari bilan to'liq TCP port diapazoni\nnmap -p- --script vuln 10.0.0.10",
           },
         ],
         diagrams: [
           {
             type: "mermaid",
-            title: "Nmap SYN scan logic",
+            title: "Nmap SYN skanerlash mantiqi",
             content:
-              "graph TD\n  S[Send SYN] --> R{Response?}\n  R -->|SYN-ACK| O[Port OPEN]\n  R -->|RST| C[Port CLOSED]\n  R -->|none / ICMP| F[Port FILTERED]",
+              "graph TD\n  S[SYN yubor] --> R{Javob?}\n  R -->|SYN-ACK| O[Port OCHIQ]\n  R -->|RST| C[Port YOPIQ]\n  R -->|yo'q / ICMP| F[Port FILTRLANGAN]",
           },
         ],
         summary:
-          "Nmap discovers hosts, scans ports, and fingerprints services and operating systems. SYN scans are fast and stealthy; NSE adds scripted checks. It is powerful and dual-use — only ever scan systems you are authorised to test.",
+          "Nmap hostlarni kashf qiladi, portlarni skanerlaydi va xizmatlar va operatsion tizimlarning barmoq izini oladi. SYN skanerlashlar tez va yashirin; NSE skriptlangan tekshiruvlar qo'shadi. U kuchli va ikki tomonlama — faqat sinovdan o'tkazishga ruxsat etilgan tizimlarni skanerlang.",
       }
     ),
     buildLesson(
@@ -1058,32 +1058,32 @@ const section7: CourseSection = {
       "Burp Suite",
       {
         introduction:
-          "Burp Suite is the industry-standard platform for web application security testing. It acts as an intercepting proxy between your browser and the target, letting you inspect, modify and replay every request.",
+          "Burp Suite — veb ilova xavfsizligini testlash uchun sanoat standarti platforma. U brauzeringiz va maqsad o'rtasida ushlab qoluvchi proksi sifatida ishlaydi, har bir so'rovni tekshirish, o'zgartirish va qayta yuborishga imkon beradi.",
         theory:
-          "Burp sits as a man-in-the-middle proxy: the browser is configured to route traffic through it, and Burp installs its own CA certificate so it can read HTTPS. Core tools include Proxy (intercept and view traffic), Repeater (manually craft and resend a request), Intruder (automated, parameterised attacks — fuzzing, brute force), Scanner (automated vulnerability detection, in the Pro edition), Decoder and Comparer. The Target tab builds a site map of discovered content.",
+          "Burp o'rtadagi odam proksi sifatida o'tiradi: brauzer uning orqali trafikni yo'naltirish uchun sozlanadi va Burp HTTPS ni o'qiy olishi uchun o'z CA sertifikatini o'rnatadi. Asosiy vositalar: Proksi (trafikni ushlab olish va ko'rish), Repeater (so'rovni qo'lda yaratish va qayta yuborish), Intruder (avtomatlashtirilgan, parametrlangan hujumlar — fuzz qilish, kuch bilan sinash), Scanner (avtomatlashtirilgan zaiflik aniqlash, Pro versiyasida), Decoder va Comparer. Target yorlig'i kashf etilgan kontent sayta xaritasini qurib boradi.",
         realWorldArchitecture:
-          "A tester configures the browser proxy to Burp's listener (default 127.0.0.1:8080), trusts Burp's CA, then browses the target so Burp populates its site map. From there, requests are sent to Repeater for manual probing or Intruder for automation. Burp scope rules keep testing confined to authorised hosts so unrelated traffic is not attacked or logged.",
+          "Tester brauzer proksiini Burp tinglovchisiga sozlaydi (standart 127.0.0.1:8080), Burp CA ga ishonadi, so'ng Burp sayta xaritasini to'ldirishi uchun maqsadni ko'rib chiqadi. U yerdan so'rovlar qo'lda zondlash uchun Repeater ga yoki avtomatlashtirishga Intruder ga yuboriladi. Burp doirasi qoidalari testlashni ruxsat etilgan hostlar bilan cheklab saqlaydi, shuning uchun tegishli bo'lmagan trafik hujumga uchramaydi yoki jurnalga yozilmaydi.",
         packetFlow:
-          "The browser sends a request to Burp. Burp can pause it (intercept on) for manual editing, or pass it through while logging. It then forwards the request to the server, receives the response, and returns it to the browser. Because Burp terminates TLS on both sides with its own certificate, it sees all HTTPS content in clear text.",
+          "Brauzer Burp ga so'rov yuboradi. Burp uni qo'lda tahrirlash uchun to'xtatib qo'yishi (ushlab olish yoqilgan) yoki jurnallashtirib o'tkazib yuborishi mumkin. So'ng so'rovni serverga yo'naltiradi, javobni oladi va brauzega qaytaradi. Burp ikkala tomonda o'z sertifikati bilan TLS ni yakunlaganligi sababli, barcha HTTPS kontentni aniq matnda ko'radi.",
         securityImplications:
-          "Burp is for authorised testing only — using it against systems without permission is illegal. The custom CA must only be trusted on the tester's own machine; trusting it elsewhere creates a real MITM risk. Intruder and Scanner generate significant, potentially damaging traffic, so scope and rate limits matter.",
+          "Burp faqat ruxsat etilgan testlash uchun — ruxsatsiz tizimlarga nisbatan foydalanish noqonuniy. Maxsus CA faqat testchiining o'z mashinasida ishonilishi kerak; boshqa joyda ishonish haqiqiy MITM xavfini yaratadi. Intruder va Scanner muhim, potensial zararli trafik hosil qiladi, shuning uchun doira va tezlik chegaralari muhim.",
         cliExamples: [
           {
             language: "text",
-            description: "Typical Burp workflow steps.",
-            code: "1. Set browser proxy -> 127.0.0.1:8080\n2. Visit http://burp and install the CA certificate\n3. Browse the target to populate the site map\n4. Right-click a request -> Send to Repeater / Intruder\n5. Define scope so only authorised hosts are tested",
+            description: "Odatiy Burp ish jarayoni qadamlari.",
+            code: "1. Brauzer proksisini -> 127.0.0.1:8080 ga sozlash\n2. http://burp ga kirish va CA sertifikatni o'rnatish\n3. Sayta xaritasini to'ldirish uchun maqsadni ko'rib chiqish\n4. So'rovni o'ng tugma bilan bosish -> Repeater / Intruder ga yuborish\n5. Faqat ruxsat etilgan hostlar testlanishi uchun doira belgilash",
           },
         ],
         diagrams: [
           {
             type: "mermaid",
-            title: "Burp intercepting proxy",
+            title: "Burp ushlab oluvchi proksi",
             content:
-              "graph LR\n  B[Browser] --> P[Burp Proxy]\n  P -->|intercept / modify| S[Target Server]\n  S --> P\n  P --> B",
+              "graph LR\n  B[Brauzer] --> P[Burp Proksi]\n  P -->|ushlab olish / o'zgartirish| S[Maqsad Server]\n  S --> P\n  P --> B",
           },
         ],
         summary:
-          "Burp Suite is an intercepting proxy for web app testing — Proxy, Repeater, Intruder and Scanner let you inspect, modify, replay and fuzz requests, including HTTPS via its own CA. It is strictly an authorised-testing tool with real MITM power.",
+          "Burp Suite — veb ilova testlash uchun ushlab oluvchi proksi — Proksi, Repeater, Intruder va Scanner so'rovlarni tekshirish, o'zgartirish, qayta yuborish va fuzz qilishga imkon beradi, o'z CA orqali HTTPS ni ham. Bu qat'iy ruxsat etilgan testlash vositasi bo'lib, haqiqiy MITM kuchiga ega.",
       }
     ),
     buildLesson("pentesting", "metasploit", "Metasploit Framework", "Advanced", "30m", "Metasploit"),

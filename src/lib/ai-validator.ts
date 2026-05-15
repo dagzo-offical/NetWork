@@ -47,12 +47,12 @@ export async function validateAnswers(
 
 function aggregateFeedback(score: number): string {
   if (score >= 90)
-    return "Outstanding work — your answers show deep, accurate understanding of the material.";
+    return "Ajoyib natija — javoblaringiz mavzuni chuqur va aniq tushunganingizni ko'rsatadi.";
   if (score >= 70)
-    return "Solid pass. You have a working grasp of the topic; tighten the weaker areas to reach mastery.";
+    return "Yaxshi natija. Mavzuni yaxshi tushunyapsiz; ustunlikka erishish uchun zaif tomonlarni mustahkamlang.";
   if (score >= 50)
-    return "Close, but not yet passing. Re-read the lesson and address the weaknesses below.";
-  return "This needs more work. Review the lesson carefully and focus on the technical specifics.";
+    return "Yaqin, lekin hali o'tmadingiz. Darsni qayta o'qing va quyidagi zaif tomonlarni bartaraf eting.";
+  return "Bu ko'proq ish talab qiladi. Darsni diqqat bilan ko'rib chiqing va texnik tafsilotlarga e'tibor qarating.";
 }
 
 export async function generateQuestions(
@@ -91,16 +91,16 @@ export function scoreAnswer(
   let lengthScore: number;
   if (wordCount < 8) {
     lengthScore = wordCount * 1.5;
-    weaknesses.push("Answer is too short to demonstrate understanding.");
+    weaknesses.push("Javob tushunishni ko'rsatish uchun juda qisqa.");
   } else if (wordCount < 25) {
     lengthScore = 14 + (wordCount - 8) * 0.7;
-    weaknesses.push("Answer could be expanded with more detail and examples.");
+    weaknesses.push("Javobni ko'proq tafsilot va misollar bilan kengaytirish mumkin.");
   } else if (wordCount <= 140) {
     lengthScore = 30;
-    strengths.push("Answer has a thorough, well-developed length.");
+    strengths.push("Javob to'liq va yaxshi rivojlangan uzunlikka ega.");
   } else {
     lengthScore = 26;
-    strengths.push("Detailed answer, though concision would help.");
+    strengths.push("Batafsil javob, ammo qisqaroq bo'lsa yaxshiroq bo'lardi.");
   }
 
   // 2. Keyword coverage component (0-45)
@@ -109,11 +109,11 @@ export function scoreAnswer(
   const keywordScore = Math.min(45, coverage * 70);
   if (matched.length >= Math.max(2, keywords.length * 0.35)) {
     strengths.push(
-      `Uses relevant technical terminology (${matched.slice(0, 4).join(", ")}).`
+      `Tegishli texnik terminologiyadan foydalanilgan (${matched.slice(0, 4).join(", ")}).`
     );
   } else {
     weaknesses.push(
-      "Missing key technical concepts — be specific and use correct terminology."
+      "Asosiy texnik tushunchalar etishmayapti — aniqroq bo'ling va to'g'ri terminologiya ishlating."
     );
   }
 
@@ -122,19 +122,19 @@ export function scoreAnswer(
   let structureScore: number;
   if (sentences.length >= 3) {
     structureScore = 15;
-    strengths.push("Well-structured explanation across multiple points.");
+    strengths.push("Bir necha nuqta bo'ylab yaxshi tuzilgan tushuntirish.");
   } else if (sentences.length === 2) {
     structureScore = 9;
   } else {
     structureScore = 4;
-    weaknesses.push("Break the answer into clearer, separate points.");
+    weaknesses.push("Javobni aniqroq, alohida nuqtalarga bo'ling.");
   }
 
   // 4. Specificity component (0-10) — numbers, protocol names, mechanisms
   const hasSpecifics = /\b(tcp|udp|ip|tls|http|dns|port|\d{1,5})\b/i.test(text);
   const specificityScore = hasSpecifics ? 10 : 3;
   if (!hasSpecifics) {
-    weaknesses.push("Add concrete specifics — protocols, ports, or mechanisms.");
+    weaknesses.push("Aniq tafsilotlar qo'shing — protokollar, portlar yoki mexanizmlar.");
   }
 
   // 5. Low-effort / gibberish penalty
@@ -143,7 +143,7 @@ export function scoreAnswer(
   let penalty = 0;
   if (wordCount > 6 && diversity < 0.4) {
     penalty = 25;
-    weaknesses.push("Answer appears repetitive or low-effort.");
+    weaknesses.push("Javob takroriy yoki kam harakat sarflangan ko'rinadi.");
   }
 
   let score = Math.round(
@@ -151,8 +151,8 @@ export function scoreAnswer(
   );
   score = Math.max(0, Math.min(100, score));
 
-  if (strengths.length === 0) strengths.push("Attempted the question.");
-  if (weaknesses.length === 0) weaknesses.push("Minor: aim for even greater precision.");
+  if (strengths.length === 0) strengths.push("Savolga urinildi.");
+  if (weaknesses.length === 0) weaknesses.push("Kichik: yanada katta aniqlikka intiling.");
 
   return {
     score,

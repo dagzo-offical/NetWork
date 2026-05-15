@@ -56,7 +56,7 @@ export function useTest(lessonId: string, lessonTopic: string, previousQuestions
       setResult(null);
       setPhase("answering");
     } catch {
-      setError("Could not generate questions. Please try again.");
+      setError("Savollarni yaratib bo'lmadi. Qayta urinib ko'ring.");
       setPhase("error");
     }
   }, [lessonId, lessonTopic, previousQuestions]);
@@ -86,7 +86,7 @@ export function useTest(lessonId: string, lessonTopic: string, previousQuestions
       setPhase("result");
       return res;
     } catch {
-      setError("Validation failed. Please try again.");
+      setError("Tekshirish muvaffaqiyatsiz tugadi. Qayta urinib ko'ring.");
       setPhase("error");
       return null;
     }

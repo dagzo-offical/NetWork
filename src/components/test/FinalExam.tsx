@@ -1,13 +1,8 @@
 "use client";
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { motion } from "framer-motion";
-import { AlertTriangle, Loader2, Eye, ArrowRight } from "lucide-react";
+import { AlertTriangle, Eye, ArrowRight, ChevronLeft, ChevronRight, Loader2 } from "lucide-react";
 import type { CourseSection, ExamAttempt, TestQuestion } from "@/lib/types";
-import { Button } from "@/components/ui/Button";
-import { Timer } from "@/components/ui/Timer";
-import { Progress } from "@/components/ui/Progress";
-import { Card } from "@/components/ui/Card";
 import { TestQuestion as QuestionField } from "./TestQuestion";
 import { TestResult } from "./TestResult";
 import { useTimer } from "@/hooks/useTimer";
@@ -24,7 +19,16 @@ import type { ValidationResult } from "@/lib/types";
 
 type Phase = "intro" | "active" | "grading" | "result";
 
-/** Builds the exam question set by sampling across all lessons in the section. */
+const UZ_TITLES: Record<string, string> = {
+  "network-fundamentals": "Tarmoq Asoslari",
+  "http-tls": "HTTP, HTTPS, TLS va SSL",
+  "web-servers": "Web Serverlar",
+  "server-infrastructure": "Server Infratuzilmasi",
+  "software-architecture": "Dasturiy Arxitektura",
+  "network-security": "Tarmoq Xavfsizligi",
+  "pentesting": "Penetratsion Testlash",
+};
+
 function buildExamQuestions(section: CourseSection): TestQuestion[] {
   const pool: string[] = [];
   for (const lesson of section.lessons) {
@@ -34,6 +38,12 @@ function buildExamQuestions(section: CourseSection): TestQuestion[] {
   return shuffle(pool)
     .slice(0, QUESTIONS_PER_EXAM)
     .map((q, i) => ({ id: `exam-${section.id}-${i}`, question: q, type: "written" }));
+}
+
+function formatTime(sec: number): string {
+  const m = Math.floor(sec / 60);
+  const s = sec % 60;
+  return `${String(m).padStart(2, "0")}:${String(s).padStart(2, "0")}`;
 }
 
 export function FinalExam({ section }: { section: CourseSection }) {
@@ -48,6 +58,8 @@ export function FinalExam({ section }: { section: CourseSection }) {
   const phaseRef = useRef<Phase>("intro");
   phaseRef.current = phase;
 
+  const sectionTitle = UZ_TITLES[section.id] ?? section.title;
+
   const submit = useCallback(async () => {
     setPhase("grading");
     const items = questions.map((q) => ({
@@ -55,7 +67,6 @@ export function FinalExam({ section }: { section: CourseSection }) {
       answer: answers[q.id] ?? "",
     }));
     const res = await validateAnswers(items, section.title);
-    // Exam uses a higher bar than lesson tests.
     const examResult: ValidationResult = {
       ...res,
       passed: res.score >= EXAM_PASSING_SCORE,
@@ -74,18 +85,13 @@ export function FinalExam({ section }: { section: CourseSection }) {
 
   const timer = useTimer(
     EXAM_TIME_LIMIT_MINUTES * 60,
-    () => {
-      if (phaseRef.current === "active") void submit();
-    },
+    () => { if (phaseRef.current === "active") void submit(); },
     false
   );
 
-  // Anti-cheat: count tab switches while the exam is active.
   useEffect(() => {
     if (phase !== "active") return;
-    const handler = () => {
-      if (document.hidden) setTabSwitches((n) => n + 1);
-    };
+    const handler = () => { if (document.hidden) setTabSwitches((n) => n + 1); };
     document.addEventListener("visibilitychange", handler);
     return () => document.removeEventListener("visibilitychange", handler);
   }, [phase]);
@@ -103,138 +109,333 @@ export function FinalExam({ section }: { section: CourseSection }) {
 
   if (phase === "intro") {
     return (
-      <Card gradientBorder className="max-w-2xl mx-auto text-center">
-        <h2 className="text-2xl font-bold gradient-text">
-          Final Exam — {section.title}
+      <div
+        style={{
+          maxWidth: "640px",
+          margin: "0 auto",
+          background: "rgba(13,13,26,0.9)",
+          border: "1px solid rgba(0,255,136,0.25)",
+          borderRadius: "18px",
+          padding: "40px 32px",
+          textAlign: "center",
+          backdropFilter: "blur(16px)",
+          boxShadow: "0 0 40px rgba(0,255,136,0.08)",
+        }}
+      >
+        <h2
+          style={{
+            fontSize: "clamp(20px, 3vw, 28px)",
+            fontWeight: 800,
+            background: "linear-gradient(135deg, #00ff88, #0088ff)",
+            WebkitBackgroundClip: "text",
+            WebkitTextFillColor: "transparent",
+            backgroundClip: "text",
+            marginBottom: "12px",
+          }}
+        >
+          Final Imtihon — {sectionTitle}
         </h2>
-        <p className="mt-3 text-slate-400 text-sm leading-relaxed">
-          This exam has {QUESTIONS_PER_EXAM} written questions drawn from every
-          lesson in the section. You have {EXAM_TIME_LIMIT_MINUTES} minutes and
-          must score at least {EXAM_PASSING_SCORE}% to pass and earn your
-          section badge.
+        <p style={{ color: "#94a3b8", fontSize: "14px", lineHeight: 1.7, marginBottom: "20px" }}>
+          Bu imtihon bo&apos;limdagi barcha darslardan olingan{" "}
+          <strong style={{ color: "#e2e8f0" }}>{QUESTIONS_PER_EXAM} ta</strong> yozma savol.
+          Sizda <strong style={{ color: "#e2e8f0" }}>{EXAM_TIME_LIMIT_MINUTES} daqiqa</strong> vaqt
+          va kamida <strong style={{ color: "#00ff88" }}>{EXAM_PASSING_SCORE}%</strong> ball
+          to&apos;plashingiz kerak.
         </p>
-        <div className="mt-5 glass rounded-lg p-4 text-left text-sm text-slate-400">
-          <p className="flex items-center gap-2 text-amber-300 font-medium mb-2">
-            <AlertTriangle className="h-4 w-4" /> Exam rules
+
+        <div
+          style={{
+            background: "rgba(245,158,11,0.07)",
+            border: "1px solid rgba(245,158,11,0.25)",
+            borderRadius: "12px",
+            padding: "16px 20px",
+            textAlign: "left",
+            marginBottom: "28px",
+          }}
+        >
+          <p
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: "8px",
+              color: "#f59e0b",
+              fontWeight: 600,
+              fontSize: "13px",
+              marginBottom: "10px",
+            }}
+          >
+            <AlertTriangle size={16} /> Imtihon qoidalari
           </p>
-          <ul className="flex flex-col gap-1 list-disc pl-5">
-            <li>The timer cannot be paused once started.</li>
-            <li>Switching tabs is detected and logged.</li>
-            <li>Unanswered questions score zero.</li>
-            <li>The exam auto-submits when time runs out.</li>
+          <ul style={{ display: "flex", flexDirection: "column", gap: "6px", paddingLeft: "16px", fontSize: "13px", color: "#94a3b8" }}>
+            <li>Boshlangandan keyin taymer to&apos;xtatib bo&apos;lmaydi.</li>
+            <li>Tab almashtirish aniqlanadi va qayd etiladi.</li>
+            <li>Javob berilmagan savollar nol ball oladi.</li>
+            <li>Vaqt tugaganda imtihon avtomatik topshiriladi.</li>
           </ul>
         </div>
-        <Button variant="solid" size="lg" className="mt-6" onClick={start}>
-          Begin Exam <ArrowRight className="h-5 w-5" />
-        </Button>
-      </Card>
+
+        <button
+          onClick={start}
+          style={{
+            padding: "14px 32px",
+            borderRadius: "10px",
+            background: "linear-gradient(135deg, #00ff88, #00cc66)",
+            color: "#000",
+            fontWeight: 700,
+            fontSize: "15px",
+            border: "none",
+            cursor: "pointer",
+            display: "inline-flex",
+            alignItems: "center",
+            gap: "8px",
+            boxShadow: "0 0 24px rgba(0,255,136,0.3)",
+          }}
+        >
+          Imtihonni Boshlash <ArrowRight size={18} />
+        </button>
+      </div>
     );
   }
 
   if (phase === "grading") {
     return (
-      <div className="flex flex-col items-center py-20 gap-3 text-slate-400">
-        <Loader2 className="h-8 w-8 animate-spin text-neon-green" />
-        <span>Grading your exam — this assesses all {QUESTIONS_PER_EXAM} answers.</span>
+      <div style={{ display: "flex", flexDirection: "column", alignItems: "center", padding: "80px 0", gap: "14px", color: "#94a3b8" }}>
+        <Loader2 size={36} color="#00ff88" style={{ animation: "spin 1s linear infinite" }} />
+        <span style={{ fontWeight: 600, fontSize: "16px" }}>Imtihon tekshirilmoqda...</span>
+        <span style={{ fontSize: "13px", color: "#64748b" }}>
+          Barcha {QUESTIONS_PER_EXAM} ta javob baholanmoqda
+        </span>
+        <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
       </div>
     );
   }
 
   if (phase === "result" && result) {
     return (
-      <Card gradientBorder className="max-w-2xl mx-auto">
+      <div
+        style={{
+          maxWidth: "640px",
+          margin: "0 auto",
+          background: "rgba(13,13,26,0.9)",
+          border: "1px solid rgba(0,255,136,0.25)",
+          borderRadius: "18px",
+          padding: "32px",
+          backdropFilter: "blur(16px)",
+        }}
+      >
         <TestResult result={result} />
+
         {tabSwitches > 0 && (
-          <p className="mt-4 flex items-center justify-center gap-1.5 text-xs text-amber-300">
-            <Eye className="h-3.5 w-3.5" />
-            Anti-cheat: {tabSwitches} tab switch{tabSwitches > 1 ? "es" : ""}{" "}
-            recorded during this exam.
+          <p
+            style={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              gap: "6px",
+              fontSize: "12px",
+              color: "#f59e0b",
+              marginTop: "16px",
+            }}
+          >
+            <Eye size={14} />
+            Anti-cheat: ushbu imtihon davomida {tabSwitches} ta tab almashtirish qayd etildi.
           </p>
         )}
-        <div className="mt-6 flex gap-3 justify-center">
-          <Button variant="ghost" href={`/courses/${section.id}`}>
-            Back to Section
-          </Button>
+
+        <div style={{ display: "flex", gap: "12px", justifyContent: "center", marginTop: "24px", flexWrap: "wrap" }}>
+          <a
+            href={`/courses/${section.id}`}
+            style={{
+              padding: "10px 20px",
+              borderRadius: "8px",
+              background: "rgba(255,255,255,0.06)",
+              border: "1px solid rgba(255,255,255,0.12)",
+              color: "#94a3b8",
+              fontSize: "14px",
+              textDecoration: "none",
+            }}
+          >
+            Bo&apos;limga Qaytish
+          </a>
           {result.passed && (
-            <Button variant="solid" href="/certificate">
-              View Certificate
-            </Button>
+            <a
+              href="/certificate"
+              style={{
+                padding: "10px 20px",
+                borderRadius: "8px",
+                background: "linear-gradient(135deg, #00ff88, #00cc66)",
+                color: "#000",
+                fontWeight: 700,
+                fontSize: "14px",
+                textDecoration: "none",
+              }}
+            >
+              🏆 Sertifikatni Ko&apos;rish
+            </a>
           )}
         </div>
-      </Card>
+      </div>
     );
   }
 
-  // active
+  // active phase
   const q = questions[current];
+  const isWarning = timer.remaining <= 300;
+
   return (
-    <div className="max-w-3xl mx-auto">
-      <div className="sticky top-16 z-20 -mx-2 mb-5 glass rounded-xl p-4">
-        <div className="flex items-center justify-between gap-4">
-          <div className="text-sm text-slate-300">
-            Question{" "}
-            <span className="text-neon-green font-semibold">{current + 1}</span>{" "}
-            of {questions.length}
-          </div>
-          <Timer
-            seconds={timer.remaining}
-            label="time left"
-            warning={timer.remaining <= 300}
+    <div style={{ maxWidth: "800px", margin: "0 auto" }}>
+      {/* Sticky header */}
+      <div
+        style={{
+          position: "sticky",
+          top: "72px",
+          zIndex: 20,
+          background: "rgba(10,10,20,0.95)",
+          border: "1px solid rgba(255,255,255,0.08)",
+          borderRadius: "12px",
+          padding: "14px 18px",
+          marginBottom: "20px",
+          backdropFilter: "blur(12px)",
+        }}
+      >
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: "12px", marginBottom: "10px" }}>
+          <span style={{ fontSize: "13px", color: "#94a3b8" }}>
+            Savol{" "}
+            <span style={{ color: "#00ff88", fontWeight: 700 }}>{current + 1}</span>
+            {" "}/ {questions.length}
+          </span>
+          <span
+            style={{
+              fontFamily: "monospace",
+              fontSize: "18px",
+              fontWeight: 700,
+              color: isWarning ? "#ff0066" : "#00ff88",
+              background: isWarning ? "rgba(255,0,102,0.08)" : "rgba(0,255,136,0.08)",
+              border: `1px solid ${isWarning ? "rgba(255,0,102,0.3)" : "rgba(0,255,136,0.3)"}`,
+              borderRadius: "8px",
+              padding: "4px 12px",
+            }}
+          >
+            ⏱ {formatTime(timer.remaining)}
+          </span>
+        </div>
+        {/* Progress bar */}
+        <div style={{ height: "4px", background: "rgba(255,255,255,0.07)", borderRadius: "2px", overflow: "hidden" }}>
+          <div
+            style={{
+              height: "100%",
+              width: `${(answeredCount / questions.length) * 100}%`,
+              background: "linear-gradient(90deg, #00ff88, #0088ff)",
+              borderRadius: "2px",
+              transition: "width 0.3s ease",
+            }}
           />
         </div>
-        <Progress value={(answeredCount / questions.length) * 100} className="mt-3" />
-        <p className="mt-1 text-xs text-slate-500">
-          {answeredCount}/{questions.length} answered
+        <p style={{ fontSize: "11px", color: "#64748b", marginTop: "4px" }}>
+          {answeredCount}/{questions.length} ta savol javoblandi
         </p>
       </div>
 
-      <motion.div
-        key={q.id}
-        initial={{ opacity: 0, x: 16 }}
-        animate={{ opacity: 1, x: 0 }}
-        transition={{ duration: 0.25 }}
-      >
-        <QuestionField
-          question={q}
-          index={current}
-          value={answers[q.id] ?? ""}
-          onChange={(v) => setAnswers((a) => ({ ...a, [q.id]: v }))}
-        />
-      </motion.div>
+      {/* Question */}
+      <QuestionField
+        question={q}
+        index={current}
+        value={answers[q.id] ?? ""}
+        onChange={(v) => setAnswers((a) => ({ ...a, [q.id]: v }))}
+      />
 
-      <div className="mt-5 flex items-center justify-between">
-        <Button
-          variant="ghost"
+      {/* Navigation */}
+      <div style={{ display: "flex", justifyContent: "space-between", marginTop: "20px", gap: "12px" }}>
+        <button
           disabled={current === 0}
           onClick={() => setCurrent((c) => Math.max(0, c - 1))}
+          style={{
+            display: "flex",
+            alignItems: "center",
+            gap: "6px",
+            padding: "10px 18px",
+            borderRadius: "8px",
+            background: "rgba(255,255,255,0.05)",
+            border: "1px solid rgba(255,255,255,0.1)",
+            color: current === 0 ? "#475569" : "#94a3b8",
+            fontSize: "13px",
+            cursor: current === 0 ? "not-allowed" : "pointer",
+          }}
         >
-          Previous
-        </Button>
+          <ChevronLeft size={16} /> Oldingi
+        </button>
+
         {current < questions.length - 1 ? (
-          <Button onClick={() => setCurrent((c) => c + 1)}>Next Question</Button>
+          <button
+            onClick={() => setCurrent((c) => c + 1)}
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: "6px",
+              padding: "10px 18px",
+              borderRadius: "8px",
+              background: "rgba(0,136,255,0.12)",
+              border: "1px solid rgba(0,136,255,0.3)",
+              color: "#0088ff",
+              fontSize: "13px",
+              cursor: "pointer",
+            }}
+          >
+            Keyingi <ChevronRight size={16} />
+          </button>
         ) : (
-          <Button variant="solid" onClick={() => void submit()}>
-            Submit Exam
-          </Button>
+          <button
+            onClick={() => void submit()}
+            style={{
+              padding: "10px 24px",
+              borderRadius: "8px",
+              background: "linear-gradient(135deg, #00ff88, #00cc66)",
+              border: "none",
+              color: "#000",
+              fontWeight: 700,
+              fontSize: "14px",
+              cursor: "pointer",
+              boxShadow: "0 0 20px rgba(0,255,136,0.3)",
+            }}
+          >
+            ✅ Imtihonni Topshirish
+          </button>
         )}
       </div>
 
-      <div className="mt-6 flex flex-wrap gap-1.5">
-        {questions.map((qq, i) => (
-          <button
-            key={qq.id}
-            onClick={() => setCurrent(i)}
-            className={`h-8 w-8 rounded-md text-xs font-mono transition-colors ${
-              i === current
-                ? "bg-neon-green/20 border border-neon-green/50 text-neon-green"
-                : (answers[qq.id] ?? "").trim()
-                ? "bg-neon-blue/15 border border-neon-blue/40 text-neon-blue"
-                : "bg-white/5 border border-white/10 text-slate-500"
-            }`}
-          >
-            {i + 1}
-          </button>
-        ))}
+      {/* Question grid */}
+      <div style={{ display: "flex", flexWrap: "wrap", gap: "6px", marginTop: "24px" }}>
+        {questions.map((qq, i) => {
+          const answered = (answers[qq.id] ?? "").trim().length > 0;
+          const isCurrent = i === current;
+          return (
+            <button
+              key={qq.id}
+              onClick={() => setCurrent(i)}
+              style={{
+                width: "32px",
+                height: "32px",
+                borderRadius: "6px",
+                fontSize: "11px",
+                fontFamily: "monospace",
+                cursor: "pointer",
+                border: isCurrent
+                  ? "1px solid rgba(0,255,136,0.5)"
+                  : answered
+                  ? "1px solid rgba(0,136,255,0.4)"
+                  : "1px solid rgba(255,255,255,0.1)",
+                background: isCurrent
+                  ? "rgba(0,255,136,0.15)"
+                  : answered
+                  ? "rgba(0,136,255,0.1)"
+                  : "rgba(255,255,255,0.04)",
+                color: isCurrent ? "#00ff88" : answered ? "#0088ff" : "#475569",
+              }}
+            >
+              {i + 1}
+            </button>
+          );
+        })}
       </div>
     </div>
   );

@@ -13,12 +13,12 @@ export interface BankEntry {
 /** Generic networking questions used when a topic has no specific bank. */
 const GENERIC: BankEntry = {
   questions: [
-    "Explain what {topic} is and why it matters in a production network.",
-    "Describe how {topic} works step by step, including the data exchanged.",
-    "What are the main security risks associated with {topic}, and how do you defend against them?",
-    "Compare {topic} with an alternative approach and explain the trade-offs.",
-    "Walk through what a packet capture would reveal about {topic}.",
-    "Describe a common misconfiguration of {topic} and its consequences.",
+    "{topic} nima ekanligi va ishlab chiqarish tarmog'ida nima uchun muhimligini tushuntiring.",
+    "{topic} qanday ishlashini qadam-baqadam, shu jumladan almashinadigan ma'lumotlarni tavsiflab bering.",
+    "{topic} bilan bog'liq asosiy xavfsizlik xavflari qanday va ulardan qanday himoyalaniladi?",
+    "{topic} ni muqobil yondashuv bilan solishtiring va murosalar haqida tushuntiring.",
+    "Paket yozuvida {topic} haqida nima ko'rsatilishini aytib bering.",
+    "{topic} ning keng tarqalgan noto'g'ri konfiguratsiyasini va uning oqibatlarini tasvirlab bering.",
   ],
   keywords: [
     "protocol",
