@@ -217,6 +217,42 @@ export const QUESTION_BANK: Record<string, BankEntry> = {
     ],
     keywords: ["intercepting proxy", "repeater", "intruder", "scanner", "ca certificate", "mitm", "site map", "scope", "fuzzing", "request", "https"],
   },
+  tcp: {
+    questions: [
+      "Walk through the TCP three-way handshake and explain the purpose of each segment.",
+      "How does TCP provide reliable, ordered delivery on top of an unreliable IP layer?",
+      "Explain TCP flow control and congestion control and how they differ.",
+      "Describe how a TCP connection is closed gracefully.",
+    ],
+    keywords: ["three-way handshake", "syn", "ack", "sequence", "acknowledgement", "reliable", "connection-oriented", "flow control", "congestion", "window", "retransmission", "port"],
+  },
+  udp: {
+    questions: [
+      "Explain why UDP is described as connectionless and unreliable.",
+      "What advantages does UDP have over TCP, and when is it the right choice?",
+      "Describe the structure of a UDP datagram header.",
+      "Why do protocols like DNS and QUIC build on UDP?",
+    ],
+    keywords: ["connectionless", "unreliable", "datagram", "no handshake", "low latency", "port", "checksum", "dns", "streaming", "overhead"],
+  },
+  dns: {
+    questions: [
+      "Explain the recursive DNS resolution process from root to authoritative server.",
+      "Describe the role of caching and TTL in DNS.",
+      "What is DNS spoofing and how does DNSSEC defend against it?",
+      "Compare the common DNS record types and their purposes.",
+    ],
+    keywords: ["resolver", "recursive", "authoritative", "root", "tld", "record", "ttl", "cache", "a record", "cname", "dnssec", "spoofing"],
+  },
+  subnetting: {
+    questions: [
+      "Explain how a subnet mask divides an IP address into network and host portions.",
+      "Walk through subnetting a /24 network into four equal subnets.",
+      "Why is subnetting used, and what are its security benefits?",
+      "Explain the relationship between subnet mask and number of usable hosts.",
+    ],
+    keywords: ["subnet mask", "network", "host", "cidr", "broadcast", "prefix", "bits", "segment", "/24", "usable hosts", "octet"],
+  },
   "lan-wan-man": {
     questions: [
       "Compare LAN, MAN and WAN in terms of scope, ownership and performance.",
