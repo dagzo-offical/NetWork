@@ -14,9 +14,18 @@ export async function validateAnswer(
   lessonTopic: string,
   lessonId?: string
 ): Promise<ValidationResult> {
+  const headers: Record<string, string> = { "Content-Type": "application/json" };
+  if (typeof window !== "undefined") {
+    const key = localStorage.getItem("netsec_ai_api_key") ?? "";
+    const provider = localStorage.getItem("netsec_ai_provider") ?? "";
+    if (key && provider) {
+      headers["x-api-key"] = key;
+      headers["x-api-provider"] = provider;
+    }
+  }
   const response = await fetch("/api/validate", {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
+    headers,
     body: JSON.stringify({ question, answer, lessonTopic, lessonId }),
   });
   if (!response.ok) throw new Error("Validation request failed");

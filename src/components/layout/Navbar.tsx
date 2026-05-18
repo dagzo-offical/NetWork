@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { ShieldCheck, LayoutDashboard, BookOpen, Award, Home } from "lucide-react";
+import { ShieldCheck, LayoutDashboard, BookOpen, Award, Home, Settings } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const links = [
@@ -10,6 +10,7 @@ const links = [
   { href: "/courses", label: "Courses", icon: BookOpen },
   { href: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
   { href: "/certificate", label: "Certificate", icon: Award },
+  { href: "/settings", label: "Settings", icon: Settings },
 ];
 
 export function Navbar() {
